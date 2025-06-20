@@ -1,3 +1,7 @@
+.btn{
+  font-weight: 500;
+}
+
 .header{
   .header__menus-container{
     a{

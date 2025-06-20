@@ -2,6 +2,12 @@
   .header__menus-container{
     a{
       text-decoration: none;
+      &:after{
+        display: none;
+      }
     }
+  }
+  .header-icons{
+    gap: 20px;
   }
 }

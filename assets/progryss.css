@@ -9,5 +9,8 @@
   }
   .header-icons{
     gap: 20px;
+    .header-icons__item{
+      padding: 0;
+    }
   }
 }

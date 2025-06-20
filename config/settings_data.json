@@ -128,6 +128,7 @@
     "slider_pagination_style": "line",
     "swatch_shape": "circle",
     "swatch_option_name": "Color,Colour,Couleur,Farbe",
+    "enable_search": false,
     "animation_speed": "medium",
     "favicon": "{{ shop.brand.square_logo }}",
     "free_shipping_bg_color": "#83858c",

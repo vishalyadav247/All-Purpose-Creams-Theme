@@ -79,7 +79,7 @@
   {%- endif -%}
 
   <!-- custom css -->
-  <link href="{{ 'progryss.css' | asset_url | stylesheet_tag }}">
+  <link rel="stylesheet" href="{{ 'progryss.css' | asset_url }}">
 </head>
 
 <body class="{% if settings.bg_color != settings.card_bg_color and settings.card_bg_color.alpha != 0 %}pad-card-info{% endif %}{% if settings.animations_enabled %} cc-animate-enabled{% endif %}{% if settings.content_boundary_style != blank %} content-boundary-enabled{% endif %}">

@@ -85,27 +85,17 @@
 {%- endstyle -%}
 
 <page-header class="page-header block relative yadav">
-  <header
-    class="
-      header js-header-height
-      {%- if section.settings.enable_sticky %} header--sticky{% endif -%}
-      {%- if section.settings.enable_transparency %} header--transparent{% endif -%}
-      {%- if section.settings.enable_inline_nav %} header--inline{% endif -%}
-      {%- if section.settings.logo_align_left %} header--inline-logo-left{% endif %}
-    "
-    {%- if section.settings.enable_inline_nav %}
-      data-nav-inline="true"
-    {% endif -%}
-  >
+  <header class="header js-header-height
+          {%- if section.settings.enable_sticky %} header--sticky{% endif -%}
+          {%- if section.settings.enable_transparency %} header--transparent{% endif -%}
+          {%- if section.settings.enable_inline_nav %} header--inline{% endif -%}
+          {%- if section.settings.logo_align_left %} header--inline-logo-left{% endif %}"
+          {%- if section.settings.enable_inline_nav %} data-nav-inline="true"{% endif -%}>
     <div class="header__layout relative flex justify-between items-center w-full">
       <div class="header__menus-container">
         {%- if section.settings.enable_inline_nav -%}
           <div class="inline-header-nav">
-            <div
-              class="nav-row multi-level-nav"
-              role="navigation"
-              aria-label="{{ 'accessibility.main_navigation' | t | escape }}"
-            >
+            <div class="nav-row multi-level-nav" role="navigation" aria-label="{{ 'accessibility.main_navigation' | t | escape }}">
               <div class="tier-1">
                 <ul>
                   {%- for link in linklists[section.settings.menu_linklist].links -%}
@@ -118,14 +108,7 @@
                     -%}
 
                     <li class="{% if link.active %}active{% endif %}{% if link.links != blank %} contains-children{% endif %}{% if has_mega_drop_down %} contains-mega-menu{% endif %}">
-                      <a
-                        href="{{ link.url }}"
-                        class="{% if link.active %}active{% endif %}{% if link.links != blank %} has-children{% endif %}"
-                        {% if link.links != blank %}
-                          aria-haspopup="true" aria-expanded="false"
-                          aria-controls="{% if has_mega_drop_down %}mega-menu-tier-2{% else %}small-menu-tier-2-{{ forloop.index }}{% endif %}"
-                        {% endif %}
-                      >
+                      <a href="{{ link.url }}" class="{% if link.active %}active{% endif %}{% if link.links != blank %} has-children{% endif %}"{% if link.links != blank %} aria-haspopup="true" aria-expanded="false" aria-controls="{% if has_mega_drop_down %}mega-menu-tier-2{% else %}small-menu-tier-2-{{ forloop.index }}{% endif %}"{% endif %}>
                         {{- link.title | strip -}}
                       </a>
 
@@ -143,28 +126,18 @@
                           endfor
                         -%}
 
-                        <ul
-                          id="small-menu-tier-2-{{ forloop.index }}"
-                          {% if has_mega_drop_down -%}
-                            class="
-                              nav-columns nav-columns--count-{{ link.links.size }}
+                        <ul id="small-menu-tier-2-{{ forloop.index }}" {% if has_mega_drop_down -%}
+                              class="nav-columns nav-columns--count-{{ link.links.size }}
                               {%- if link.links.size > 2 %} nav-columns--count-3-or-more {% endif -%}
                               {%- if link.links.size > 5 %} nav-columns--count-6-or-more {% endif -%}
-                              nav-columns--cta-count-{{ num_ctas }}
-                            "
-                          {%- else -%}
-                            class="nav-rows"
-                          {%- endif -%}
-                        >
+                              nav-columns--cta-count-{{ num_ctas }}"
+                            {%- else -%}
+                              class="nav-rows"
+                            {%- endif -%}>
+
                           {%- for child_link in link.links -%}
                             <li class="{% if child_link.links != blank %}contains-children{% endif %}{% if child_link.active %}  active{% endif %}">
-                              <a
-                                href="{{ child_link.url }}"
-                                class="{% if child_link.links != blank %}has-children column-title{% endif %}"
-                                {% if child_link.links != blank %}
-                                  aria-haspopup="true"
-                                {% endif %}
-                              >
+                              <a href="{{ child_link.url }}" class="{% if child_link.links != blank %}has-children column-title{% endif %}" {% if child_link.links != blank %}aria-haspopup="true"{% endif %}>
                                 {{ child_link.title | strip }}
                               </a>
 
@@ -201,10 +174,7 @@
                         </ul>
 
                         {%- if section.settings.show_social_links or section.settings.contact_info_in_mega -%}
-                          {%- if section.settings.show_social_links
-                            or section.settings.contact_info_phone != blank
-                            or section.settings.contact_info_email != blank
-                          -%}
+                          {%- if section.settings.show_social_links or section.settings.contact_info_phone != blank or section.settings.contact_info_email != blank -%}
                             {%- liquid
                               assign num_columns = 0
                               if section.settings.show_social_links
@@ -225,25 +195,17 @@
                                 </div>
                               {%- endif -%}
 
-                              {%- if section.settings.contact_info_in_mega
-                                and section.settings.contact_info_phone != blank
-                              -%}
+                              {%- if section.settings.contact_info_in_mega and section.settings.contact_info_phone != blank -%}
                                 <div class="nav-contact-info__block">
-                                  <span class="nav-contact-info__icon nav-contact-info__icon--phone">
-                                    {%- render 'icon-phone' -%}
-                                  </span>
+                                  <span class="nav-contact-info__icon nav-contact-info__icon--phone">{% render 'icon-phone' %}</span>
                                   {{ section.settings.contact_info_phone }}
                                 </div>
                               {%- endif -%}
 
-                              {%- if section.settings.contact_info_in_mega
-                                and section.settings.contact_info_email != blank
-                              -%}
+                              {%- if section.settings.contact_info_in_mega and section.settings.contact_info_email != blank -%}
                                 <div class="nav-contact-info__block">
                                   <a href="mailto:{{ section.settings.contact_info_email }}">
-                                    <span class="nav-contact-info__icon nav-contact-info__icon--email">
-                                      {%- render 'icon-email' -%}
-                                    </span>
+                                    <span class="nav-contact-info__icon nav-contact-info__icon--email">{% render 'icon-email' %}</span>
                                     {{ section.settings.contact_info_email }}
                                   </a>
                                 </div>
@@ -274,28 +236,14 @@
               <span class="menu-toggle__text menu-toggle__text--back">{{ 'general.navigation.back' | t }}</span>
             </button>
           </summary>
-          <menu-drawer
-            class="drawer drawer--x-start fixed top-0 start-0 flex flex-col has-motion"
-            id="main-menu"
-            role="dialog"
-            tabindex="-1"
-            aria-label="{{ 'general.navigation.menu' | t }}"
-            aria-modal="true"
-            aria-hidden="true"
-          >
+          <menu-drawer class="drawer drawer--x-start fixed top-0 start-0 flex flex-col has-motion" id="main-menu" role="dialog" tabindex="-1" aria-label="{{ 'general.navigation.menu' | t }}" aria-modal="true" aria-hidden="true">
             <div class="main-menu-inner">
               <nav class="main-menu-panel-wrapper" aria-label="{{ 'accessibility.main_navigation' | t | escape }}">
                 <div class="main-menu-panel" id="main-menu-panel">
                   <ul class="main-menu-links">
                     {%- for link in linklists[section.settings.menu_linklist].links -%}
                       <li class="main-menu-list-item{% if link.links != blank %} has-children{% endif %}{% if link.active %} active{% endif %}">
-                        <a
-                          class="main-menu-link"
-                          href="{{ link.url }}"
-                          {% if link.links != blank %}
-                            aria-haspopup="true" aria-controls="main-menu-panel-{{ forloop.index }}"
-                          {% endif %}
-                        >
+                        <a class="main-menu-link" href="{{ link.url }}" {% if link.links != blank %}aria-haspopup="true" aria-controls="main-menu-panel-{{ forloop.index }}"{% endif %}>
                           {{- link.title | strip -}}
                           {%- if link.links != blank -%}
                             <span class="child-indicator has-ltr-icon">{% render 'icon-arrow-right' %}</span>
@@ -336,20 +284,14 @@
                     {%- if shop.customer_accounts_enabled -%}
                       {%- if customer -%}
                         <li class="main-menu-account-link main-menu-account-link--first main-menu-list-item">
-                          <a class="main-menu-link" href="{{ routes.account_url }}">
-                            {{- 'sections.header.account' | t -}}
-                          </a>
+                          <a class="main-menu-link" href="{{ routes.account_url }}">{{ 'sections.header.account' | t }}</a>
                         </li>
                         <li class="main-menu-account-link main-menu-list-item">
-                          <a class="main-menu-link" href="{{ routes.account_logout_url }}">
-                            {{- 'sections.header.log_out' | t -}}
-                          </a>
+                          <a class="main-menu-link" href="{{ routes.account_logout_url }}">{{ 'sections.header.log_out' | t }}</a>
                         </li>
                       {%- else -%}
                         <li class="main-menu-account-link main-menu-account-link--first main-menu-list-item">
-                          <a class="main-menu-link" href="{{ routes.account_login_url }}">
-                            {{- 'sections.header.log_in' | t -}}
-                          </a>
+                          <a class="main-menu-link" href="{{ routes.account_login_url }}">{{ 'sections.header.log_in' | t }}</a>
                         </li>
                       {%- endif -%}
                     {%- endif -%}
@@ -377,15 +319,11 @@
                     {%- endif -%}
                   {% endif %}
 
-                  {%- if section.settings.contact_info_phone != blank
-                    or section.settings.contact_info_email != blank
-                  -%}
+                  {%- if section.settings.contact_info_phone != blank or section.settings.contact_info_email != blank -%}
                     <div class="nav-contact-info">
                       {%- if section.settings.contact_info_phone != blank -%}
                         <div class="nav-contact-info__block">
-                          <span class="nav-contact-info__icon nav-contact-info__icon--phone">
-                            {%- render 'icon-phone' -%}
-                          </span>
+                          <span class="nav-contact-info__icon nav-contact-info__icon--phone">{% render 'icon-phone' %}</span>
                           {{ section.settings.contact_info_phone }}
                         </div>
                       {%- endif -%}
@@ -393,9 +331,7 @@
                       {%- if section.settings.contact_info_email != blank -%}
                         <div class="nav-contact-info__block">
                           <a href="mailto:{{ section.settings.contact_info_email }}">
-                            <span class="nav-contact-info__icon nav-contact-info__icon--email">
-                              {%- render 'icon-email' -%}
-                            </span>
+                            <span class="nav-contact-info__icon nav-contact-info__icon--email">{% render 'icon-email' %}</span>
                             {{ section.settings.contact_info_email }}
                           </a>
                         </div>
@@ -427,24 +363,12 @@
 
                 {%- for link in linklists[section.settings.menu_linklist].links -%}
                   {%- if link.links != blank -%}
-                    <div
-                      class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden"
-                      id="main-menu-panel-{{ forloop.index }}"
-                      data-back-id="main-menu-panel"
-                      aria-hidden="true"
-                    >
+                    <div class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden" id="main-menu-panel-{{ forloop.index }}" data-back-id="main-menu-panel" aria-hidden="true">
                       <ul class="main-menu-links">
                         {%- assign outer_forloop_index = forloop.index -%}
                         {%- for child_link in link.links -%}
                           <li class="main-menu-list-item{% if child_link.links != blank %} has-children{% endif %}{% if child_link.active %} active{% endif %}">
-                            <a
-                              class="main-menu-link"
-                              href="{{ child_link.url }}"
-                              {% if child_link.links != blank %}
-                                aria-haspopup="true"
-                                aria-controls="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}"
-                              {% endif %}
-                            >
+                            <a class="main-menu-link" href="{{ child_link.url }}" {% if child_link.links != blank %}aria-haspopup="true" aria-controls="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}"{% endif %}>
                               {{- child_link.title | strip -}}
 
                               {%- if child_link.links != blank -%}
@@ -488,19 +412,10 @@
                     {%- assign outer_forloop_index = forloop.index -%}
                     {%- for child_link in link.links -%}
                       {%- if child_link.links != blank -%}
-                        <div
-                          class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden"
-                          id="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}"
-                          data-back-id="main-menu-panel-{{ outer_forloop_index }}"
-                          aria-hidden="true"
-                        >
+                        <div class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden" id="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}" data-back-id="main-menu-panel-{{ outer_forloop_index }}" aria-hidden="true">
                           <ul class="main-menu-links">
                             {%- for grandchild_link in child_link.links -%}
-                              <li
-                                {% if grandchild_link.active %}
-                                  class="active"
-                                {% endif %}
-                              >
+                              <li {% if grandchild_link.active %}class="active"{% endif %}>
                                 <a class="main-menu-link" href="{{ grandchild_link.url }}">
                                   {{- grandchild_link.title | strip -}}
                                 </a>
@@ -522,34 +437,26 @@
         {%- if section.settings.logo != blank -%}
           <div class="logo__image{% if section.settings.alt_logo %} has-alt-image relative{% endif %}">
             <a href="{{ routes.root_url }}">
-              <img
-                class="logo__default-image"
-                src="{{ section.settings.logo | image_url: width: logo_width }}"
-                {%- if section.settings.logo.width >= logo_width_2x
-                  and section.settings.logo.height >= logo_height_2x
-                %}
-                  srcset="{{ section.settings.logo | image_url: width: logo_width_2x }} 2x"
-                {% endif -%}
-                loading="eager"
-                width="{{ logo_width }}"
-                height="{{ logo_height }}"
-                alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
-              >
+              <img class="logo__default-image"
+                    src="{{ section.settings.logo | image_url: width: logo_width }}"
+                    {%- if section.settings.logo.width >= logo_width_2x and section.settings.logo.height >= logo_height_2x %}
+                      srcset="{{ section.settings.logo | image_url: width: logo_width_2x }} 2x"
+                    {% endif -%}
+                    loading="eager"
+                    width="{{ logo_width }}"
+                    height="{{ logo_height }}"
+                    alt="{{ section.settings.logo.alt | default: shop.name | escape }}">
               {%- if section.settings.alt_logo -%}
-                <img
-                  class="logo__contrast-image absolute top-0 left-0 w-full h-full object-contain"
-                  src="{{ section.settings.alt_logo | image_url: width: logo_width }}"
-                  {%- if section.settings.alt_logo.width >= logo_width_2x
-                    and section.settings.alt_logo.height >= logo_height_2x
-                  %}
-                    srcset="{{ section.settings.alt_logo | image_url: width: logo_width_2x }} 2x"
-                  {% endif -%}
-                  loading="eager"
-                  width="{{ logo_width }}"
-                  height="{{ logo_height }}"
-                  alt="{{ section.settings.alt_logo.alt | default: shop.name | escape }}"
-                  aria-hidden="true"
-                >
+                <img class="logo__contrast-image absolute top-0 left-0 w-full h-full object-contain"
+                      src="{{ section.settings.alt_logo | image_url: width: logo_width }}"
+                      {%- if section.settings.alt_logo.width >= logo_width_2x and section.settings.alt_logo.height >= logo_height_2x %}
+                        srcset="{{ section.settings.alt_logo | image_url: width: logo_width_2x }} 2x"
+                      {% endif -%}
+                      loading="eager"
+                      width="{{ logo_width }}"
+                      height="{{ logo_height }}"
+                      alt="{{ section.settings.alt_logo.alt | default: shop.name | escape }}"
+                      aria-hidden="true">
               {%- endif -%}
             </a>
           </div>
@@ -616,14 +523,7 @@
 </script>
 
 {%- if settings.enable_search -%}
-  <search-drawer
-    class="search-drawer drawer fixed top-0 right-0 flex flex-col has-motion"
-    role="dialog"
-    tabindex="-1"
-    aria-labelledby="search-drawer-heading"
-    aria-modal="true"
-    aria-hidden="true"
-  >
+  <search-drawer class="search-drawer drawer fixed top-0 right-0 flex flex-col has-motion" role="dialog" tabindex="-1" aria-labelledby="search-drawer-heading" aria-modal="true" aria-hidden="true">
     <header class="drawer__header flex justify-between items-center">
       <h2 class="h4 mb-0" id="search-drawer-heading">{{ 'general.search.title' | t }}</h2>
       <button type="button" class="drawer__close-btn js-close-drawer">
@@ -634,9 +534,7 @@
     <div class="search-drawer__content drawer__content flex-auto">
       {% render 'predictive-search', id: 'search-drawer-input' %}
 
-      {%- if section.settings.search_menu_linklist != blank
-        and linklists[section.settings.search_menu_linklist].links.size > 0
-      -%}
+      {%- if section.settings.search_menu_linklist != blank and linklists[section.settings.search_menu_linklist].links.size > 0 -%}
         <div class="search-drawer__quick-links">
           {%- if section.settings.search_menu_title != blank -%}
             <h3 class="h6 uppercase">{{ section.settings.search_menu_title }}</h3>

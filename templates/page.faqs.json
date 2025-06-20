@@ -1,0 +1,138 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {}
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "faq_section": {
+      "type": "faq",
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "text": "Ordering"
+          }
+        },
+        "question_1": {
+          "type": "question",
+          "settings": {
+            "heading": "Can I cancel my order?",
+            "text": "<p>We completely get it, we change our minds too! While we wish could, once an order is placed, we are unable to alter or cancel it at this time. We hope to have a cancellation window one day in the future.</p><p>Should the item(s) not work out, make sure to exchange for a preferred style or return for a refund. As a reminder, domestic return shipping is free.</p>"
+          }
+        },
+        "question_2": {
+          "type": "question",
+          "settings": {
+            "heading": "What if I want to speak to someone?",
+            "text": "<p>We want to speak to you too! Contact us with any questions, concerns, or feedback. We will be sure to get back to you within 48 hours. However, please note that inquiries sent on Fridays will receive a reply the following Monday, but possibly sooner.</p>"
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "text": "Shipping"
+          }
+        },
+        "question_3": {
+          "type": "question",
+          "settings": {
+            "heading": "What countries do you ship to?",
+            "text": "<p>We currently ship to the United States, Canada, Australia and the UK. To enquire about shipping to a different destination, please contact us.</p>"
+          }
+        },
+        "question_4": {
+          "type": "question",
+          "settings": {
+            "heading": "How long will it take to receive my order?",
+            "text": "<p>Standard shipping normally takes 3-5 days. Next day shipping is available on all domestic orders (for an additional charge). International shipping times depend on the products and destination (estimated at checkout).</p>"
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "text": "Returns and Refunds"
+          }
+        },
+        "question_5": {
+          "type": "question",
+          "settings": {
+            "heading": "How do I return a product?",
+            "text": "<p>Items must be returned within 30 days after receiving your order. Items must be returned in the same condition in which they were received, be unworn/unused, have any tags still attached, and include all the original packaging.</p>"
+          }
+        },
+        "question_6": {
+          "type": "question",
+          "settings": {
+            "heading": "How long will it take to receive my refund?",
+            "text": "<p>Refunds are processed within 7 days from when we receive the item(s).</p>"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "question_1",
+        "question_2",
+        "category_2",
+        "question_3",
+        "question_4",
+        "category_3",
+        "question_5",
+        "question_6"
+      ],
+      "settings": {
+        "heading": "",
+        "full_width": true,
+        "color_scheme": "none"
+      }
+    },
+    "contact_form_section": {
+      "type": "contact-form",
+      "blocks": {
+        "dropdown_1": {
+          "type": "dropdown",
+          "settings": {
+            "title": "How can we help?",
+            "options": "Option 1\nOption 2\nOption 3",
+            "half_width": false
+          }
+        }
+      },
+      "block_order": [
+        "dropdown_1"
+      ],
+      "settings": {
+        "heading": "Still looking for answers?",
+        "text": "<p>If the answers you're looking for aren't in our FAQ, please send us an email by completing the form below.</p>",
+        "color_scheme": "1"
+      }
+    },
+    "featured_collection_section": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Trending",
+        "color_scheme": "none"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "main",
+    "faq_section",
+    "contact_form_section",
+    "featured_collection_section"
+  ]
+}

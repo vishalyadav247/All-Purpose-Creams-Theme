@@ -1,0 +1,832 @@
+{%- liquid
+  assign breakpoint_sm = 640
+  assign breakpoint_sm_down = breakpoint_sm | minus: 0.02
+  assign breakpoint_md = 768
+
+  assign min_hdr_items_width = 132
+  if section.settings.logo_width > min_hdr_items_width
+    assign hdr_items_width = section.settings.logo_width
+  else
+    assign hdr_items_width = min_hdr_items_width
+  endif
+
+  if section.settings.logo != blank
+    assign logo_width = section.settings.logo.width
+    if logo_width > section.settings.logo_width
+      assign logo_width = section.settings.logo_width | plus: 0
+    endif
+
+    assign logo_height = logo_width | divided_by: section.settings.logo.aspect_ratio | round
+    if logo_height > 150
+      assign logo_width = 150 | times: section.settings.logo.aspect_ratio | round
+      assign logo_height = 150
+    endif
+
+    assign logo_width_2x = logo_width | times: 2
+    assign logo_height_2x = logo_height | times: 2
+  endif
+-%}
+
+{%- style -%}
+  .header {
+    --bg-color: {{ settings.header_bg_color.rgb }};
+    --text-color: {{ settings.header_text_color.rgb }};
+    --text-over-media-color: {{ section.settings.text_over_media_color.rgb }};
+    --menu-drawer-bg-color: {{ settings.menu_drawer_bg_color.rgb }};
+    --menu-drawer-text-color: {{ settings.menu_drawer_text_color.rgb }};
+    --nav-font-size: {{ section.settings.nav_font_size }}px;
+    --nav-inline-font-size: {{ section.settings.inline_nav_font_size }}px;
+    --cart-icon-bg-color: {{ settings.cart_icon_badge_bg_color.rgb }};
+    --cart-icon-text-color: {{ settings.cart_icon_badge_text_color.rgb }};
+  }
+
+  {%- if section.settings.enable_sticky -%}
+    .js .cc-header { position: -webkit-sticky; position: sticky; }
+    .viewport-height, .viewport-height .slide {
+      min-height: calc(100svh - var(--header-height) + 24px);
+    }
+    {%- unless section.settings.logo == blank -%}
+      {%- if section.settings.enable_logo_shrink and logo_height > 44 -%}
+        .scrolled-down .logo__default-image,
+        .scrolled-down .logo__contrast-image { max-height: 44px; }
+      {%- endif -%}
+    {%- endunless -%}
+  {%- endif -%}
+
+  {%- if section.settings.enable_transparency -%}
+    .js .cc-header { min-height: calc(var(--header-height) - var(--announcement-height, 0px)) }
+    .js .active-banner:first-child { margin-top: calc(var(--header-height) * -1); }
+    .js .active-banner:first-child .viewport-height,
+    .js .active-banner:first-child .viewport-height .slide { min-height: 100svh; }
+    .js .active-banner:first-child .text-overlay { margin-top: calc(var(--header-height) + 20px); }
+    @media (max-width: {{ breakpoint_sm_down }}px) {
+      .js .active-banner:first-child .mobile-stacked .text-overlay { margin-top: 0; }
+    }
+    @media (min-width: {{ breakpoint_md }}px) {
+      .js .active-banner:first-child .text-overlay { margin-top: calc(var(--header-height) + 40px); }
+    }
+  {%- else -%}
+    .js .active-banner:first-child .viewport-height, .js .active-banner:first-child .viewport-height .slide {
+      min-height: calc(100svh - var(--header-height));
+    }
+  {%- endif -%}
+
+  {%- if section.settings.logo_align_left -%}
+    .header--inline-visible.header--inline-logo-left .header-icons,
+    .header--inline-visible.header--inline-logo-left .logo {
+      flex-basis: {{ hdr_items_width }}px !important;
+    }
+    .header--inline-logo-left:not(.header--inline-visible) .nav-row {
+      min-width: calc(100vw - {{ hdr_items_width | times: 2 | plus: 100 }}px);
+    }
+  {%- endif -%}
+
+  .logo__image { max-width: {{ section.settings.logo_width }}px; }
+{%- endstyle -%}
+
+<page-header class="page-header block relative vishal">
+  <header class="header js-header-height
+          {%- if section.settings.enable_sticky %} header--sticky{% endif -%}
+          {%- if section.settings.enable_transparency %} header--transparent{% endif -%}
+          {%- if section.settings.enable_inline_nav %} header--inline{% endif -%}
+          {%- if section.settings.logo_align_left %} header--inline-logo-left{% endif %}"
+          {%- if section.settings.enable_inline_nav %} data-nav-inline="true"{% endif -%}>
+    <div class="header__layout relative flex justify-between items-center w-full">
+      <div class="header__menus-container">
+        {%- if section.settings.enable_inline_nav -%}
+          <div class="inline-header-nav">
+            <div class="nav-row multi-level-nav" role="navigation" aria-label="{{ 'accessibility.main_navigation' | t | escape }}">
+              <div class="tier-1">
+                <ul>
+                  {%- for link in linklists[section.settings.menu_linklist].links -%}
+                    {%- liquid
+                      if link.levels > 1
+                        assign has_mega_drop_down = true
+                      else
+                        assign has_mega_drop_down = false
+                      endif
+                    -%}
+
+                    <li class="{% if link.active %}active{% endif %}{% if link.links != blank %} contains-children{% endif %}{% if has_mega_drop_down %} contains-mega-menu{% endif %}">
+                      <a href="{{ link.url }}" class="{% if link.active %}active{% endif %}{% if link.links != blank %} has-children{% endif %}"{% if link.links != blank %} aria-haspopup="true" aria-expanded="false" aria-controls="{% if has_mega_drop_down %}mega-menu-tier-2{% else %}small-menu-tier-2-{{ forloop.index }}{% endif %}"{% endif %}>
+                        {{- link.title | strip -}}
+                      </a>
+
+                      {%- if link.links != blank -%}
+                        {%- liquid
+                          assign num_ctas = 0
+                          for block in section.blocks
+                            assign menu_item = block.settings.menu_item | downcase
+                            assign link_title = link.title | downcase
+                            if menu_item == link_title
+                              if block.settings.image != blank
+                                assign num_ctas = num_ctas | plus: 1
+                              endif
+                            endif
+                          endfor
+                        -%}
+
+                        <ul id="small-menu-tier-2-{{ forloop.index }}" {% if has_mega_drop_down -%}
+                              class="nav-columns nav-columns--count-{{ link.links.size }}
+                              {%- if link.links.size > 2 %} nav-columns--count-3-or-more {% endif -%}
+                              {%- if link.links.size > 5 %} nav-columns--count-6-or-more {% endif -%}
+                              nav-columns--cta-count-{{ num_ctas }}"
+                            {%- else -%}
+                              class="nav-rows"
+                            {%- endif -%}>
+
+                          {%- for child_link in link.links -%}
+                            <li class="{% if child_link.links != blank %}contains-children{% endif %}{% if child_link.active %}  active{% endif %}">
+                              <a href="{{ child_link.url }}" class="{% if child_link.links != blank %}has-children column-title{% endif %}" {% if child_link.links != blank %}aria-haspopup="true"{% endif %}>
+                                {{ child_link.title | strip }}
+                              </a>
+
+                              {%- if child_link.links != blank -%}
+                                <ul>
+                                  {%- for child_child_link in child_link.links -%}
+                                    <li class="{% if child_child_link.active %}active{% endif %}">
+                                      <a href="{{ child_child_link.url }}">{{ child_child_link.title | strip }}</a>
+                                    </li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+
+                          {%- liquid
+                            assign column_count = link.links.size
+                            for block in section.blocks
+                              assign menu_item = block.settings.menu_item | downcase
+                              assign link_title = link.title | downcase
+                              if menu_item == link_title
+                                assign column_count = column_count | plus: 1
+                              endif
+                            endfor
+
+                            for block in section.blocks
+                              assign menu_item = block.settings.menu_item | downcase
+                              assign link_title = link.title | downcase
+                              if menu_item == link_title
+                                render 'nav-call-to-action', block: block, menu: 'inline', first_cta: forloop.first, column_count: column_count
+                              endif
+                            endfor
+                          -%}
+                        </ul>
+
+                        {%- if section.settings.show_social_links or section.settings.contact_info_in_mega -%}
+                          {%- if section.settings.show_social_links or section.settings.contact_info_phone != blank or section.settings.contact_info_email != blank -%}
+                            {%- liquid
+                              assign num_columns = 0
+                              if section.settings.show_social_links
+                                assign num_columns = num_columns | plus: 1
+                              endif
+                              if section.settings.contact_info_phone != blank
+                                assign num_columns = num_columns | plus: 1
+                              endif
+                              if section.settings.contact_info_email != blank
+                                assign num_columns = num_columns | plus: 1
+                              endif
+                            -%}
+
+                            <div class="nav-contact-info nav-contact-info--{{ num_columns }}">
+                              {%- if section.settings.show_social_links -%}
+                                <div class="nav-contact-info__block">
+                                  {% render 'social-media', icon: settings.social_custom_icon, icon_height: 32 %}
+                                </div>
+                              {%- endif -%}
+
+                              {%- if section.settings.contact_info_in_mega and section.settings.contact_info_phone != blank -%}
+                                <div class="nav-contact-info__block">
+                                  <span class="nav-contact-info__icon nav-contact-info__icon--phone">{% render 'icon-phone' %}</span>
+                                  {{ section.settings.contact_info_phone }}
+                                </div>
+                              {%- endif -%}
+
+                              {%- if section.settings.contact_info_in_mega and section.settings.contact_info_email != blank -%}
+                                <div class="nav-contact-info__block">
+                                  <a href="mailto:{{ section.settings.contact_info_email }}">
+                                    <span class="nav-contact-info__icon nav-contact-info__icon--email">{% render 'icon-email' %}</span>
+                                    {{ section.settings.contact_info_email }}
+                                  </a>
+                                </div>
+                              {%- endif -%}
+                            </div>
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endif -%}
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+              <div id="mega-menu-tier-2" class="tier-2"></div>
+            </div>
+          </div>
+        {%- endif -%}
+
+        <details class="main-menu-wrapper" id="menu-disclosure">
+          <summary tabindex="-1">
+            <button type="button" class="menu-toggle" aria-controls="main-menu">
+              <div class="menu-icon block relative pointer-events-none">
+                <span class="menu-icon__line menu-icon__line--1"></span>
+                <span class="menu-icon__line menu-icon__line--2"></span>
+                <span class="menu-icon__line menu-icon__line--3"></span>
+              </div>
+              <span class="menu-toggle__text menu-toggle__text--menu">{{ 'general.navigation.menu' | t }}</span>
+              <span class="menu-toggle__text menu-toggle__text--close">{{ 'general.navigation.close' | t }}</span>
+              <span class="menu-toggle__text menu-toggle__text--back">{{ 'general.navigation.back' | t }}</span>
+            </button>
+          </summary>
+          <menu-drawer class="drawer drawer--x-start fixed top-0 start-0 flex flex-col has-motion" id="main-menu" role="dialog" tabindex="-1" aria-label="{{ 'general.navigation.menu' | t }}" aria-modal="true" aria-hidden="true">
+            <div class="main-menu-inner">
+              <nav class="main-menu-panel-wrapper" aria-label="{{ 'accessibility.main_navigation' | t | escape }}">
+                <div class="main-menu-panel" id="main-menu-panel">
+                  <ul class="main-menu-links">
+                    {%- for link in linklists[section.settings.menu_linklist].links -%}
+                      <li class="main-menu-list-item{% if link.links != blank %} has-children{% endif %}{% if link.active %} active{% endif %}">
+                        <a class="main-menu-link" href="{{ link.url }}" {% if link.links != blank %}aria-haspopup="true" aria-controls="main-menu-panel-{{ forloop.index }}"{% endif %}>
+                          {{- link.title | strip -}}
+                          {%- if link.links != blank -%}
+                            <span class="child-indicator has-ltr-icon">{% render 'icon-arrow-right' %}</span>
+                          {%- endif -%}
+                        </a>
+
+                        {%- if link.links != blank -%}
+                          <noscript>
+                            <div class="main-menu-panel main-menu-panel--child">
+                              <ul class="main-menu-links">
+                                {%- for child_link in link.links -%}
+                                  <li class="main-menu-list-item">
+                                    <a class="main-menu-link" href="{{ child_link.url }}">
+                                      {{- child_link.title | strip -}}
+                                    </a>
+                                    {%- if child_link.links != blank -%}
+                                      <div class="main-menu-panel main-menu-panel--child">
+                                        <ul class="main-menu-links">
+                                          {%- for grandchild_link in child_link.links -%}
+                                            <li>
+                                              <a class="main-menu-link" href="{{ grandchild_link.url }}">
+                                                {{- grandchild_link.title | strip -}}
+                                              </a>
+                                            </li>
+                                          {%- endfor -%}
+                                        </ul>
+                                      </div>
+                                    {%- endif -%}
+                                  </li>
+                                {%- endfor -%}
+                              </ul>
+                            </div>
+                          </noscript>
+                        {%- endif -%}
+                      </li>
+                    {%- endfor -%}
+
+                    {%- if shop.customer_accounts_enabled -%}
+                      {%- if customer -%}
+                        <li class="main-menu-account-link main-menu-account-link--first main-menu-list-item">
+                          <a class="main-menu-link" href="{{ routes.account_url }}">{{ 'sections.header.account' | t }}</a>
+                        </li>
+                        <li class="main-menu-account-link main-menu-list-item">
+                          <a class="main-menu-link" href="{{ routes.account_logout_url }}">{{ 'sections.header.log_out' | t }}</a>
+                        </li>
+                      {%- else -%}
+                        <li class="main-menu-account-link main-menu-account-link--first main-menu-list-item">
+                          <a class="main-menu-link" href="{{ routes.account_login_url }}">{{ 'sections.header.log_in' | t }}</a>
+                        </li>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </ul>
+
+                  {%- if section.blocks.size > 0 -%}
+                    {%- liquid
+                      assign cta_count = 0
+                      for block in section.blocks
+                        if block.settings.menu_item == blank
+                          if block.settings.image != blank or block.settings.title != blank or block.settings.subheading != blank or block.settings.button_label != blank
+                            assign cta_count = cta_count | plus: 1
+                          endif
+                        endif
+                      endfor
+                    -%}
+                    {%- if cta_count > 0 -%}
+                      <ul class="nav-ctas nav-ctas--{{ cta_count }} no-js-hidden">
+                        {%- for block in section.blocks -%}
+                          {%- if block.settings.menu_item == blank -%}
+                            {% render 'nav-call-to-action', block: block, menu: 'drawer' %}
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </ul>
+                    {%- endif -%}
+                  {% endif %}
+
+                  {%- if section.settings.contact_info_phone != blank or section.settings.contact_info_email != blank -%}
+                    <div class="nav-contact-info">
+                      {%- if section.settings.contact_info_phone != blank -%}
+                        <div class="nav-contact-info__block">
+                          <span class="nav-contact-info__icon nav-contact-info__icon--phone">{% render 'icon-phone' %}</span>
+                          {{ section.settings.contact_info_phone }}
+                        </div>
+                      {%- endif -%}
+
+                      {%- if section.settings.contact_info_email != blank -%}
+                        <div class="nav-contact-info__block">
+                          <a href="mailto:{{ section.settings.contact_info_email }}">
+                            <span class="nav-contact-info__icon nav-contact-info__icon--email">{% render 'icon-email' %}</span>
+                            {{ section.settings.contact_info_email }}
+                          </a>
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                  {%- if section.settings.show_social_links -%}
+                    <div class="main-menu-section main-menu-section--socials">
+                      {% render 'social-media', icon: settings.social_custom_icon, icon_height: 32 %}
+                    </div>
+                  {%- endif -%}
+
+                  {%- liquid
+                    assign show_localization = false
+                    if section.settings.enable_country_selector and localization.available_countries.size > 1
+                      assign show_localization = true
+                    elsif section.settings.enable_language_selector and localization.available_languages.size > 1
+                      assign show_localization = true
+                    endif
+                  -%}
+
+                  {%- if show_localization -%}
+                    <div class="main-menu-section no-js-hidden">
+                      {% render 'localization-form', id: 'menu-localization', hide_labels: true %}
+                    </div>
+                  {%- endif -%}
+                </div>
+
+                {%- for link in linklists[section.settings.menu_linklist].links -%}
+                  {%- if link.links != blank -%}
+                    <div class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden" id="main-menu-panel-{{ forloop.index }}" data-back-id="main-menu-panel" aria-hidden="true">
+                      <ul class="main-menu-links">
+                        {%- assign outer_forloop_index = forloop.index -%}
+                        {%- for child_link in link.links -%}
+                          <li class="main-menu-list-item{% if child_link.links != blank %} has-children{% endif %}{% if child_link.active %} active{% endif %}">
+                            <a class="main-menu-link" href="{{ child_link.url }}" {% if child_link.links != blank %}aria-haspopup="true" aria-controls="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}"{% endif %}>
+                              {{- child_link.title | strip -}}
+
+                              {%- if child_link.links != blank -%}
+                                <span class="child-indicator has-ltr-icon">{% render 'icon-arrow-right' %}</span>
+                              {%- endif -%}
+                            </a>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+
+                      {%- if section.blocks.size > 0 -%}
+                        {%- liquid
+                          assign cta_count = 0
+                          for block in section.blocks
+                            assign nav_item = block.settings.menu_item | downcase
+                            assign thisLinkLowercase = link.title | downcase
+
+                            if thisLinkLowercase == nav_item
+                              if block.settings.image != blank or block.settings.title != blank or block.settings.subheading != blank or block.settings.button_label != blank
+                                assign cta_count = cta_count | plus: 1
+                              endif
+                            endif
+                          endfor
+                        -%}
+                        {%- if cta_count > 0 -%}
+                          <ul class="nav-ctas nav-ctas--{{ cta_count }} no-js-hidden">
+                            {%- for block in section.blocks -%}
+                              {%- liquid
+                                assign nav_item = block.settings.menu_item | downcase
+                                assign thisLinkLowercase = link.title | downcase
+                              -%}
+                              {%- if thisLinkLowercase == nav_item -%}
+                                {% render 'nav-call-to-action', block: block, menu: 'drawer' %}
+                              {%- endif -%}
+                            {%- endfor -%}
+                          </ul>
+                        {%- endif -%}
+                      {%- endif -%}
+                    </div>
+
+                    {%- assign outer_forloop_index = forloop.index -%}
+                    {%- for child_link in link.links -%}
+                      {%- if child_link.links != blank -%}
+                        <div class="main-menu-panel main-menu-panel--child main-menu-panel--inactive-right no-js-hidden" id="main-menu-panel-{{ outer_forloop_index }}-{{ forloop.index }}" data-back-id="main-menu-panel-{{ outer_forloop_index }}" aria-hidden="true">
+                          <ul class="main-menu-links">
+                            {%- for grandchild_link in child_link.links -%}
+                              <li {% if grandchild_link.active %}class="active"{% endif %}>
+                                <a class="main-menu-link" href="{{ grandchild_link.url }}">
+                                  {{- grandchild_link.title | strip -}}
+                                </a>
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </nav>
+            </div>
+          </menu-drawer>
+        </details>
+      </div>
+
+      <div class="logo logo--{% if section.settings.logo == blank %}text{% else %}image{% endif %}">
+        {%- if section.settings.logo != blank -%}
+          <div class="logo__image{% if section.settings.alt_logo %} has-alt-image relative{% endif %}">
+            <a href="{{ routes.root_url }}">
+              <img class="logo__default-image"
+                    src="{{ section.settings.logo | image_url: width: logo_width }}"
+                    {%- if section.settings.logo.width >= logo_width_2x and section.settings.logo.height >= logo_height_2x %}
+                      srcset="{{ section.settings.logo | image_url: width: logo_width_2x }} 2x"
+                    {% endif -%}
+                    loading="eager"
+                    width="{{ logo_width }}"
+                    height="{{ logo_height }}"
+                    alt="{{ section.settings.logo.alt | default: shop.name | escape }}">
+              {%- if section.settings.alt_logo -%}
+                <img class="logo__contrast-image absolute top-0 left-0 w-full h-full object-contain"
+                      src="{{ section.settings.alt_logo | image_url: width: logo_width }}"
+                      {%- if section.settings.alt_logo.width >= logo_width_2x and section.settings.alt_logo.height >= logo_height_2x %}
+                        srcset="{{ section.settings.alt_logo | image_url: width: logo_width_2x }} 2x"
+                      {% endif -%}
+                      loading="eager"
+                      width="{{ logo_width }}"
+                      height="{{ logo_height }}"
+                      alt="{{ section.settings.alt_logo.alt | default: shop.name | escape }}"
+                      aria-hidden="true">
+              {%- endif -%}
+            </a>
+          </div>
+        {%- endif -%}
+
+        {%- if request.page_type == 'index' and section.settings.logo_h1 -%}
+          <h1 class="logo__text{% if section.settings.logo != blank %} visually-hidden{% endif %}">
+            <a href="{{ routes.root_url }}">{{ shop.name }}</a>
+          </h1>
+        {%- else -%}
+          <a class="logo__text{% if section.settings.logo != blank %} hidden{% endif %}" href="{{ routes.root_url }}">
+            {{- shop.name -}}
+          </a>
+        {%- endif -%}
+      </div>
+
+      <div class="header-icons flex items-center justify-end">
+        {%- if section.settings.enable_inline_nav -%}
+          {%- if shop.customer_accounts_enabled -%}
+            <a class="header-icons__item hidden md:block" href="{{ routes.account_url }}">
+              {% render 'icon-account' %}
+              <span class="visually-hidden">{{ 'sections.header.log_in' | t }}</span>
+            </a>
+          {%- endif -%}
+        {%- endif -%}
+
+        {%- if settings.enable_search -%}
+          <a class="header-icons__item header-search-toggle" href="{{ routes.search_url }}">
+            {% render 'icon-search' %}
+            <span class="visually-hidden">{{ 'sections.header.search' | t }}</span>
+          </a>
+        {%- endif -%}
+
+        <a class="header-icons__item relative" id="cart-icon" href="{{ routes.cart_url }}">
+          {%- render 'icon-basket' -%}
+          <span class="visually-hidden">{{ 'sections.header.cart' | t }}</span>
+
+          <div id="cart-icon-bubble">
+            {%- if cart != empty -%}
+              <div class="header-icons__cart-count absolute text-center">
+                {%- if cart.item_count < 100 -%}
+                  <span aria-hidden="true">{{ cart.item_count }}</span>
+                {%- endif -%}
+                <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+              </div>
+            {%- endif -%}
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="overlay fixed top-0 right-0 bottom-0 left-0 js-header-overlay"></div>
+  </header>
+</page-header>
+
+<script>
+  const header = document.querySelector('.page-header .header');
+  const inlineNavContainer = header.querySelector('.multi-level-nav');
+  if (inlineNavContainer) {
+    const inlineNav = header.querySelector('.inline-header-nav .tier-1 > ul');
+    if (header.dataset.navInline === 'true' && (inlineNavContainer.offsetWidth > inlineNav.offsetWidth)) {
+      header.classList.add('header--inline-visible');
+    }
+  }
+</script>
+
+{%- if settings.enable_search -%}
+  <search-drawer class="search-drawer drawer fixed top-0 right-0 flex flex-col has-motion" role="dialog" tabindex="-1" aria-labelledby="search-drawer-heading" aria-modal="true" aria-hidden="true">
+    <header class="drawer__header flex justify-between items-center">
+      <h2 class="h4 mb-0" id="search-drawer-heading">{{ 'general.search.title' | t }}</h2>
+      <button type="button" class="drawer__close-btn js-close-drawer">
+        <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+        {% render 'icon-close' %}
+      </button>
+    </header>
+    <div class="search-drawer__content drawer__content flex-auto">
+      {% render 'predictive-search', id: 'search-drawer-input' %}
+
+      {%- if section.settings.search_menu_linklist != blank and linklists[section.settings.search_menu_linklist].links.size > 0 -%}
+        <div class="search-drawer__quick-links">
+          {%- if section.settings.search_menu_title != blank -%}
+            <h3 class="h6 uppercase">{{ section.settings.search_menu_title }}</h3>
+          {%- endif -%}
+
+          <ul role="list">
+            {%- for link in linklists[section.settings.search_menu_linklist].links -%}
+              <li class="mt-3">
+                <a href="{{ link.url }}">{{ link.title | strip }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+  </search-drawer>
+{%- endif -%}
+
+{% render 'structured-data-header' %}
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "cc-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sticky",
+      "label": "Enable sticky header",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Maximum width",
+      "info": "Height is restricted to 150px.",
+      "min": 50,
+      "max": 250,
+      "step": 5,
+      "unit": "px",
+      "default": 150
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_h1",
+      "label": "Enable logo <h1> on home page",
+      "info": "For SEO. Deselect only if another section on the home page contains a primary page heading. [Learn more](https://cleancanvas.co.uk/support/alchemy/seo)",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "logo_align_left",
+      "label": "Align left when inline menu visible",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_logo_shrink",
+      "label": "Shrink on scroll",
+      "info": "Only applies when taller than header.",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Transparency"
+    },
+    {
+      "type": "paragraph",
+      "content": "Applies when the first section in a page is full width."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_transparency",
+      "label": "Enable transparent header",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "alt_logo",
+      "label": "Alternative logo (optional)",
+      "info": "Shown instead of the main logo when first section contains media."
+    },
+    {
+      "type": "color",
+      "id": "text_over_media_color",
+      "label": "Text and icons color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_linklist",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_inline_nav",
+      "label": "Show inline menu",
+      "info": "Shown on desktop when there is sufficient room, otherwise menu drawer icon will be shown.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "inline_nav_font_size",
+      "min": 14,
+      "max": 18,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size (inline menu)",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "nav_font_size",
+      "min": 16,
+      "max": 50,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size (menu drawer)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Search drawer"
+    },
+    {
+      "type": "text",
+      "id": "search_menu_title",
+      "label": "Quick links heading"
+    },
+    {
+      "type": "link_list",
+      "id": "search_menu_linklist",
+      "label": "Quick links menu"
+    },
+    {
+      "type": "header",
+      "content": "Contact information"
+    },
+    {
+      "type": "paragraph",
+      "content": "Always shown in the menu drawer."
+    },
+    {
+      "type": "checkbox",
+      "id": "contact_info_in_mega",
+      "label": "Show in mega menus",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "contact_info_phone",
+      "label": "Phone number"
+    },
+    {
+      "type": "text",
+      "id": "contact_info_email",
+      "label": "Email address",
+      "info": "Just an email address, no other text."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_links",
+      "label": "Show social media icons",
+      "info": "Set in Theme settings > Social media.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Country/Region selector"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shown in the menu drawer."
+    },
+    {
+      "type": "paragraph",
+      "content": "To add a country/region, go to your [payment settings](/admin/settings/payments)."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_country_selector",
+      "label": "Show country/region selector",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Language selector"
+    },
+    {
+      "type": "paragraph",
+      "content": "Shown in the menu drawer."
+    },
+    {
+      "type": "paragraph",
+      "content": "To add a language, go to your [language settings](/admin/settings/languages)."
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_language_selector",
+      "label": "Show language selector",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Menu promotion",
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Menu promotions are shown in dropdown menus. [Learn more.](https://cleancanvas.co.uk/support/alchemy/header)"
+        },
+        {
+          "type": "header",
+          "content": "Where to show"
+        },
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu item",
+          "info": "Enter the title of a menu item to show the promotion in, e.g. 'Shop'. Leave this empty to show the promotion in the first level of the menu drawer (will not be shown in dropdown menus)."
+        },
+        {
+          "type": "header",
+          "content": "Details"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Link text"
+        },
+        {
+          "type": "url",
+          "id": "cta_link",
+          "label": "Link URL"
+        },
+        {
+          "type": "header",
+          "content": "Overlay"
+        },
+        {
+          "type": "color",
+          "id": "promo_tint_color",
+          "label": "Background color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "promo_tint_opacity",
+          "label": "Background opacity",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "unit": "%",
+          "default": 20
+        },
+        {
+          "type": "color",
+          "id": "promo_text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

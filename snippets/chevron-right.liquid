@@ -1,0 +1,18 @@
+{%- comment -%}
+  Parameters:
+  - width {Number} - Width of the SVG.
+  - height {Number} - Height of the SVG.
+
+  Usage:
+  {% render 'chevron-right',
+    width: 20,
+    height: 20
+  %}
+{%- endcomment -%}
+
+{% assign width = width | default: 24 %}
+{% assign height = height | default: 24 %}
+
+<svg class="icon" width="{{ width }}" height="{{ height }}" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+  <path d="m 8 4.7 l 8 8 L 8 19.3" fill="none"></path>
+</svg>

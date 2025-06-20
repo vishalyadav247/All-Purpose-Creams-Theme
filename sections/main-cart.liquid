@@ -1,0 +1,266 @@
+{%- liquid
+  if section.settings.show_continue_shopping and cart.items != empty
+    if section.settings.continue_shopping_url != blank
+      assign continue_shopping_url = section.settings.continue_shopping_url
+    else
+      assign continue_shopping_url = routes.all_products_collection_url
+      for item in cart.items
+        for collection in item.product.collections
+          unless collection.handle == 'all' or collection.handle == 'frontpage'
+            assign continue_shopping_url = collection.url
+            assign csurl_found = true
+            break
+          endunless
+        endfor
+        if csurl_found
+          break
+        endif
+      endfor
+    endif
+  endif
+-%}
+
+<link rel="stylesheet" href="{{ 'cart.css' | asset_url }}">
+
+<div class="section section--page-width" style="--page-width: 1200px;">
+  <form class="cart form" id="cart" action="{{ routes.cart_url }}" method="post">
+    {%- if cart != empty and settings.show_free_shipping_notice -%}
+      {% render 'free-shipping-notice', bar_position: 'top' %}
+    {%- endif -%}
+
+    <div class="cart__items">
+      {% render 'cart-items' %}
+    </div>
+
+    <div class="alert mt-6 bg-error-bg text-error-text" id="cart-errors" role="alert" hidden></div>
+
+    {%- if cart != empty -%}
+      <div class="cart__summary grid grid-cols-1 md:grid-cols-2 gap-x-6" id="cart-summary" data-section="{{ section.id }}">
+        <div class="mt-8">
+          <div class="{% if section.settings.show_order_note or section.settings.show_shipping_calculator %}px-4 py-2 md:px-8 md:py-4 bg-panel-bg{% endif %}">
+            {%- if section.settings.show_order_note -%}
+              <script src="{{ 'cart-note.js' | asset_url }}" defer="defer"></script>
+              <details-disclosure>
+                <details class="cart-note-disclosure disclosure">
+                  <summary>
+                    <div class="flex justify-between items-center">
+                      <span class="disclosure__title flex-auto js-show-note">
+                        {%- if cart.note == blank -%}
+                          {{- 'cart.note.add' | t -}}
+                        {%- else -%}
+                          {{- 'cart.note.edit' | t -}}
+                        {%- endif -%}
+                      </span>
+                      <span class="disclosure__toggle">
+                        {%- if settings.disclosure_toggle == 'plus' -%}
+                          {% render 'icon-plus' %}
+                        {%- else -%}
+                          {% render 'icon-chevron-down' %}
+                        {%- endif -%}
+                      </span>
+                    </div>
+                  </summary>
+                  <div class="disclosure__panel">
+                    <div class="disclosure__content">
+                      <cart-note>
+                        <label class="visually-hidden" for="cart-note">{{ 'cart.note.label' | t }}</label>
+                        <textarea class="input w-full" id="cart-note" name="note" rows="4">{{ cart.note }}</textarea>
+                      </cart-note>
+                    </div>
+                  </div>
+                </details>
+              </details-disclosure>
+            {%- endif -%}
+
+            {%- if section.settings.show_shipping_calculator -%}
+              <details-disclosure>
+                <details class="cart-note-disclosure disclosure">
+                  <summary>
+                    <div class="flex justify-between items-center">
+                      <span class="disclosure__title flex-auto js-show-note">
+                        {{ 'cart.shipping_calculator.title' | t }}
+                      </span>
+                      <span class="disclosure__toggle">
+                        {%- if settings.disclosure_toggle == 'plus' -%}
+                          {% render 'icon-plus' %}
+                        {%- else -%}
+                          {% render 'icon-chevron-down' %}
+                        {%- endif -%}
+                      </span>
+                    </div>
+                  </summary>
+                  <div class="disclosure__panel">
+                    <div class="disclosure__content">
+                      <div class="cart__shipping-calculator">
+                        {% render 'shipping-calculator',
+                          id: 'cart',
+                          default_country: section.settings.shipping_calculator_default_country,
+                          no_heading: true
+                        %}
+                      </div>
+                    </div>
+                  </div>
+                </details>
+              </details-disclosure>
+            {%- endif -%}
+          </div>
+        </div>
+
+        <div class="mt-8 text-start md:text-end">
+          {%- if cart.cart_level_discount_applications != blank -%}
+            <ul role="list" aria-label="{{ 'customer.order.discount' | t }}">
+              {%- for discount in cart.cart_level_discount_applications -%}
+                <li class="mt-2 first:mt-0">
+                  <div class="cart-discount flex sm:inline-flex flex-wrap justify-between items-baseline h5">
+                    <span>{{ discount.title | escape_once }}</span>
+                    <span class="ms-2">-{{ discount.total_allocated_amount | money }}</span>
+                  </div>
+                </li>
+              {%- endfor -%}
+            </ul>
+          {%- endif -%}
+
+          <div class="cart-subtotal h3 m-0 flex sm:block flex-wrap justify-between items-baseline">
+            <span>{{ 'cart.summary.subtotal' | t }}<span class="hidden sm:inline">:</span></span>
+            <span class="cart-subtotal__value ms-2">{{ cart.total_price | money_with_currency }}</span>
+          </div>
+
+          {%- if section.settings.show_tax_and_shipping -%}
+            <div class="mt-4 rte">
+              {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+                {{- 'cart.general.taxes_included_shipping_at_checkout_html' | t: link: shop.shipping_policy.url -}}
+              {%- elsif cart.taxes_included -%}
+                {{- 'cart.general.taxes_included_shipping_at_checkout' | t -}}
+              {%- elsif shop.shipping_policy.body != blank -%}
+                {{- 'cart.general.taxes_and_shipping_at_checkout_html' | t: link: shop.shipping_policy.url -}}
+              {%- else -%}
+                {{- 'cart.general.taxes_and_shipping_at_checkout' | t -}}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.cart_terms_page != blank -%}
+            <cart-terms class="block mt-6">
+              <input type="checkbox" class="checkbox" id="cart-terms">
+              <label for="cart-terms">
+                <span class="rte">{{ 'cart.terms.agreement_html' | t: terms_url: settings.cart_terms_page }}</span>
+              </label>
+            </cart-terms>
+          {%- endif -%}
+
+          <button type="submit" class="btn btn--primary mt-8" name="checkout">
+            {{- 'cart.summary.checkout' | t | escape -}}
+          </button>
+
+          {%- if additional_checkout_buttons and section.settings.cart_terms_page == blank and section.settings.show_additional_checkout_buttons -%}
+            <div class="dynamic-cart-btns mt-4 md:ms-auto">
+              {{ content_for_additional_checkout_buttons }}
+            </div>
+          {%- endif -%}
+
+          {%- if section.settings.show_continue_shopping -%}
+            <div class="text-center sm:[text-align:inherit] mt-4">
+              <a class="continue-shopping link" href="{{ continue_shopping_url }}">{{ 'cart.summary.continue_shopping' | t }}</a>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </form>
+</div>
+
+{%- if section.settings.cart_terms_page != blank -%}
+  <script>
+    class CartTerms extends HTMLElement {
+      constructor() {
+        super();
+        document.getElementById('cart').addEventListener('submit', (evt) => {
+          if (!document.getElementById('cart-terms').checked) {
+            evt.preventDefault();
+            alert(`{{ 'cart.terms.confirmation' | t }}`);
+          }
+        });
+      }
+    }
+    customElements.define('cart-terms', CartTerms);
+  </script>
+{%- endif -%}
+
+
+{% schema %}
+{
+  "name": "Cart",
+  "class": "cc-main-cart",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart items"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_backorder_text",
+      "label": "Show backorder text",
+      "default": true,
+      "info": "Only shows for products that use Shopify inventory tracking and can be purchased when out of stock."
+    },
+    {
+      "type": "header",
+      "content": "Cart summary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_order_note",
+      "label": "Show order note",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tax_and_shipping",
+      "label": "Show tax status and shipping policy link",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_additional_checkout_buttons",
+      "label": "Show additional checkout options",
+      "default": true,
+      "info": "Display other gateways and quick checkout buttons. [Learn more](https://help.shopify.com/en/manual/payments/accelerated-checkouts)"
+    },
+    {
+      "type": "url",
+      "id": "cart_terms_page",
+      "label": "Terms and conditions link",
+      "info": "Additional checkout options will be hidden when cart terms are shown."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_continue_shopping",
+      "label": "Show continue shopping link",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "continue_shopping_url",
+      "label": "Continue shopping link",
+      "info": "If not entered, link will be the first collection (alphabetically) of the first product in the cart."
+    },
+    {
+      "type": "header",
+      "content": "Shipping calculator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_calculator",
+      "label": "Show shipping calculator",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "shipping_calculator_default_country",
+      "label": "Default country",
+      "info": "If the customer is logged-in, their default shipping address details will be selected.",
+      "default": "United States"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,306 @@
+{%- if settings.enable_quick_add -%}
+  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'product.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)'
+    assign bg_color = false
+  endif
+
+  if section.settings.boundary_effect != blank
+    assign bg_color = true
+  endif
+
+  if color_scheme == 'none' and section.settings.boundary_effect != blank
+  assign color_scheme = 'page'
+  endif
+
+  if section.settings.layout == 'carousel'
+    assign carousel = true
+    assign grid_classes = 'grid-flow-col auto-cols-' | append: settings.prod_card_mob_per_row
+
+    if section.settings.card_size == 'small'
+      assign grid_classes = grid_classes | append: ' md:auto-cols-3 lg:auto-cols-4 xl:auto-cols-5'
+    elsif section.settings.card_size == 'medium'
+      assign grid_classes = grid_classes | append: ' sm:auto-cols-2 lg:auto-cols-3 xl:auto-cols-4'
+    else
+      assign grid_classes = grid_classes | append: ' sm:auto-cols-2 lg:auto-cols-3'
+    endif
+  else
+    assign carousel = false
+    assign grid_classes = 'grid-cols-' | append: settings.prod_card_mob_per_row
+
+    if section.settings.card_size == 'small'
+      assign grid_classes = grid_classes | append: ' md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+    elsif section.settings.card_size == 'medium'
+      assign grid_classes = grid_classes | append: ' sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+    else
+      assign grid_classes = grid_classes | append: ' md:grid-cols-2 xl:grid-cols-3'
+    endif
+  endif
+
+  if settings.prod_card_image_ratio == 'shortest'
+    assign image_ratio = 0
+    for product in section.settings.collection.products limit: section.settings.products_to_show
+      if product.featured_media.preview_image.aspect_ratio > image_ratio
+        assign image_ratio = product.featured_media.preview_image.aspect_ratio
+      endif
+    endfor
+  elsif settings.prod_card_image_ratio == 'tallest'
+    assign image_ratio = 99
+    for product in section.settings.collection.products limit: section.settings.products_to_show
+      if product.featured_media.preview_image.aspect_ratio < image_ratio
+        assign image_ratio = product.featured_media.preview_image.aspect_ratio
+      endif
+    endfor
+  else
+    assign image_ratio = settings.prod_card_image_ratio
+  endif
+-%}
+
+<div class="section
+    {%- unless section.settings.full_width %} section--page-width{% endunless %}
+    {%- if bg_color %} section--padded{% endif %}
+    {%- if bg_color and section.settings.full_width %} section--m-0{% endif %}
+    {%- if carousel %} section--px-0{% endif %}
+    {%- unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}
+      {%- if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+    {%- endunless %}
+    {%- unless section.settings.full_width %} content-block{% endunless %}" id="{{ section.id }}">
+  {%- if carousel -%}
+    <carousel-slider class="carousel block xl:overflow-hidden" inactive>
+  {%- endif -%}
+
+  <div class="container">
+    {%- if carousel -%}
+      <div class="carousel__header flex items-center justify-between mb-6">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="section__heading flex-auto mb-0" data-cc-animate>
+            {{- section.settings.heading | link_to: section.settings.collection.url -}}
+          </h2>
+        {%- endif -%}
+
+        <div class="slider-nav flex no-js-hidden">
+          <button type="button" class="slider-nav__btn btn has-ltr-icon" name="prev" aria-controls="slider-{{ section.id }}">
+            <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+            {% render 'icon-arrow-left' %}
+          </button>
+          <button type="button" class="slider-nav__btn btn has-ltr-icon" name="next" aria-controls="slider-{{ section.id }}">
+            <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+            {% render 'icon-arrow-right' %}
+          </button>
+        </div>
+      </div>
+    {%- elsif section.settings.heading != blank -%}
+      <h2 class="section__heading text-center mb-6" data-cc-animate>
+        {{- section.settings.heading | link_to: section.settings.collection.url -}}
+      </h2>
+    {%- endif -%}
+
+    {%- if carousel -%}
+      <div class="slider relative" id="slider-{{ section.id }}">
+        <div class="container">
+    {%- endif -%}
+
+    <ul class="{% if carousel %}slider__grid {% endif %}grid {{ grid_classes }} gap-x-theme gap-y-card" role="list">
+      {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+        <li class="flex flex-col{% if carousel %} slider__item{% endif %}">
+          {% render 'product-card', collection: section.settings.collection, product: product, image_ratio: image_ratio, animate: forloop.index %}
+        </li>
+      {%- else -%}
+        {%- for i in (1..section.settings.products_to_show) -%}
+          <li class="flex flex-col{% if carousel %} slider__item{% endif %}">
+            {% render 'product-card', image_ratio: image_ratio %}
+          </li>
+        {%- endfor -%}
+      {%- endfor -%}
+    </ul>
+
+    {%- if carousel -%}
+        </div>
+      </div> {% # slider %}
+    {%- endif -%}
+  </div>
+
+  {%- if carousel -%}
+    </carousel-slider>
+  {%- endif -%}
+
+  {%- if section.settings.collection.all_products_count > section.settings.products_to_show and section.settings.show_view_all -%}
+    <div class="section__footer container text-center" data-cc-animate data-cc-animate-delay="0.2s">
+      <a href="{{ section.settings.collection.url }}" class="btn btn--secondary" aria-label="{{ 'sections.featured_collection.view_all_label' | t: collection_name: section.settings.collection.title }}">
+        {{- 'sections.featured_collection.view_all' | t -}}
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "tag": "section",
+  "class": "cc-featured-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Featured collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "select",
+      "id": "card_size",
+      "label": "Product card size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products to show",
+      "min": 2,
+      "max": 24,
+      "step": 2,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" button",
+      "info": "Only shows if the collection has more products than are shown here.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width background",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ],
+  "disabled_on": {
+    "templates": [
+      "password"
+    ],
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

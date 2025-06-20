@@ -1,0 +1,141 @@
+{% comment %}
+  Parameters:
+  - media {Object} - Media object.
+  - media_ratio {Number} - Media aspect ratio.
+  - loop {Boolean} - Enable video looping.
+  - loading {String} - Loading method for images. (optional)
+  - is_first {Boolean} - Media is first in loop.
+
+  Usage:
+  {% render 'product-media',
+    media: media,
+    media_ratio: media_ratio,
+    loop: section.settings.enable_video_looping,
+    loading: 'eager'
+  %}
+{% endcomment %}
+
+{%- capture sizes -%}
+  {%- if section.settings.media_layout == 'stacked' -%}
+    {%- if is_first -%}
+      {%- liquid
+        assign widths = '480, 640, 790, 1280, 1580'
+        assign src_width = 790
+      -%}
+      {%- render 'sizes-attribute',
+        min: 'page',
+        sm: 'calc(100vw - 64px)',
+        md: 'calc(50vw - 32px)',
+        lg: 'calc(50vw - 48px)',
+        xl: '790px',
+        max: false
+      -%}
+    {%- else -%}
+      {%- liquid
+        assign widths = '375, 480, 640, 750, 1280'
+        assign src_width = 750
+      -%}
+      {%- render 'sizes-attribute',
+        min: 'page',
+        sm: 'calc(50vw - 32px - 6px)',
+        md: 'calc(50vw - 32px)',
+        lg: 'calc((50vw - 48px - 12px) / 2)',
+        xl: '375px',
+        max: false
+      -%}
+    {%- endif -%}
+  {%- else -%}
+    {%- liquid
+      assign widths = '640, 760, 960, 1280, 1520'
+      assign src_width = 1520
+    -%}
+    {%- render 'sizes-attribute',
+      min: 'page',
+      sm: 'page',
+      md: 'calc(50vw - 32px)',
+      lg: 'calc(50vw - 48px)',
+      xl: '760px',
+      max: false
+    -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- if media.media_type == 'image' -%}
+  <div class="media relative" style="padding-top: {{ 1 | divided_by: media_ratio | times: 100 }}%;">
+    {% render 'image',
+      image: media,
+      widths: widths,
+      mobile_widths: '690, 800',
+      src_width: src_width,
+      sizes: sizes,
+      loading: loading,
+      class: 'img-fit img-fit--contain w-full'
+    %}
+  </div>
+{%- else -%}
+  {%- if media.media_type == 'model' -%}
+    <product-model class="block relative no-js-hidden" style="padding-top: {{ 1 | divided_by: media_ratio | times: 100 }}%" data-media-id="{{ media.id }}">
+  {%- else -%}
+    <deferred-media class="block relative no-js-hidden" style="padding-top: {{ 1 | divided_by: media_ratio | times: 100 }}%" data-media-id="{{ media.id }}">
+  {%- endif -%}
+
+  <button type="button" class="media-poster absolute top-0 left-0 flex justify-center items-center w-full h-full js-load-media">
+    {%- if media.media_type == 'model' -%}
+      <span class="visually-hidden">{{ 'products.product.media.play_model' | t }}</span>
+      <span class="media-poster__btn absolute flex items-center justify-center pointer-events-none">
+        {%- render 'icon-3d-model' -%}
+      </span>
+    {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+      <span class="visually-hidden">{{ 'products.product.media.play_video' | t }}</span>
+      <span class="media-poster__btn absolute flex items-center justify-center pointer-events-none">
+        {%- render 'icon-video' -%}
+      </span>
+    {%- endif -%}
+
+    {% render 'image',
+      image: media.preview_image,
+      widths: widths,
+      mobile_widths: '690, 800',
+      src_width: src_width,
+      sizes: sizes,
+      loading: loading,
+      class: 'img-fit img-fit--contain w-full',
+      alt_text: media.alt
+    %}
+  </button>
+
+  <template>
+    {%- liquid
+      case media.media_type
+        when 'external_video'
+          assign video_class = 'js-' | append: media.host
+          if media.host == 'youtube'
+            echo media | external_video_url: autoplay: true, loop: loop, playlist: media.external_id | external_video_tag: class: video_class, loading: 'lazy'
+          else
+            echo media | external_video_url: autoplay: true, loop: loop | external_video_tag: class: video_class, loading: 'lazy'
+          endif
+        when 'video'
+          echo media | media_tag: image_size: "1726x", autoplay: true, loop: loop, controls: true, preload: 'none'
+        when 'model'
+          echo media | media_tag: image_size: "1726x", toggleable: true
+      endcase
+    -%}
+  </template>
+
+  {%- if media.media_type == 'model' -%}
+    </product-model>
+    {%- if section.settings.media_layout == 'stacked' and xr_button -%}
+      <button type="button"
+              class="media-xr-button btn btn--primary btn--icon-with-text w-full hidden md:block"
+              data-shopify-model3d-id="{{ media.id }}"
+              data-shopify-title="title"
+              data-shopify-xr
+              data-shopify-xr-hidden>
+        {% render 'icon-3d-model' %}
+        {{ 'products.product.xr_button' | t }}
+      </button>
+    {%- endif -%}
+  {%- else -%}
+    </deferred-media>
+  {%- endif -%}
+{%- endif -%}

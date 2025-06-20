@@ -1,0 +1,114 @@
+.gallery-zoom-modal.modal {
+  z-index: 10000;
+}
+.gallery-zoom-modal .modal__window {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  overflow: hidden;
+}
+.gallery-zoom-modal .modal__content {
+  padding: 0;
+}
+.gallery-zoom-modal .modal__close-btn {
+  z-index: 3;
+}
+
+.gallery-zoom__zoom-container {
+  z-index: 1;
+  cursor: zoom-in;
+}
+
+.gallery-zoom__zoom-container--loading::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - 20px / 2);
+  left: calc(50% - 20px / 2);
+  width: 20px;
+  height: 20px;
+  animation: galleryViewerSpinner 1s linear infinite;
+  border: 1px solid transparent;
+  border-radius: 100%;
+  border-left-color: rgb(var(--text-color));
+  opacity: 0.75;
+}
+
+@keyframes galleryViewerSpinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.gallery-zoom__zoom-image {
+  position: absolute;
+  width: auto;
+  min-width: 0;
+  max-width: none;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.gallery-zoom__thumbs {
+  z-index: 2;
+}
+
+.gallery-zoom__thumb {
+  width: 69px;
+  padding: 4px;
+  background: rgb(var(--bg-color));
+}
+.gallery-zoom__thumb[hidden] {
+  display: none;
+}
+.gallery-zoom__thumb:not(:first-child) {
+  margin-left: -4px;
+}
+@media (max-width: 640px) {
+  .gallery-zoom__thumb {
+    width: 60px;
+  }
+}
+
+.gallery-zoom__thumb--active {
+  position: relative;
+}
+.gallery-zoom__thumb--active::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  left: 4px;
+  height: 3px;
+  background: rgb(var(--text-color));
+}
+
+.gallery-zoom__controls {
+  z-index: 3;
+}
+
+.gallery-zoom__button {
+  padding: 10px;
+  background: rgb(var(--bg-color), 0.7);
+  color: rgb(var(--text-color));
+}
+.gallery-zoom__button svg {
+  width: 34px;
+  height: 34px;
+  stroke-width: 1.2;
+}
+.gallery-zoom__button .feather {
+  stroke: rgb(var(--text-color));
+}
+@media (max-width: 640px) {
+  .gallery-zoom__button svg {
+    width: 26px;
+    height: 26px;
+    stroke-width: 1.6;
+  }
+}

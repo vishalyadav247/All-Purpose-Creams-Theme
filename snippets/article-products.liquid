@@ -1,0 +1,51 @@
+{%- comment %}theme-check-disable LiquidTag{% endcomment -%}
+
+{%- if settings.enable_quick_add -%}
+  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'product.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  assign products_html = ''
+  assign all_product_handles = '' | split: ' '
+  assign split_content = content | split: 'href="'
+-%}
+
+{%- for chunk in split_content -%}
+  {%- assign this_href = chunk | split: '"' | first -%}
+
+  {%- if this_href contains '/products/' -%}
+    {%- assign chunk_handle = this_href | split: '/' | last | split: '?' | first -%}
+
+    {%- unless all_product_handles contains chunk_handle -%}
+      {%- capture products_html -%}
+        {{- products_html -}}
+        <product-card class="card card--product relative flex w-full" data-lazy-product-handle="{{ chunk_handle }}"></product-card>
+      {%- endcapture -%}
+    {%- endunless -%}
+
+    {%- liquid
+      assign add_product_handle = chunk_handle | split: ' '
+      assign all_product_handles = all_product_handles | concat: add_product_handle
+    -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if products_html != blank -%}
+  <div class="section section--page-width">
+    <article-products class="article-products">
+      {%- capture title -%}{{ 'blogs.article.featured_products_title' | t }}{%- endcapture -%}
+      {%- if title != blank -%}
+        <h2 class="article-products__title section__heading">{{ title }}</h2>
+      {%- endif -%}
+      <div class="article-products__cards">
+        <div class="grid grid-cols-{{ settings.prod_card_mob_per_row }} sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-theme gap-y-card">
+          {{ products_html }}
+        </div>
+      </div>
+    </article-products>
+  </div>
+{%- endif -%}

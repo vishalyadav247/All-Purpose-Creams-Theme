@@ -1,0 +1,118 @@
+{%- liquid
+  if settings.coll_card_image_ratio == 'shortest'
+    assign image_ratio = 0
+    if section.settings.display_type == 'all'
+      for collection in collections
+        if collection != blank and collection.featured_image.aspect_ratio > image_ratio
+          assign image_ratio = collection.featured_image.aspect_ratio
+        endif
+      endfor
+    else
+      for block in section.blocks
+        assign collection = block.settings.collection
+        if collection != blank and collection.featured_image.aspect_ratio > image_ratio
+          assign image_ratio = collection.featured_image.aspect_ratio
+        endif
+      endfor
+    endif
+  elsif settings.coll_card_image_ratio == 'tallest'
+    assign image_ratio = 99
+    if section.settings.display_type == 'all'
+      for collection in collections
+        if collection != blank and collection.featured_image.aspect_ratio < image_ratio
+          assign image_ratio = collection.featured_image.aspect_ratio
+        endif
+      endfor
+    else
+      for block in section.blocks
+        assign collection = block.settings.collection
+        if collection != blank and collection.featured_image.aspect_ratio < image_ratio
+          assign image_ratio = collection.featured_image.aspect_ratio
+        endif
+      endfor
+    endif
+  else
+    assign image_ratio = settings.coll_card_image_ratio | split: '-' | first
+  endif
+-%}
+
+<div class="section section--page-width content-block">
+  {%- if section.settings.display_type == 'all' -%}
+    {%- paginate collections by 12 -%}
+      <ul class="grid grid-cols-{{ settings.coll_card_mob_per_row }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-theme gap-y-10" role="list">
+        {%- for collection in collections -%}
+          {%- liquid
+            if settings.coll_card_image_src == 'product'
+              assign coll_image = collection.products.first.featured_media.preview_image
+            else
+              assign coll_image = collection.featured_image
+            endif
+          -%}
+          <li>
+            {% render 'collection-card', collection: collection, image: coll_image, image_ratio: image_ratio %}
+          </li>
+        {%- endfor -%}
+      </ul>
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  {%- else -%}
+    <ul class="grid grid-cols-{{ settings.coll_card_mob_per_row }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-theme gap-y-10" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign collection = block.settings.collection
+          if settings.coll_card_image_src == 'product'
+            assign coll_image = collection.products.first.featured_media.preview_image
+          else
+            assign coll_image = collection.featured_image
+          endif
+        -%}
+        <li>
+          {% render 'collection-card', collection: collection, image: coll_image, image_ratio: image_ratio %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "class": "cc-main-list-collections",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "All of your collections are listed by default. To show a custom list, choose 'Selected' and add collections."
+    },
+    {
+      "type": "select",
+      "id": "display_type",
+      "label": "Collections to show",
+      "options": [
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "selected",
+          "label": "Selected"
+        }
+      ],
+      "default": "all"
+    }
+  ],
+  "max_blocks": 48,
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

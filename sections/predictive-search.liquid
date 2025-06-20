@@ -1,0 +1,117 @@
+{%- if predictive_search.performed -%}
+  <div class="predictive-search bg-theme-bg text-theme-text text-start">
+    <div class="predictive-search__results">
+      {%- if settings.enable_search_suggestions and predictive_search.resources.queries.size > 0 -%}
+        <div class="predictive-search__suggestions relative pt-2 md:pt-0 mb-2">
+          <h3 class="predictive-result__title h6 font-body regular-text font-bold mt-3">{{ 'general.search.queries' | t }}</h3>
+          <ul class="predictive-search__list predictive-result__list-suggestions" role="list">
+            {%- for suggestion in predictive_search.resources.queries -%}
+              <li class="predictive-search__item" role="option">
+                <a class="predictive-result predictive-result--suggestion block focus-inset" href="{{ suggestion.url }}">
+                  {{- suggestion.styled_text -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+      {%- liquid
+        assign show_predictive_results = false
+        if settings.enable_predictive_search
+          if predictive_search.resources.products.size > 0 or predictive_search.resources.collections.size > 0 or predictive_search.resources.pages.size > 0 or predictive_search.resources.articles.size > 0
+            assign show_predictive_results = true
+          endif
+        endif
+      -%}
+      {%- if show_predictive_results -%}
+        <tabbed-content>
+          <div class="tablist overflow-hidden mb-2">
+            <div class="tablist__scroller flex flex-wrap" role="tablist">
+              {%- if predictive_search.resources['products'] and predictive_search.resources['products'].size > 0 -%}
+                {%- assign products_tab_shown = true -%}
+                <button type="button"
+                  class="tablist__tab font-bold"
+                  id="psearch-products-tab"
+                  role="tab"
+                  aria-controls="psearch-products"
+                  aria-selected="true">
+                  {{- 'general.search.products' | t -}}
+                </button>
+              {%- endif -%}
+              {%- for resource in predictive_search.resources -%}
+                {%- liquid
+                  assign type = resource | first
+                  if type == 'products'
+                    continue
+                  endif
+                -%}
+                {%- if type != 'queries' and predictive_search.resources[type].size > 0 -%}
+                  <button type="button"
+                          class="tablist__tab font-bold"
+                          id="psearch-{{ type }}-tab"
+                          role="tab"
+                          {%- unless forloop.first or products_tab_shown %}tabindex="-1"{% endunless %}
+                          aria-controls="psearch-{{ type }}"
+                          aria-selected="{% if forloop.first and products_tab_shown == blank %}true{% else %}false{% endif %}">
+                    {%- if type == 'collections' -%}
+                      {{- 'general.search.collections' | t -}}
+                    {%- elsif type == 'articles' -%}
+                      {{- 'general.search.articles' | t -}}
+                    {%- else -%}
+                      {{- 'general.search.pages' | t -}}
+                    {%- endif -%}
+                  </button>
+                {%- endif -%}
+              {%- endfor -%}
+            </div>
+          </div>
+
+          {%- for resource in predictive_search.resources -%}
+            {%- assign type = resource | first -%}
+            {%- if type != 'queries' and predictive_search.resources[type].size > 0 -%}
+              {%- assign items = predictive_search.resources[type] -%}
+              <div class="predictive-search__tabpanel focus-inset" id="psearch-{{ type }}" role="tabpanel" tabindex="0" aria-labelledby="psearch-{{ type }}-tab"{% if products_tab_shown and type != 'products' %} hidden{% elsif products_tab_shown == blank and forloop.first == false %} hidden{% endif %}>
+                <ul class="predictive-search__list" role="list">
+                  {%- for item in items -%}
+                    <li class="predictive-search__item">
+                      <a class="predictive-result block focus-inset js-search-link" href="{{ item.url }}">
+                        {%- if type == 'products' -%}
+                          {% render 'product-card-mini', product: item, product_url: item.url, no_link: true %}
+                        {%- else -%}
+                          <div class="flex items-center">
+                            {%- if type == 'collections' -%}
+                              {%- if item.featured_image != blank -%}
+                                {{ item.featured_image | image_url: width: 112 | image_tag: loading: 'eager', class: 'predictive-result__media' }}
+                              {%- else -%}
+                                <div class="predictive-result__media media relative">
+                                  {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
+                                </div>
+                              {%- endif -%}
+                            {%- endif -%}
+
+                            <div class="predictive-result__info">
+                              <h3 class="predictive-result__title h6 m-0">{{ item.title }}</h3>
+                            </div>
+                          </div>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                  <li class="predictive-search__item js-submit" role="option">
+                    <button class="predictive-search__view-all link flex items-center w-full text-start focus-inset has-ltr-icon js-search-link">
+                      {{- 'general.search.view_all' | t -}} {% render 'icon-arrow-right' %}
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </tabbed-content>
+      {%- elsif predictive_search.resources.queries == blank or predictive_search.resources.queries.size == 0 -%}
+        <div class="predictive-search__no-results">
+          {{ 'general.search.no_results' | t: terms: predictive_search.terms }}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

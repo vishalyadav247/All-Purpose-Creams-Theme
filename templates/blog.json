@@ -1,0 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "hero_height_desktop": 400,
+        "hero_height_mobile": 240,
+        "enable_bg": true,
+        "boundary_effect": "",
+        "show_contrast_logo": false,
+        "hero_bg_color": "#e4e4e4",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#3f3f3f",
+        "hero_tint_color": "#141414",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": true
+      }
+    },
+    "main": {
+      "type": "main-blog",
+      "settings": {
+        "tag_style": "pill",
+        "show_author": true,
+        "show_date": true,
+        "layout": "grid",
+        "image_ratio": "shortest"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "main"
+  ]
+}

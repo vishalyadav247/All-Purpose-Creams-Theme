@@ -1,0 +1,72 @@
+{%- comment -%}
+  Parameters:
+  - product {Object} - Product object.
+  - product_url {String} - URL for product (optional, default is standard product URL).
+  - no_link {Boolean} - Do not output link tag and quick buy (optional, default is false).
+
+  Usage:
+  {% render 'product-card-mini', product: product %}
+{%- endcomment -%}
+
+{%- liquid
+  if product_url == blank
+    if collection and settings.card_url_within_coll and product.collections contains collection
+      assign product_url = product.url | within: collection
+    else
+      assign product_url = product.url
+    endif
+  endif
+-%}
+<div class="product-card-mini flex">
+  {%- if no_link -%}
+    <div class="flex flex-auto me-4">
+  {%- else -%}
+    <a class="flex flex-auto me-4 focus-inset" href="{{ product_url }}">
+  {%- endif -%}
+
+  {%- if product.featured_media != blank -%}
+    {{- product.featured_media | image_url: width: 112 | image_tag: loading: 'eager', class: 'w-[56px] me-4 object-top object-contain' -}}
+  {%- endif -%}
+
+  <div class="flex-auto{% if settings.predictive_search_show_price == false %} self-center{% endif %}">
+    <div class="product-card-mini__title mb-1">{{ product.title }}</div>
+    {% if settings.predictive_search_show_price %}
+      {% render 'price', product: product, use_variant: true %}
+    {% endif %}
+  </div>
+
+  {%- if no_link -%}
+    </div>
+  {%- else -%}
+    </a>
+  {%- endif -%}
+
+  {%- if settings.enable_quick_add and no_link != true -%}
+    <div class="flex-none">
+      {%- assign product_form_id = 'quick-add-' | append: section_id | append: product.id -%}
+      {%- if product.has_only_default_variant -%}
+        <product-form>
+          <div class="alert alert--compact mb-4 bg-error-bg text-error-text js-form-error" role="alert" hidden></div>
+          {%- form 'product', product,
+            class: 'js-product-form',
+            id: product_form_id,
+            novalidate: 'novalidate'
+          -%}
+            <input type="hidden" name="id" value="{{ product.variants.first.id }}" disabled>
+            <button class="btn btn--secondary btn--icon" name="add" aria-label="{{ 'products.product.add_to_cart' | t }}" aria-haspopup="dialog"{% if current_variant.available == false %} disabled{% endif %}>
+              {%- render 'icon-add-to-cart' -%}
+            </button>
+          {%- endform -%}
+        </product-form>
+      {%- else -%}
+        <div class="no-js-hidden">
+          <button type="button" class="btn btn--secondary btn--icon js-quick-add" aria-label="{{ 'products.product.choose_options' | t }}" aria-haspopup="dialog" data-product-url="{{ product_url }}">
+            <span class="pointer-events-none">
+              {%- render 'icon-add-to-cart' -%}
+            </span>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>

@@ -1,0 +1,96 @@
+{%- comment %}theme-check-disable LiquidTag{% endcomment -%}
+
+{%- comment -%}
+  Parameters:
+  - min {Number|String} - Number of columns (grid mode) or width value when no media queries are matched.
+  - sm {Number|String} - Number of columns (grid mode) or width value from the sm breakpoint up.
+  - md {Number|String} - Number of columns (grid mode) or width value from the md breakpoint up.
+  - lg {Number|String} - Number of columns (grid mode) or width value from the lg breakpoint up.
+  - xl {Number|String} - Number of columns (grid mode) or width value from the xl breakpoint up.
+  - max {Number|String} - Number of columns (grid mode) or width value from the max page width (plus gutters).
+  - grid {Boolean} - Breakpoint values are number of grid columns (optional, default is true).
+
+  Usage (grid):
+  {% render 'sizes-attribute', grid: true, min: 1, sm: 2, lg: 3, xl: 4 %}
+
+  Usage (non grid):
+  {% render 'sizes-attribute', min: '100vw', sm: 'calc(100vw - 64px)', lg: 'calc(100vw - 128px)', max: '1312px' %}
+{%- endcomment -%}
+
+{%- liquid
+  assign page_width = settings.max_page_width
+
+  assign gutter_sm = 16
+  assign gutter_md = 32
+  assign gutter_lg = 48
+
+  assign sm_mq = 640
+  assign md_mq = 768
+  assign lg_mq = 1024
+  assign xl_mq = 1280
+  assign max_mq = gutter_lg | times: 2 | plus: page_width
+-%}
+
+{%- if grid -%}
+  {%- liquid
+    assign gap_sm = settings.grid_column_gap
+    assign gap_lg = settings.grid_column_gap | times: 2
+    assign cols = min
+  -%}
+
+  {%- if cols > 1 -%}
+    {%- assign gaps = cols | minus: 1 | times: gap_sm -%}
+    {%- capture sizes %}calc((100vw - {{ gutter_sm | times: 2 | plus: gaps }}px) / {{ cols }}){% endcapture -%}
+  {%- else -%}
+    {%- capture sizes %}calc(100vw - {{ gutter_sm | times: 2 }}px){% endcapture -%}
+  {%- endif -%}
+
+  {%- if sm %}{% assign cols = sm %}{% endif -%}
+  {%- if cols > 1 -%}
+    {%- assign gaps = cols | minus: 1 | times: gap_lg -%}
+    {%- capture sizes %}(min-width: {{ sm_mq }}px) calc((100vw - {{ gutter_md | times: 2 | plus: gaps }}px) / {{ cols }}), {{ sizes }}{% endcapture -%}
+  {%- else -%}
+    {%- capture sizes %}(min-width: {{ sm_mq }}px) calc(100vw - {{ gutter_md | times: 2 }}px), {{ sizes }}{% endcapture -%}
+  {%- endif -%}
+
+  {%- if md -%}
+    {%- assign cols = md -%}
+    {%- if cols > 1 -%}
+      {%- assign gaps = cols | minus: 1 | times: gap_lg -%}
+      {%- capture sizes %}(min-width: {{ md_mq }}px) calc((100vw - {{ gutter_md | times: 2 | plus: gaps }}px) / {{ cols }}), {{ sizes }}{% endcapture -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if lg %}{% assign cols = lg %}{% endif -%}
+  {%- if cols > 1 -%}
+    {%- assign gaps = cols | minus: 1 | times: gap_lg -%}
+    {%- capture sizes %}(min-width: {{ lg_mq }}px) calc((100vw - {{ gutter_lg | times: 2 | plus: gaps }}px) / {{ cols }}), {{ sizes }}{% endcapture -%}
+  {%- else -%}
+    {%- capture sizes %}(min-width: {{ lg_mq }}px) calc(100vw - {{ gutter_lg | times: 2 }}px), {{ sizes }}{% endcapture -%}
+  {%- endif -%}
+
+  {%- if xl -%}
+    {%- assign cols = xl %}
+    {%- if cols > 1 -%}
+      {%- assign gaps = cols | minus: 1 | times: gap_lg -%}
+      {%- capture sizes %}(min-width: {{ xl_mq }}px) calc((100vw - {{ gutter_md | times: 2 | plus: gaps }}px) / {{ cols }}), {{ sizes }}{% endcapture -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- if max %}{% assign cols = max %}{% endif -%}
+  {%- if cols > 1 -%}
+    {%- assign gaps = cols | minus: 1 | times: gap_lg -%}
+    {%- capture sizes %}(min-width: {{ max_mq }}px) calc(({{ page_width }}px - {{ gaps }}px) / {{ cols }}), {{ sizes }}{% endcapture -%}
+  {%- else -%}
+    {%- capture sizes %}(min-width: {{ max_mq }}px) {{ page_width }}px, {{ sizes }}{% endcapture -%}
+  {%- endif -%}
+
+  {{- sizes -}}
+{%- else -%}
+  {%- if max %}(min-width: {{ max_mq }}px) {% if max and max != 'page' %}{{ max }}{% else %}{{ page_width }}px{% endif %}, {% endif -%}
+  {%- if xl and xl != 'page' %}(min-width: {{ xl_mq }}px) {{ xl }}, {% endif -%}
+  {%- if lg != false %}(min-width: {{ lg_mq }}px) {% if lg and lg != 'page' %}{{ lg }}, {% else %}calc(100vw - {{ gutter_lg | times: 2 }}px), {% endif %}{% endif -%}
+  {%- if md and md != 'page' %}(min-width: {{ md_mq }}px) {{ md }}, {% endif -%}
+  {%- if sm != false %}(min-width: {{ sm_mq }}px) {% if sm and sm != 'page' %}{{ sm }}, {% else %}calc(100vw - {{ gutter_md | times: 2 }}px), {% endif %}{% endif -%}
+  {%- if min and min != 'page' %}{{ min }}{% else %}calc(100vw - {{ gutter_sm | times: 2 }}px){% endif -%}
+{%- endif -%}

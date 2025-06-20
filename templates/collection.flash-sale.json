@@ -1,0 +1,176 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner-coll",
+      "disabled": true,
+      "settings": {}
+    },
+    "rich_text_1": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Flash sale now on!",
+            "heading_size": "h1",
+            "heading_h1": true
+          }
+        },
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Sale ends in:</p>",
+            "text_size": 130
+          }
+        },
+        "countdown_1": {
+          "type": "countdown",
+          "settings": {
+            "number_size": 64
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "text_1",
+        "countdown_1"
+      ],
+      "settings": {
+        "full_width_content": true,
+        "full_width": true,
+        "color_scheme": "2"
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "products_per_page": 24,
+        "card_size": "large",
+        "show_prod_totals": true,
+        "show_filter_counts": true,
+        "filters_open": "all"
+      }
+    },
+    "scrolling_banner": {
+      "type": "scrolling-banner",
+      "blocks": {
+        "icon_1": {
+          "type": "icon",
+          "settings": {
+            "icon": "price_tag"
+          }
+        },
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "Flash Sale!",
+            "heading_size": "h0"
+          }
+        },
+        "icon_2": {
+          "type": "icon",
+          "settings": {
+            "icon": "price_tag"
+          }
+        },
+        "text_2": {
+          "type": "text",
+          "settings": {
+            "text": "Up to 50% off",
+            "heading_size": "h0"
+          }
+        }
+      },
+      "block_order": [
+        "icon_1",
+        "text_1",
+        "icon_2",
+        "text_2"
+      ],
+      "settings": {
+        "section_height": "-xsmall",
+        "color_scheme": "none"
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_1": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_2": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_3": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_4": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_5": {
+          "type": "collection",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2",
+        "collection_3",
+        "collection_4",
+        "collection_5"
+      ],
+      "settings": {
+        "heading": "Collection List",
+        "show_view_all": false,
+        "layout": "carousel",
+        "card_size": "medium",
+        "color_scheme": "none"
+      }
+    },
+    "rich_text_2": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {}
+        },
+        "text": {
+          "type": "text",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "full_width_content": false,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "rich_text_1",
+    "main",
+    "scrolling_banner",
+    "collection_list",
+    "rich_text_2"
+  ]
+}

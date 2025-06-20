@@ -1,0 +1,107 @@
+.results-header__count {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.results-header__filter,
+.results-header__apply {
+  margin-inline-start: calc(4 * var(--space-unit));
+}
+
+.results-header__filter > .icon {
+  margin: 2px;
+  margin-inline-start: -10px;
+  margin-inline-end: 10px;
+}
+.results-header__filter circle {
+  transition: fill 0.2s ease;
+  fill: rgb(var(--btn-bg-color));
+}
+.results-header__filter:hover circle {
+  fill: rgb(var(--btn-text-color));
+}
+
+.facets .drawer__content {
+  padding: 0;
+}
+
+.filter.disclosure {
+  padding: calc(2 * var(--space-unit)) var(--gutter);
+  border-bottom: 1px solid rgba(var(--text-color)/0.15);
+}
+
+.filter__list > li:not(:last-child) {
+  margin-bottom: calc(3 * var(--space-unit));
+}
+
+.checkbox + .filter__label {
+  padding-inline-end: 3px;
+  font-weight: calc(var(--body-font-weight) + 100);
+}
+
+.filter__swatches {
+  margin: 0 -10px -10px 0;
+  padding: 2px;
+}
+.filter__swatches > li {
+  margin: 0 10px 10px 0;
+}
+
+.product-list > .grid {
+  transition: opacity 0.4s ease;
+}
+
+.product-list.is-loading > .grid {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.product-list.is-loading::after {
+  top: calc(50% - 24px);
+  right: calc(50% - 24px);
+  width: 48px;
+  height: 48px;
+  border-width: 3px;
+}
+
+.no-js .facets.drawer {
+  visibility: visible;
+  position: static;
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin-bottom: calc(4 * var(--space-unit));
+  transform: none;
+  opacity: 1;
+}
+.no-js .facets .drawer__header,
+.no-js .facets .drawer__content,
+.no-js .facets .drawer__footer,
+.no-js .facets .disclosure {
+  padding-right: 0;
+  padding-left: 0;
+}
+.no-js .facets .drawer__header {
+  padding-top: 0;
+}
+.no-js .facets .drawer__close-btn {
+  display: none;
+}
+.no-js .facets .filter__toggle {
+  padding: calc(2 * var(--space-unit)) 0;
+}
+.no-js .facets .disclosure__content {
+  padding-top: calc(2 * var(--space-unit));
+}
+.no-js .facets .drawer__footer {
+  border-top: 0;
+}
+
+@media (max-width: 767.98px) {
+  .results-header__sortby.mobile-visually-hidden {
+    visibility: hidden;
+    position: absolute;
+    pointer-events: none;
+  }
+}

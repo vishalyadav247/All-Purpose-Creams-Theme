@@ -1,0 +1,24 @@
+.article-products {
+  padding: calc(var(--section-gap) * var(--fluid-1-5)) 0 0;
+  border-top: 1px solid rgba(var(--text-color)/0.15);
+}
+
+.article-products__cards {
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+.is-loading .article-products__cards {
+  opacity: 0;
+}
+
+.comment footer {
+  font-style: italic; /* Tailwind not working */
+}
+
+@media (min-width: 1024px) {
+  .article__image {
+    width: var(--viewport-width);
+    max-width: 800px;
+    margin-inline-start: calc(50% - 400px);
+  }
+}

@@ -1,0 +1,54 @@
+{% comment %}
+  Parameters:
+  - product {Object} - Product object.
+  - use_variant {Boolean} - Use variant price instead of general (optional, default is false).
+
+  Usage:
+  {% render 'price', product: product %}
+{% endcomment %}
+
+{%- liquid
+  if use_variant
+    assign product_variant = product.selected_or_first_available_variant
+  else
+    assign use_variant = false
+    assign product_variant = product.variants | sort: 'price' | first
+  endif
+
+  assign available = product_variant.available | default: false
+  assign compare_at_price = product_variant.compare_at_price
+  assign price = product_variant.price | default: 1999
+  assign money_price = price | money
+
+  if settings.show_currency_code
+    assign money_price = price | money_with_currency
+  endif
+-%}
+
+<div class="price{%- if compare_at_price > price %} price--on-sale{% endif -%}
+                 {%- if available == false %} price--sold-out{% endif -%}">
+  <div class="price__default">
+    {%- if product.price_varies and use_variant == false %}
+      <span class="price__from">{{ 'products.product.from' | t }}</span>
+    {%- endif %}
+    <span class="price__current">{{ money_price }}</span>
+    {% if compare_at_price > price or use_variant -%}
+      <s class="price__was{% if use_variant %} text-sm{% endif %}"{% unless compare_at_price > price %} hidden{% endunless %}>{{ compare_at_price | money }}</s>
+    {%- endif %}
+  </div>
+
+  <div class="unit-price {% if use_variant %}text-sm{% else %}text-xs{% endif %}"{% if product_variant.unit_price_measurement == nil %} hidden{% endif %}>
+    (<span class="unit-price__price">{{ product_variant.unit_price | money }}</span>
+    <span class="unit-price__separator">{{ 'products.product.price.unit_price_separator' | t }}</span>
+    <span class="unit-price__unit">
+      {%- if product_variant.unit_price_measurement.reference_value != 1 -%}
+        {{- product_variant.unit_price_measurement.reference_value -}}
+      {%- endif -%}
+      {{ product_variant.unit_price_measurement.reference_unit -}}
+    </span>)
+  </div>
+
+  <div class="price__no-variant" hidden>
+    <span class="price__current">{{ 'products.variant.non_existent' | t }}</span>
+  </div>
+</div>

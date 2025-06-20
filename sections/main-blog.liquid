@@ -1,0 +1,235 @@
+<div class="section section--page-width">
+  {%- if section.settings.tag_style == 'dropdown' and blog.all_tags.size > 0 -%}
+    <div class="blog-filter items-center mb-10" data-cc-animate data-cc-animate-delay="0.1s">
+      <label class="label label--inline-select me-2" for="blog-filter">{{ 'blogs.tags.label' | t }}</label>
+      <div class="select inline-block relative">
+        <select id="blog-filter" onchange="window.location=this.value">
+          <option value="{{ blog.url }}">{{ 'blogs.tags.all' | t }}</option>
+          {%- for tag in blog.all_tags -%}
+            <option value="{{ blog.url }}/tagged/{{ tag | handle }}"{% if current_tags contains tag %} selected{% endif %}>
+              {{- tag -}}
+            </option>
+          {%- endfor -%}
+        </select>
+      </div>
+    </div>
+  {%- elsif section.settings.tag_style == 'pill' and blog.all_tags.size > 0 -%}
+    <div class="blog-filter mb-10" data-cc-animate data-cc-animate-delay="0.1s">
+      <span class="label label--inline me-6" for="blog-filter">{{ 'blogs.tags.label' | t }}</span>
+      {%- for tag in blog.all_tags -%}
+        <a class="pill me-4 mb-4 inline-flex items-center" href="{% if current_tags contains tag %}{{ blog.url }}{% else %}{{ blog.url }}/tagged/{{ tag | handle }}{% endif %}">
+          {{- tag -}}
+          {% if current_tags contains tag -%}
+            {%- render 'icon-close' -%}
+          {%- endif -%}
+        </a>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- paginate blog.articles by 12 -%}
+    {%- liquid
+      if section.settings.image_ratio == 'shortest'
+        assign image_ratio = 0
+        for article in blog.articles
+          if article.image != blank and article.image.aspect_ratio > image_ratio
+            assign image_ratio = article.image.aspect_ratio
+          endif
+        endfor
+      elsif section.settings.image_ratio == 'tallest'
+        assign image_ratio = 99
+        for article in blog.articles
+          if article.image != blank and article.image.aspect_ratio < image_ratio
+            assign image_ratio = article.image.aspect_ratio
+          endif
+        endfor
+      else
+        assign image_ratio = section.settings.image_ratio
+      endif
+    -%}
+
+    {%- if section.settings.layout == 'grid' and blog.articles != empty -%}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-theme gap-y-14">
+    {%- endif -%}
+
+    {%- for article in blog.articles -%}
+      {%- liquid
+        assign article_class = ''
+        if section.settings.layout == 'list'
+          if article.image != blank
+            assign article_class = 'md:grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-5'
+          endif
+          unless forloop.first
+            assign article_class = article_class | append: ' mt-10'
+          endunless
+        endif
+      -%}
+      <article class="{{ article_class }}" data-cc-animate data-cc-animate-offset="80%">
+        {%- if article.image != blank -%}
+          <a class="block mb-5" href="{{ article.url }}">
+            <div class="media media-hover-effect relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+              {%- liquid
+                capture sizes
+                  if section.settings.layout == 'grid'
+                    render 'sizes-attribute', grid: true, min: 1, md: 2, lg: 3
+                  else
+                    render 'sizes-attribute', grid: true, min: 1, md: 2, xl: 2
+                  endif
+                endcapture
+              -%}
+              {% render 'image',
+                image: article.image,
+                widths: '320, 480, 600, 700, 800, 1000, 1280',
+                src_width: 640,
+                sizes: sizes,
+                class: 'img-fit'
+              %}
+            </div>
+          </a>
+        {%- endif -%}
+        <div>
+          <h2 class="{% if section.settings.layout == 'grid' %}h4{% else %}h3{% endif %}"><a href="{{ article.url }}">{{ article.title | escape }}</a></h2>
+          <div class="text-sm text-theme-heading uppercase tracking-wider">
+            {% if section.settings.show_author %}
+              <span>{{ article.author }}</span>
+            {% endif %}
+
+            {% if section.settings.show_date %}
+              {% if section.settings.show_author %}<span class="px-1">&middot;</span>{% endif %}
+              <span>{{ article.published_at | time_tag: format: 'date' }}</span>
+            {% endif %}
+
+            {% if blog.comments_enabled? and article.comments_count > 0 %}
+              {% if section.settings.show_author or section.settings.show_date %}<span class="px-1">&middot;</span>{% endif %}
+              <span>
+                <a href="{{ article.url }}#comments">{{ 'blogs.article.comments' | t: count: article.comments_count }}</a>
+              </span>
+            {% endif %}
+          </div>
+          <div class="rte reading-width m-0 mt-4">
+            {%- if article.excerpt.size > 0 -%}
+              {{ article.excerpt }}
+            {%- else -%}
+              <p>{{ article.content | strip_html | truncatewords: 35 }}</p>
+            {%- endif -%}
+          </div>
+          <div class="mt-8 hide-until-lg">
+            <a class="btn btn--secondary" href="{{ article.url }}">{{ 'blogs.article.read_more' | t }}</a>
+          </div>
+        </div>
+      </article>
+    {%- else -%}
+      <p><em>{{ 'blogs.article.no_matches' | t }}</em></p>
+    {%- endfor -%}
+
+    {%- if section.settings.layout == 'grid' -%}
+      </div>
+    {%- endif -%}
+
+    {%- if paginate.pages > 1 -%}
+      <div class="pagination" data-cc-animate>
+        {% comment %}
+          When paginating blog articles, a previous article is actually a newer article, not an older one,
+          because blog articles are shown and paginated in a reversed chronological order.
+          The word 'previous' can be confusing, hence we'll change it.
+        {% endcomment %}
+        {%- assign older_articles = 'blogs.pagination.older_articles' | t -%}
+        {%- assign newer_articles = 'blogs.pagination.newer_articles' | t -%}
+        {% render 'pagination', previous_text: newer_articles, next_text: older_articles, paginate: paginate %}
+      </div>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Blog listing",
+  "class": "cc-main-blog",
+  "settings": [
+    {
+      "type": "select",
+      "id": "tag_style",
+      "label": "Tags",
+      "default": "pill",
+      "options": [
+        {
+          "label": "None",
+          "value": "none"
+        },
+        {
+          "label": "Pill",
+          "value": "pill"
+        },
+        {
+          "label": "Dropdown",
+          "value": "dropdown"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show published date",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "default": "grid",
+      "options": [
+        {
+          "label": "Grid",
+          "value": "grid"
+        },
+        {
+          "label": "List",
+          "value": "list"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "shortest",
+          "label": "Adapt (shortest image)"
+        },
+        {
+          "value": "tallest",
+          "label": "Adapt (tallest image)"
+        },
+        {
+          "value": "1.78",
+          "label": "Wide"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.75",
+          "label": "Portrait"
+        }
+      ],
+      "default": "1.33"
+    }
+  ]
+}
+{% endschema %}

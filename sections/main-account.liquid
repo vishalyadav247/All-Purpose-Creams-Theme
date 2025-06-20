@@ -1,0 +1,68 @@
+<div class="section section--page-width customer">
+  <div class="account-width mx-auto">
+    <div class="text-center">
+      <h2 class="h3 mb-6">{{ 'customer.account.details' | t }}</h2>
+      <div class="address-box mx-auto">
+        {{ customer.default_address | format_address }}
+        <a class="link" href="{{ routes.account_addresses_url }}">
+          {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-12 text-center">
+      <h2 class="h3 mb-6">{{ 'customer.orders.title' | t }}</h2>
+
+      {%- paginate customer.orders by 20 -%}
+        {%- if customer.orders.size > 0 -%}
+          <table class="order-history orders w-full">
+            <caption class="visually-hidden">{{ 'customer.orders.title' | t }}</caption>
+            <thead>
+              <tr>
+                <th>{{ 'customer.orders.order_number' | t }}</th>
+                <th>{{ 'customer.orders.date' | t }}</th>
+                <th>{{ 'customer.orders.payment_status' | t }}</th>
+                <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+                <th class="text-end">{{ 'customer.orders.total' | t }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr class="order-history__item">
+                  <td data-label="{{ 'customer.orders.order_number' | t }}">
+                    <a class="link" href="{{ order.customer_url }}">{{ order.name }}</a>
+                  </td>
+                  <td data-label="{{ 'customer.orders.date' | t }}">
+                    {{- order.created_at | time_tag: format: 'date' -}}
+                  </td>
+                  <td data-label="{{ 'customer.orders.payment_status' | t }}">
+                    {{- order.financial_status_label -}}
+                  </td>
+                  <td data-label="{{ 'customer.orders.fulfillment_status' | t }}">
+                    {{- order.fulfillment_status_label -}}
+                  </td>
+                  <td class="text-end" data-label="{{ 'customer.orders.total' | t }}">
+                    {{- order.total_price | money_with_currency -}}
+                  </td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        {%- else -%}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- endpaginate -%}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Account",
+  "class": "cc-main-account"
+}
+{% endschema %}

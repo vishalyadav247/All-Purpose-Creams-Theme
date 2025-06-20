@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "hero_height_desktop": 320,
+        "hero_height_mobile": 240,
+        "enable_bg": true,
+        "boundary_effect": "",
+        "show_contrast_logo": false,
+        "hero_bg_color": "#e4e4e4",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#3f3f3f",
+        "hero_tint_color": "#141414",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": false
+      }
+    },
+    "main": {
+      "type": "main-search",
+      "settings": {
+        "results_per_page": 24,
+        "card_size": "medium",
+        "show_prod_totals": true,
+        "enable_filtering": true,
+        "show_filter_counts": true,
+        "filters_open": "some",
+        "max_filter_options": 7,
+        "enable_sorting": true,
+        "show_article_date": true,
+        "show_article_author": false
+      }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "blocks": {
+        "collection_1": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_2": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_3": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_4": {
+          "type": "collection",
+          "settings": {}
+        },
+        "collection_5": {
+          "type": "collection",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "collection_1",
+        "collection_2",
+        "collection_3",
+        "collection_4",
+        "collection_5"
+      ],
+      "settings": {
+        "heading": "Have you tried...?",
+        "show_view_all": false,
+        "layout": "carousel",
+        "card_size": "small",
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "main",
+    "collection_list"
+  ]
+}

@@ -1,0 +1,133 @@
+.footer {
+  background-color: rgb(var(--bg-color));
+  color: rgb(var(--text-color));
+  font-size: max(0.875em, 1.4rem);
+}
+.footer .rte a:hover,
+.footer .copyright a:hover,
+.footer .footer-menu__item a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2rem;
+}
+
+.footer-block--links {
+  min-width: 120px;
+}
+
+.footer-block--newsletter {
+  min-width: 230px;
+  max-width: 480px;
+}
+
+.footer--transparent {
+  border-top: 1px solid rgba(var(--text-color)/0.15);
+}
+
+.footer__main {
+  padding: calc(48 * var(--fluid-1-5)) 0;
+}
+
+.footer-menu__item {
+  margin: 0.88em 0 0;
+}
+
+.footer-block__text {
+  max-width: 60ch;
+}
+
+.lower-footer {
+  padding: calc(8 * var(--space-unit)) 0;
+  border-top: 1px solid rgba(var(--text-color)/0.1);
+}
+.lower-footer.no-border-top {
+  border-top: 0;
+}
+.lower-footer > .container {
+  display: block;
+}
+.lower-footer .custom-select__listbox {
+  top: auto;
+  bottom: 5px;
+}
+
+.lower-footer__left {
+  width: 100%;
+  text-align: center;
+}
+.lower-footer__left .copyright {
+  font-size: 0.875em;
+}
+.lower-footer__left .seg {
+  display: block;
+  margin: 0 0 1em;
+}
+
+.lower-footer__right {
+  width: 100%;
+  margin: 20px 0 0;
+  text-align: center;
+}
+
+.lower-footer__full {
+  width: 100%;
+  text-align: center;
+}
+
+.payment-methods__inner {
+  justify-content: center;
+  margin: -5px;
+}
+
+.payment-methods .payment-icon {
+  width: 38px;
+  margin: 5px;
+  vertical-align: top;
+}
+
+@media (max-width: 767.98px) {
+  .footer .localization__selector {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 calc(5 * var(--space-unit));
+  }
+}
+@media (min-width: 768px) {
+  .js .lower-footer .localization__grid {
+    display: flex;
+  }
+  .lower-footer .localization__selector {
+    flex-shrink: 0;
+    max-width: 250px;
+    margin: 0;
+    margin-inline-end: calc(8 * var(--space-unit));
+  }
+  .lower-footer .no-js .localization__selector {
+    margin-bottom: calc(4 * var(--space-unit));
+  }
+  .lower-footer > .container {
+    display: flex;
+    align-items: center;
+  }
+  .lower-footer__left {
+    width: 50%;
+    margin: 0 auto;
+    text-align: start;
+  }
+  .lower-footer__left .seg {
+    display: inline-block;
+    margin: 0;
+    padding-inline-end: 1em;
+  }
+  .lower-footer__left .copyright > a {
+    display: inline-block;
+  }
+  .lower-footer__right {
+    width: 50%;
+    margin: 0 auto;
+    text-align: end;
+  }
+  .payment-methods__inner {
+    justify-content: flex-end;
+  }
+}

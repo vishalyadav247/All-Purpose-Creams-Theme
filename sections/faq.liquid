@@ -1,0 +1,171 @@
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)' or bg_color == settings.bg_color
+    assign bg_color = false
+  endif
+-%}
+
+<div class="section{% unless section.settings.full_width %} section--page-width{% endunless %}{% if bg_color %} section--padded{% endif %}{% if bg_color and section.settings.full_width %} section--m-0{% endif %}{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}{% unless section.settings.full_width %} content-block{% endunless %}" id="{{ section.id }}">
+  <div class="{% if section.settings.full_width or bg_color %}container {% endif %}reading-width">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="section__heading text-center">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'category' -%}
+        <h3 class="h4{% unless forloop.first %} mt-12{% endunless %} mb-6">{{ block.settings.text }}</h3>
+      {%- else -%}
+        <details-disclosure>
+          <details class="disclosure disclosure--row">
+            <summary>
+              <div class="flex justify-between items-center">
+                <span class="disclosure__title">{{ block.settings.heading }}</span>
+                <span class="disclosure__toggle">
+                  {%- if settings.disclosure_toggle == 'plus' -%}
+                    {% render 'icon-plus' %}
+                  {%- else -%}
+                    {% render 'icon-chevron-down' %}
+                  {%- endif -%}
+                </span>
+              </div>
+            </summary>
+            <div class="disclosure__panel has-motion">
+              <div class="disclosure__content rte">
+                {{ block.settings.text }}
+              </div>
+            </div>
+          </details>
+        </details-disclosure>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "cc-faq",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Frequently Asked Questions"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width background",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "question",
+      "name": "Question",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Question",
+          "default": "Frequently asked question"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Answer",
+          "default": "<p>Provide an answer to the question here, with as much detail as possible to help your customers.</p>"
+        }
+      ]
+    },
+    {
+      "type": "category",
+      "name": "Category",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Category",
+          "default": "Some category"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "blocks": [
+        {
+          "type": "category"
+        },
+        {
+          "type": "question"
+        },
+        {
+          "type": "question"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "question"
+        },
+        {
+          "type": "question"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

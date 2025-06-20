@@ -1,0 +1,247 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_1": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Ingredients That Work, Strengths That Deliver.",
+            "heading_size": "h3",
+            "heading_h1": false
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Welcome customers to your store, make announcements, share information about your brand or describe your products.</p>",
+            "enlarge_text": false
+          }
+        },
+        "button_NVdt8R": {
+          "type": "button",
+          "settings": {
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections/best-sellers",
+            "button_style": "btn--primary"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "button_NVdt8R"
+      ],
+      "settings": {
+        "image_desktop": "shopify://shop_images/apc-banner.jpg",
+        "image_mobile": "shopify://shop_images/apc-banner-mobile.jpg",
+        "height_mode": "auto",
+        "fixed_height_desktop": 600,
+        "fixed_height_mobile": 440,
+        "full_width": true,
+        "overlay_position": "justify-start items-center",
+        "overlay_text_align": "left",
+        "mobile_center_text": true,
+        "mobile_stacked": false,
+        "text_border_width": 0,
+        "text_border_color": "#ffffff",
+        "text_border_radius": 0,
+        "text_bg_opacity": 20,
+        "color_scheme": "none",
+        "text_color_without_scheme": "#212121",
+        "tint_color": "#141414",
+        "tint_opacity": 0,
+        "boundary_effect": ""
+      }
+    },
+    "icons_with_text_BimMKH": {
+      "type": "icons-with-text",
+      "blocks": {
+        "item_VJXRUE": {
+          "type": "item",
+          "settings": {
+            "title": "Free shipping",
+            "icon": "truck",
+            "icon_size": 60,
+            "url": ""
+          }
+        },
+        "item_KLTqrx": {
+          "type": "item",
+          "settings": {
+            "title": "Special offers",
+            "icon": "price_tag",
+            "icon_size": 60,
+            "url": ""
+          }
+        },
+        "item_pBNQDN": {
+          "type": "item",
+          "settings": {
+            "title": "Easy returns",
+            "icon": "return",
+            "icon_size": 60,
+            "url": ""
+          }
+        },
+        "item_nhWH9U": {
+          "type": "item",
+          "settings": {
+            "title": "Chat facility",
+            "icon": "chat_bubble",
+            "icon_size": 60,
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "item_VJXRUE",
+        "item_KLTqrx",
+        "item_pBNQDN",
+        "item_nhWH9U"
+      ],
+      "name": "Icons with text",
+      "settings": {
+        "heading": "",
+        "enlarge_text": false,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    },
+    "media-with-text": {
+      "type": "media-with-text",
+      "settings": {
+        "media_type": "image",
+        "image": "shopify://shop_images/DSC05610Large.jpg",
+        "video_external": "",
+        "video_description": "",
+        "video_autoplay": false,
+        "heading": "Enhance your skincare with ease and savings",
+        "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nulla, ullamcorper sed nisi at, facilisis aliquet est. Quisque convallis risus vitae tellus consectetur, ac luctus est consequat. Nullam at augue placerat, blandit leo ac, hendrerit diam. Curabitur arcu diam, lobortis ultricies arcu nec, eleifend posuere lorem. </p><p>Vivamus ut lobortis turpis, id suscipit elit. Pellentesque commodo felis quis metus sodales, id varius lacus luctus. Donec eu massa at arcu dignissim rutrum. Maecenas pretium nunc magna, vel luctus dui semper id. Aliquam fermentum risus vitae consequat pharetra. </p>",
+        "button_text": "SHOP NOW",
+        "button_link": "shopify://collections/best-sellers",
+        "button_style": "btn btn--primary",
+        "layout": "left",
+        "text_alignment": "left",
+        "text_center_mobile": true,
+        "bg_style": "content",
+        "color_scheme": "1",
+        "boundary_effect": ""
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial-0": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>Add customer reviews and testimonials to showcase your store's happy customers.</p>",
+            "author": "Author's name",
+            "image_shape": "natural",
+            "show_star_rating": true,
+            "star_rating": 5
+          }
+        },
+        "testimonial_jPTDU7": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>Add customer reviews and testimonials to showcase your store's happy customers.</p>",
+            "author": "Author's name",
+            "image_shape": "natural",
+            "show_star_rating": true,
+            "star_rating": 5
+          }
+        },
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>Add customer reviews and testimonials to showcase your store's happy customers.</p>",
+            "author": "Author's name",
+            "image_shape": "natural",
+            "show_star_rating": true,
+            "star_rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "testimonial-0",
+        "testimonial_jPTDU7",
+        "testimonial-1"
+      ],
+      "settings": {
+        "heading": "Testimonials",
+        "nav_style": "arrows",
+        "transition": "slide-fade",
+        "autoplay": false,
+        "autoplay_speed": 5,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    },
+    "multi_column_QCDU8f": {
+      "type": "multi-column",
+      "blocks": {
+        "column_iEH9Xa": {
+          "type": "column",
+          "settings": {
+            "show_image": true,
+            "image": "shopify://shop_images/APC-VC6.jpg",
+            "heading": "Join the APC VIP Program",
+            "heading_size": "h3",
+            "text": "<p>The more you buy, the more you save! Unlock special pricing, discounts, and exclusive rewards.</p>",
+            "button_label": "join today",
+            "button_link": "#",
+            "button_style": "btn btn--primary"
+          }
+        },
+        "column_fGctid": {
+          "type": "column",
+          "settings": {
+            "show_image": true,
+            "image": "shopify://shop_images/APNLSC.jpg",
+            "heading": "Subscribe to our newsletter",
+            "heading_size": "h3",
+            "text": "<p>Get the latest promotions, new products and sales, directly to your inbox.</p>",
+            "button_label": "SIGN UP",
+            "button_link": "#",
+            "button_style": "btn btn--primary"
+          }
+        }
+      },
+      "block_order": [
+        "column_iEH9Xa",
+        "column_fGctid"
+      ],
+      "name": "Multi-column",
+      "settings": {
+        "heading": "",
+        "button_label": "",
+        "button_link": "",
+        "layout": "grid",
+        "column_align": "left",
+        "image_ratio": "1.33",
+        "full_width": true,
+        "bg_style": "column",
+        "color_scheme": "2",
+        "boundary_effect": ""
+      }
+    }
+  },
+  "order": [
+    "image_banner_1",
+    "icons_with_text_BimMKH",
+    "media-with-text",
+    "testimonials",
+    "multi_column_QCDU8f"
+  ]
+}

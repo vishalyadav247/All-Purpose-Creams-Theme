@@ -1,0 +1,194 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_and_shipping": false,
+            "show_rating": true
+          }
+        },
+        "richtext_XzJUWR": {
+          "type": "richtext",
+          "settings": {
+            "text": "<ul><li>Our proprietary formula is a bright white cream with no oxidation or brown color</li><li>One of our top sellers since 2017</li><li>Updated formula in 2024 with smaller crystals for smoother application</li></ul>",
+            "icon": "none",
+            "icon_size": "small",
+            "enable_box": false,
+            "box_color": "#e0f4d5",
+            "reduce_margin": false
+          }
+        },
+        "variant-picker": {
+          "type": "variant-picker",
+          "settings": {
+            "selector_style": "buttons",
+            "enable_dynamic_availability": true,
+            "enable_size_chart": false,
+            "size_chart_variant": "Size",
+            "size_chart_page": ""
+          }
+        },
+        "bold_subscriptions_bsub_widget_block_4qcXax": {
+          "type": "shopify://apps/bold-subscriptions/blocks/bsub-widget-block/9ceb49f0-5fe5-4b5e-943d-f8af8985167d",
+          "settings": {
+            "default_subscribe": false,
+            "primary_color": "#008752",
+            "secondary_color": "#0061b3",
+            "background_color": "#f8f9f9",
+            "border_radius": 4,
+            "header_text": "Purchase Options",
+            "one_time_text": "One-time Purchase",
+            "recurring_text": "Subscribe and Save",
+            "prepaid_recurring_text": "Prepaid Subscribe and Save",
+            "discount_summary_text": "(Save {discount})",
+            "discount_summary_plural_text": "(Save up to {discount})",
+            "frequency_header": "Delivery Frequency",
+            "frequency_text": "delivery",
+            "prepaid_checkbox_label_text": "Prepay for subscription",
+            "billing_frequency_header": "Billing Frequency",
+            "billing_frequency_text": "{count} Orders",
+            "delivery_frequency_discount_text": "({discount} off)",
+            "billing_frequency_discount_text": "({discount} off)",
+            "prepaid_total_text": "Billed {price} today",
+            "prepaid_continue_as_prepaid_text": "Prepaid order will auto-renew after {count} orders",
+            "prepaid_continue_as_standard_text": "Becomes a regular subscription after {count} orders",
+            "convertible_header": "Converts to",
+            "eligible_for_subscription_header": "Eligible for Subscription",
+            "initial_dynamic_discount_text": "Save {initial_percent_discount}% ({initial_fixed_discount})",
+            "subsequent_dynamic_discounts_text": "{subsequent_percent_discount}% ({subsequent_fixed_discount}) after {order_count} order(s)"
+          }
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {
+            "show_qty_selector": true,
+            "enable_dynamic_checkout": false,
+            "show_pickup_availability": false,
+            "show_backorder_text": false,
+            "show_gift_card_recipient": false,
+            "show_inventory_notice": "low",
+            "show_inventory_count": "low",
+            "inventory_threshold": 10
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "show_as_collapsible_content": true,
+            "icon": "none",
+            "open": false
+          }
+        },
+        "collapsible_content_qdLGAa": {
+          "type": "collapsible-content",
+          "settings": {
+            "heading": "How to Use",
+            "icon": "none",
+            "text": "<p>Purified Water, Propylene Glycol, Mineral Oil, Hydroquinone, Stearic Acid, Cetyl Alcohol, EDTA, Glyceryl Stearate, Aloe Vera Gel, Triethanolamine, White Protopet, Dimethhicone, Propyl Paraben, Methylparaben, Allantoin, Carbomer, Propylene Glycol, Diazolidinyl Urea, Iodopropynyl Butylcarbamate.</p>",
+            "page": "",
+            "custom_liquid": "",
+            "open": false
+          }
+        },
+        "collapsible_content_mMiq3x": {
+          "type": "collapsible-content",
+          "settings": {
+            "heading": "Ingredients",
+            "icon": "none",
+            "text": "<p>Purified Water, Propylene Glycol, Mineral Oil, Hydroquinone, Stearic Acid, Cetyl Alcohol, EDTA, Glyceryl Stearate, Aloe Vera Gel, Triethanolamine, White Protopet, Dimethhicone, Propyl Paraben, Methylparaben, Allantoin, Carbomer, Propylene Glycol, Diazolidinyl Urea, Iodopropynyl Butylcarbamate.</p>",
+            "page": "",
+            "custom_liquid": "",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "richtext_XzJUWR",
+        "variant-picker",
+        "bold_subscriptions_bsub_widget_block_4qcXax",
+        "buy-buttons",
+        "description",
+        "collapsible_content_qdLGAa",
+        "collapsible_content_mMiq3x"
+      ],
+      "settings": {
+        "enable_sticky_columns": true,
+        "media_size": "medium",
+        "media_layout": "stacked",
+        "media_thumbs": "never",
+        "media_ratio": "1",
+        "enable_border": false,
+        "enable_zoom": true,
+        "enable_video_looping": false,
+        "description_location": "details",
+        "enable_media_grouping": false,
+        "media_grouping_option": "Color,Colour,Couleur,Farbe"
+      }
+    },
+    "17501617857e568869": {
+      "type": "apps",
+      "blocks": {
+        "stamped_reviews_carousel_hXtkDc": {
+          "type": "shopify://apps/stamped-reviews/blocks/carousel/a103faaf-2125-4b0e-89fa-de5149736723",
+          "settings": {
+            "title": "Real Reviews from Real Customers",
+            "auto_play": false,
+            "take": 5,
+            "color_title": "#212121",
+            "color_star": "#ffc220",
+            "color_text": "#212121",
+            "color_link": "#8a8a8a",
+            "review_ids": "",
+            "product_ids": "8315067105538",
+            "category": "",
+            "product_brand": "",
+            "tags": "",
+            "limit_words": 20,
+            "min_rating": "4",
+            "fill_empty": true,
+            "random": false,
+            "with_photos": false
+          }
+        }
+      },
+      "block_order": [
+        "stamped_reviews_carousel_hXtkDc"
+      ],
+      "settings": {
+        "full_width": false
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "layout": "grid",
+        "card_size": "small",
+        "products_to_show": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "17501617857e568869",
+    "related-products"
+  ]
+}

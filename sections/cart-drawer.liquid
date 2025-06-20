@@ -1,0 +1,83 @@
+{%- unless request.page_type == 'cart' or settings.cart_type == 'page' -%}
+  {%- comment %}theme-check-disable NestedSnippet{% endcomment -%}
+  {%- render 'cart-drawer' -%}
+  {%- comment %}theme-check-enable NestedSnippet{% endcomment -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "class": "cc-cart-drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Cart items"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_backorder_text",
+      "label": "Show backorder text",
+      "default": true,
+      "info": "Only shows for products which use Shopify inventory tracking and can be purchased when out of stock."
+    },
+    {
+      "type": "header",
+      "content": "Cart summary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_order_note",
+      "label": "Show order note",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_checkout_button",
+      "label": "Show checkout button",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "cart_terms_page",
+      "label": "Terms and conditions link",
+      "info": "Shows a box which must be checked before going to checkout."
+    },
+    {
+      "type": "header",
+      "content": "Recommended products"
+    },
+    {
+      "type": "paragraph",
+      "content": "Dynamic recommendations are based on your cart contents and will change and improve over time. [Learn more](https://help.shopify.com/en/themes/development/recommended-products)"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recommendations",
+      "label": "Show recommendations",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "recommendations_heading",
+      "label": "Heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "select",
+      "id": "recommendations_layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "list",
+          "label": "List"
+        }
+      ],
+      "default": "list"
+    }
+  ]
+}
+{% endschema %}

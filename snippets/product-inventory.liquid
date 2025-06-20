@@ -1,0 +1,70 @@
+{%- if block.settings.show_inventory_notice != 'never' -%}
+  <script src="{{ 'product-inventory.js' | asset_url }}" defer="defer"></script>
+  <product-inventory class="no-js-hidden"
+    data-show-inventory-notice="{{ block.settings.show_inventory_notice }}"
+    data-show-inventory-count="{{ block.settings.show_inventory_count }}"
+    data-threshold="{{ block.settings.inventory_threshold }}"
+    data-text-x-left-low="{{ 'products.inventory.only_x_left' | t: quantity: '[QTY]' }}"
+    data-text-x-left-ok="{{ 'products.inventory.x_left' | t: quantity: '[QTY]' }}"
+    data-text-low="{{ 'products.inventory.low_stock' | t }}"
+    data-text-ok="{{ 'products.inventory.in_stock' | t }}">
+    {%- liquid
+      assign show_inventory_count = false
+      if block.settings.show_inventory_count == 'always'
+        assign show_inventory_count = true
+      endif
+      if block.settings.show_inventory_count == 'low' and current_variant.inventory_quantity <= block.settings.inventory_threshold
+        assign show_inventory_count = true
+      endif
+
+      if show_inventory_count
+        if current_variant.inventory_quantity <= block.settings.inventory_threshold
+          assign notice = 'products.inventory.only_x_left' | t: quantity: current_variant.inventory_quantity
+        else
+          assign notice = 'products.inventory.x_left' | t: quantity: current_variant.inventory_quantity
+        endif
+      else
+        if current_variant.inventory_quantity <= block.settings.inventory_threshold
+          assign notice = 'products.inventory.low_stock' | t
+        else
+          assign notice = 'products.inventory.in_stock' | t
+        endif
+      endif
+    -%}
+    <div class="product-inventory mb-6 product-inventory--pulse product-inventory--{% if current_variant.inventory_quantity <= block.settings.inventory_threshold %}low{% else %}ok{% endif %}"
+      {%- if current_variant == blank or current_variant.inventory_management == blank %} hidden
+      {%- elsif current_variant and current_variant.inventory_management != blank and current_variant.inventory_quantity < 1 %} hidden
+      {%- elsif block.settings.show_inventory_notice == 'low' and current_variant.inventory_quantity > block.settings.inventory_threshold %} hidden{% endif %}>
+      <span class="product-inventory__icon-container relative inline-flex me-1">
+        <span class="product-inventory__icon-low"{% if current_variant.inventory_quantity > block.settings.inventory_threshold %} hidden{% endif %}>
+          <svg class="icon relative block" width="20" height="20" stroke-width="1" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+            <circle stroke="currentColor" fill="none" cx="8" cy="8" r="6.7097588" />
+            <polyline stroke="currentColor" fill="none" points="12 6 12 12 16 14" transform="matrix(0.67097581,0,0,0.67097581,-0.01963672,-0.01963672)" />
+          </svg>
+        </span>
+        <span class="product-inventory__icon-ok"{% if current_variant.inventory_quantity <= block.settings.inventory_threshold %} hidden{% endif %}>
+          <svg class="icon relative block" width="20" height="20" stroke-width="1" aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+            <circle stroke="currentColor" fill="none" cx="8" cy="8" r="6.6666665"/>
+            <path stroke="currentColor" fill="none" transform="translate(5.0003335,6.0003335)" d="m 6,0 -4,4 L 0,2.1818182" />
+          </svg>
+        </span>
+      </span>
+      <span class="product-inventory__status align-text-bottom">{{ notice }}</span>
+    </div>
+
+    {%- capture quantity_json -%}
+      {%- for variant in product.variants -%}
+        {%- if variant.inventory_management != blank and variant.inventory_quantity > 0 -%}
+          {%- if block.settings.show_inventory_notice == 'always' or variant.inventory_quantity <= block.settings.inventory_threshold -%}
+            ,{ "id":{{- variant.id -}}, "inventory_quantity":{{- variant.inventory_quantity -}} }
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    {%- endcapture -%}
+    <script type="application/json">
+      [
+        {{- quantity_json | replace_first: ',', '' -}}
+      ]
+    </script>
+  </product-inventory>
+{%- endif -%}

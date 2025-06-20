@@ -1,0 +1,78 @@
+<div class="section section--m-0
+    {%- if section.settings.show_space == true %} section--padded{% endif %}
+    
+    {%- if section.settings.boundary_effect != blank %}
+      content-boundary content-boundary--{{ section.settings.boundary_effect }}
+    {%- endif %}">
+    {%- if section.settings.full_width == false %} 
+      <div class="container">
+    {% endif %}
+        {{- section.settings.custom_liquid -}}
+    {%- if section.settings.full_width == false %}
+      </div>
+    {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Custom HTML/Liquid",
+  "tag": "section",
+  "class": "cc-custom-liquid",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "Custom code",
+      "default": "Add HTML or Liquid code to create advanced customizations."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_space",
+      "label": "Show space above and below section",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom HTML/Liquid"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,201 @@
+{%- if settings.enable_quick_add -%}
+  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'product.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  if collection.products.size > 0
+    assign grid_classes = 'grid-cols-' | append: settings.prod_card_mob_per_row
+
+    if section.settings.card_size == 'small'
+      assign grid_classes = grid_classes | append: ' md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+    elsif section.settings.card_size == 'medium'
+      assign grid_classes = grid_classes | append: ' sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+    else
+      assign grid_classes = grid_classes | append: ' md:grid-cols-2 xl:grid-cols-3'
+    endif
+
+    if settings.prod_card_image_ratio == 'shortest'
+      assign image_ratio = 0
+      for product in collection.products
+        if product.featured_media.preview_image.aspect_ratio > image_ratio
+          assign image_ratio = product.featured_media.preview_image.aspect_ratio
+        endif
+      endfor
+    elsif settings.prod_card_image_ratio == 'tallest'
+      assign image_ratio = 99
+      for product in collection.products
+        if product.featured_media.preview_image.aspect_ratio < image_ratio
+          assign image_ratio = product.featured_media.preview_image.aspect_ratio
+        endif
+      endfor
+    else
+      assign image_ratio = settings.prod_card_image_ratio
+    endif
+  endif
+-%}
+
+<div class="section section--page-width content-block">
+  {%- paginate collection.products by section.settings.products_per_page -%}
+    {% render 'facet-filters', results: collection, paginate: paginate %}
+
+    <div class="product-list" id="filter-results">
+      {%- if collection.products.size == 0 -%}
+        <p>{{ 'sections.collection.empty' | t }}</p>
+      {%- else -%}
+        <ul class="grid {{ grid_classes }} gap-x-theme gap-y-card" role="list">
+          {%- for product in collection.products -%}
+            <li class="flex flex-col">
+              {% render 'product-card', product: product, image_ratio: image_ratio %}
+            </li>
+          {%- endfor -%}
+        </ul>
+
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination', paginate: paginate %}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  {%- endpaginate -%}
+</div>
+
+{% schema %}
+{
+  "name": "Collection",
+  "class": "cc-main-collection",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "label": "Products per page",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "card_size",
+      "label": "Product card size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prod_totals",
+      "label": "Show products total",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Filtering"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filtering",
+      "label": "Enable filtering",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_filter_counts",
+      "label": "Show product counts",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filters_open",
+      "label": "Filters open by default (desktop)",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "some",
+          "label": "First 4"
+        },
+        {
+          "value": "all",
+          "label": "All"
+        }
+      ],
+      "default": "some"
+    },
+    {
+      "type": "range",
+      "id": "max_filter_options",
+      "label": "Visible options per filter",
+      "info": "Remaining options will be automatically collapsed. Not applied to swatches.",
+      "min": 2,
+      "max": 50,
+      "step": 1,
+      "default": 7
+    },
+    {
+      "type": "header",
+      "content": "Sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_show_featured",
+      "label": "Enable order: Featured",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_show_best",
+      "label": "Enable order: Best selling",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_show_alpha",
+      "label": "Enable order: Alphabetical",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_show_price",
+      "label": "Enable order: Price",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_show_date",
+      "label": "Enable order: Date added",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "The collection's default sort order will always show."
+    }
+  ]
+}
+{% endschema %}

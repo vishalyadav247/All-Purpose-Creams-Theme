@@ -1,0 +1,147 @@
+{%- liquid
+  if settings.card_bg_color != settings.drawer_bg_color
+    assign card_pad_class = ' pad-card-info'
+  endif
+-%}
+<link rel="stylesheet" href="{{ 'cart.css' | asset_url }}" media="print" onload="this.media='all'">
+<script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+<cart-drawer class="drawer fixed top-0 right-0 flex flex-col w-full has-motion{{ card_pad_class }}" id="cart-drawer" role="dialog" aria-label="{{ 'cart.general.title' | t }}" aria-modal="true" aria-hidden="true" tabindex="-1" data-shipping-calculator="{{ section.settings.show_shipping_calculator }}" data-section="{{ section.id }}" data-name="cart-drawer">
+  <header class="drawer__header flex justify-between items-center">
+    <h2 class="h4 mb-0 js-drawer-header-title">
+      {{- 'cart.general.title' | t }}
+      {% if cart.item_count > 0 %}({{ cart.item_count }}){% endif -%}
+    </h2>
+    <button type="button" class="drawer__close-btn js-close-drawer">
+      <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+      {% render 'icon-close' %}
+    </button>
+  </header>
+  <div class="drawer__content {% if cart == empty %}flex {% endif %}flex-auto justify-center items-center">
+    {%- if settings.show_free_shipping_notice -%}
+      {% render 'free-shipping-notice', bar_position: 'top' %}
+    {%- endif -%}
+
+    <form class="form" id="cart-drawer-form" action="{{ routes.cart_url }}" method="post">
+      {% render 'cart-items', is_drawer: true %}
+    </form>
+
+    {%- if section.settings.show_recommendations and cart != empty -%}
+      {%- liquid
+        if section.settings.recommendations_layout == 'carousel'
+          assign grid_classes = 'grid grid-flow-col gap-x-theme'
+        else
+          assign grid_classes = 'grid grid-cols-2 gap-4'
+        endif
+      -%}
+      {%- render 'recommendations',
+        is_cart: true,
+        products_to_show: 4,
+        heading: section.settings.recommendations_heading,
+        layout: section.settings.recommendations_layout,
+        related_cards: true,
+        grid_classes: grid_classes
+      -%}
+    {%- endif -%}
+  </div>
+  <footer class="drawer__footer relative">
+    {%- if cart != empty -%}
+      {%- if cart.cart_level_discount_applications != blank -%}
+        <ul role="list" aria-label="{{ 'customer.order.discount' | t }}">
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <li class="mt-2 first:mt-0">
+              <div class="cart-discount flex justify-between items-center h6">
+                <span>{{ discount.title | escape_once }}</span>
+                <span class="ms-4">-{{ discount.total_allocated_amount | money }}</span>
+              </div>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      <div class="flex flex-wrap justify-between items-baseline cart-subtotal h5">
+        <span>{{ 'cart.summary.subtotal' | t }}</span>
+        <span class="cart-subtotal__value">{{ cart.total_price | money_with_currency }}</span>
+      </div>
+
+
+      {%- if section.settings.show_order_note -%}
+        <script src="{{ 'cart-note.js' | asset_url }}" defer="defer"></script>
+        <details class="cart-note-disclosure disclosure">
+          <summary>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm link js-show-note">
+                {%- if cart.note == blank -%}
+                  {{- 'cart.note.add' | t -}}
+                {%- else -%}
+                  {{- 'cart.note.edit' | t -}}
+                {%- endif -%}
+              </span>
+            </div>
+          </summary>
+          <div class="disclosure__panel">
+            <div class="disclosure__content">
+              <cart-note>
+                <label class="visually-hidden" for="cart-note">{{ 'cart.note.label' | t }}</label>
+                <textarea class="input w-full" id="cart-note" name="note" rows="4">{{ cart.note }}</textarea>
+              </cart-note>
+            </div>
+          </div>
+        </details>
+      {%- endif -%}
+
+      <p class="mb-5 rte">
+        <small class="text-sm">
+          {%- if cart.taxes_included and shop.shipping_policy.body != blank -%}
+            {{ 'cart.general.taxes_included_shipping_at_checkout_html' | t: link: shop.shipping_policy.url }}
+          {%- elsif cart.taxes_included -%}
+            {{ 'cart.general.taxes_included_shipping_at_checkout' | t }}
+          {%- elsif shop.shipping_policy.body != blank -%}
+            {{ 'cart.general.taxes_and_shipping_at_checkout_html' | t: link: shop.shipping_policy.url }}
+          {%- else -%}
+            {{ 'cart.general.taxes_and_shipping_at_checkout' | t }}
+          {%- endif -%}
+        </small>
+      </p>
+
+      {%- if section.settings.cart_terms_page != blank -%}
+        <cart-terms class="block mb-6 text-sm">
+          <input type="checkbox" class="checkbox" id="cart-terms">
+          <label for="cart-terms">
+            <span class="rte">{{ 'cart.terms.agreement_html' | t: terms_url: settings.cart_terms_page }}</span>
+          </label>
+        </cart-terms>
+      {%- endif -%}
+
+      <div class="grid grid-cols-1{% if section.settings.show_checkout_button %} md:grid-cols-2 gap-x-4 gap-y-4{% endif %} pb-2">
+        <a class="btn btn--secondary" href="{{ routes.cart_url }}">
+          {{- 'cart.general.view_cart' | t -}}
+        </a>
+
+        {% if section.settings.show_checkout_button -%}
+          <button type="submit" class="btn btn--primary w-full" name="checkout" form="cart-drawer-form"{% if cart == empty %} disabled{% endif %}>
+            {{- 'cart.summary.checkout' | t -}}
+          </button>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </footer>
+  <div class="overlay overlay--drawer absolute top-0 right-0 bottom-0 left-0 js-close"></div>
+</cart-drawer>
+
+{%- if section.settings.cart_terms_page != blank -%}
+  <script>
+    class CartTerms extends HTMLElement {
+      constructor() {
+        super();
+        document.getElementById('cart-drawer-form').addEventListener('submit', (evt) => {
+          if (!document.getElementById('cart-terms').checked) {
+            evt.preventDefault();
+            alert(`{{ 'cart.terms.confirmation' | t }}`);
+          }
+        });
+      }
+    }
+    customElements.define('cart-terms', CartTerms);
+  </script>
+{%- endif -%}

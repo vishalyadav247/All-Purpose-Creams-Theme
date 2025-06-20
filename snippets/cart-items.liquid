@@ -1,0 +1,232 @@
+{%- comment -%}
+  Parameters:
+  - is_drawer {Boolean} - Is cart drawer.
+
+  Usage:
+  {% render 'cart-items', is_drawer: true %}
+{%- endcomment -%}
+
+{%- if cart != empty -%}
+  <script src="{{ 'cart-items.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+<cart-items id="cart-items" data-section="{{ section.id }}" data-empty="{% if cart == empty %}true{% else %}false{% endif %}">
+  {%- if cart == empty -%}
+    <div class="flex flex-col justify-center items-center h-full js-cart-empty">
+      <p>{{ 'cart.general.empty' | t }}</p>
+      <a class="btn btn--primary" href="{{ settings.cart_empty_shop_link }}">
+        {{- 'cart.general.start_shopping' | t -}}
+      </a>
+    </div>
+  {%- endif -%}
+
+  {%- if cart != empty -%}
+    <table class="cart-items w-full">
+      <thead class="cart-head">
+        <tr>
+          <th class="text-start" colspan="2">{{ 'cart.items.product' | t }}</th>
+          <th class="text-end">{{ 'cart.items.price' | t }}</th>
+          <th class="text-center">{{ 'cart.items.quantity' | t }}</th>
+          <th class="text-end">{{ 'cart.items.total' | t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {%- for item in cart.items -%}
+          {%- liquid
+            if item.variant.compare_at_price > item.variant.price
+              assign variant_price_reduced = true
+            else
+              assign variant_price_reduced = false
+            endif
+          -%}
+          {%- capture unit_price -%}
+            {%- if item.unit_price_measurement -%}
+              <div class="unit-price text-xs mt-1">
+                <span class="visually-hidden">{{ 'products.product.price.unit_price' | t }}</span>
+                (<span class="unit-price__price">{{ item.unit_price | money }}</span>
+                <span class="unit-price__separator">{{ 'products.product.price.unit_price_separator' | t }}</span>
+                <span class="unit-price__unit">
+                  {%- if item.unit_price_measurement.reference_value != 1 -%}
+                    {{- item.unit_price_measurement.reference_value -}}
+                  {%- endif -%}
+                  {{ item.unit_price_measurement.reference_unit -}}
+                </span>)
+              </div>
+            {%- endif -%}
+          {%- endcapture -%}
+
+          <tr class="cart-item relative" id="cart-item-{{ item.index | plus: 1 }}" data-variant-id="{{ item.variant_id }}">
+            <td class="cart-item__image">
+              <a href="{{ item.url }}">
+                {%- if item.image -%}
+                  {% render 'image', image: item.image, src_width: 88, srcset_2x: true %}
+                {%- else -%}
+                  <div class="media relative" style="padding-top: 100%;">
+                    {{ 'image' | placeholder_svg_tag: 'media__placeholder img-fit' }}
+                  </div>
+                {%- endif -%}
+              </a>
+              <div class="cart-item__loader absolute top-0 left-0 z-[2] w-full h-full is-loading" hidden></div>
+            </td>
+
+            <td class="cart-item__details">
+              <a class="cart-item__title inline-block m-0 font-bold text-current js-item-name" href="{{ item.url }}">
+                {{- item.product.title | escape -}}
+              </a>
+
+              {%- if item.product.variants.size > 1 -%}
+                <div class="text-sm mt-1">
+                  {{ item.variant.title }}
+                </div>
+              {%- endif -%}
+
+              {%- comment %}theme-check-disable LiquidTag{% endcomment -%}
+              {%- if item.product.has_only_default_variant == false or item.properties.size != 0 or item.selling_plan_allocation != nil -%}
+                {% capture item_properties_html %}
+                  {%- for property in item.properties -%}
+                    {%- assign property_first_char = property.first | slice: 0 -%}
+                    {%- if property.last != blank and property_first_char != '_' -%}
+                      <div>
+                        <dt class="inline"><strong>{{ property.first }}: </strong></dt>
+                        <dd class="inline m-0">
+                          {%- if property.last contains '/uploads/' -%}
+                            <a href="{{ property.last }}" class="link" target="_blank">
+                              {{ property.last | split: '/' | last }}
+                            </a>
+                          {%- else -%}
+                            {{ property.last }}
+                          {%- endif -%}
+                        </dd>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                {% endcapture %}
+                {%- comment %}theme-check-enable LiquidTag{% endcomment -%}
+
+                {%- if item.product.template_suffix contains 'preorder' -%}
+                  <div class="mt-2">
+                    <span class="product-label product-label--preorder">
+                      {{- 'products.product.preorder' | t -}}
+                    </span>
+                  </div>
+                {%- endif -%}
+
+                <div class="cart-item__variants text-sm">
+                  {% if item_properties_html != blank %}
+                    <dl class="mt-2 mb-0">
+                      {{ item_properties_html }}
+                    </dl>
+                  {% endif %}
+
+                  {%- if item.selling_plan_allocation -%}
+                    <p class="mt-2 mb-0">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+                  {%- endif -%}
+                </div>
+
+                {%- if section.settings.show_backorder_text -%}
+                  {% render 'backorder', product: item.product, variant: item.variant %}
+                {%- endif -%}
+              {%- endif -%}
+
+              <div class="alert mt-6 bg-error-bg text-error-text cart-item__error" id="line-item-error-{{ item.index | plus: 1 }}" role="alert" hidden></div>
+            </td>
+
+            <td class="cart-item__price">
+              <div class="price{% if item.original_price != item.final_price or item.variant.compare_at_price > item.variant.price %} price--on-sale{% endif %}">
+                {%- if variant_price_reduced or item.original_price != item.final_price -%}
+                  <dl class="m-0">
+                    <dt class="visually-hidden">
+                      {{- 'products.product.price.sale_price' | t -}}
+                    </dt>
+                    <dd class="price__current m-0">
+                      {{- item.final_price | money -}}
+                    </dd>
+                    <dt class="visually-hidden">
+                      {{- 'products.product.price.regular_price' | t -}}
+                    </dt>
+                    <dd class="m-0">
+                      {%- if variant_price_reduced -%}
+                        <s class="price__was">{{ item.variant.compare_at_price | money }}</s>
+                      {%- else -%}
+                        <s class="price__was">{{ item.original_price | money }}</s>
+                      {%- endif -%}
+                    </dd>
+                  </dl>
+                {%- else -%}
+                  <span class="price__current">{{ item.original_price | money }}</span>
+                {%- endif -%}
+              </div>
+
+            <div class="{% unless is_drawer %}md:hidden{% endunless %}">
+              {{- unit_price -}}
+            </div>
+
+              {%- if item.discounts.size > 0 -%}
+                <ul class="cart-item__discounts mt-3" role="list" aria-label="{{ 'customer.order.discount' | t }}">
+                  {%- for discount in item.discounts -%}
+                    <li class="mt-2 first:mt-0">
+                      <div class="discount text-sm inline-flex items-center">
+                        {% render 'icon-tags' %} {{- discount.title | escape_once -}}
+                      </div>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- endif -%}
+            </td>
+
+            <td class="cart-item__qty">
+              <div class="cart-item__qty-inner flex items-center">
+                {% render 'quantity-input', is_cart: true, item: item, layout_style: 'combined' %}
+                <a class="link text-sm js-remove-item" href="{{ item.url_to_remove }}" data-index="{{ item.index | plus: 1 }}">
+                  {{- 'cart.items.remove' | t -}}
+                </a>
+              </div>
+            </td>
+
+            <td class="cart-item__total">
+              <div class="price{% if item.original_line_price != item.final_line_price or item.variant.compare_at_price > item.variant.price %} price--on-sale{% endif %}">
+                {%- if variant_price_reduced or item.original_line_price != item.final_line_price -%}
+                  <dl class="m-0">
+                    <dt class="visually-hidden">
+                      {{- 'products.product.price.sale_price' | t -}}
+                    </dt>
+                    <dd class="price__current m-0">
+                      {{- item.final_line_price | money -}}
+                    </dd>
+                    <dt class="visually-hidden">
+                      {{- 'products.product.price.regular_price' | t -}}
+                    </dt>
+                    <dd class="m-0">
+                      {%- if variant_price_reduced -%}
+                        <s class="price__was">{{ item.variant.compare_at_price | times: item.quantity | money }}</s>
+                      {%- else -%}
+                        <s class="price__was">{{ item.original_line_price | money }}</s>
+                      {%- endif -%}
+                    </dd>
+                  </dl>
+                {%- else -%}
+                  <span class="price__current">{{ item.original_line_price | money }}</span>
+                {%- endif -%}
+              </div>
+
+              {%- unless is_drawer -%}
+                {{- unit_price -}}
+              {%- endunless -%}
+            </td>
+          </tr>
+        {%- endfor -%}
+      </tbody>
+    </table>
+  {%- endif -%}
+
+  <p class="visually-hidden" id="cart-live-region-text" role="status" aria-live="polite">
+    {{ 'cart.summary.subtotal' | t }}: {{ cart.total_price | money_with_currency }}
+  </p>
+  <p class="visually-hidden" id="cart-line-item-status" role="status" aria-live="polite" aria-hidden="true">
+    {{- 'accessibility.loading' | t -}}
+  </p>
+
+  {%- if is_drawer -%}
+    <div class="alert mt-6 bg-error-bg text-error-text" id="cart-errors" role="alert" hidden></div>
+  {%- endif -%}
+</cart-items>

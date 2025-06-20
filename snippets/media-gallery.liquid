@@ -1,0 +1,215 @@
+{%- comment -%}
+  Parameters:
+  - product {Object} - Product object.
+  - media_ratio {Number} - Media aspect ratio.
+  - first_3d_model {Boolean} - First 3d model (if applicable).
+  - featured_product {Boolean} - Gallery is for a 'Featured product' section (optional, default is false).
+
+  Usage:
+  {% render 'media-gallery',
+    product: product,
+    media_ratio: section.settings.media_ratio,
+    first_3d_model: first_3d_model
+  %}
+{%- endcomment -%}
+
+<script src="{{ 'media-gallery.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign media_count = product.media.size
+
+  if featured_product
+    assign layout = 'featured'
+  else
+    assign layout = section.settings.media_layout
+  endif
+-%}
+
+<media-gallery
+    class="media-gallery"
+    role="region"
+    data-layout="{{ layout }}"
+    {%- if section.settings.enable_zoom %} data-zoom-enabled{% endif %}
+    aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
+    {%- if section.settings.enable_media_grouping %}
+      data-media-grouping-enabled
+    {%- endif %}>
+  <div class="media-gallery__status visually-hidden" role="status"></div>
+
+  <div class="media-gallery__viewer relative">
+    <ul class="media-viewer flex" id="media-viewer" role="list" tabindex="0">
+      {%- for media in product.media -%}
+        {%- liquid
+          assign loading = nil
+          if forloop.first
+            assign loading = 'eager'
+          endif
+
+          if section.settings.media_layout == 'stacked' and forloop.index == 2
+            assign loading = 'eager'
+          endif
+
+          assign active = false
+          if media == current_variant.featured_media or current_variant.featured_media == null and forloop.index == 1
+            assign active = true
+          endif
+        -%}
+
+        <li class="media-viewer__item{% if active %} is-active{% endif %}" data-media-id="{{ media.id }}" data-media-type="{{ media.media_type }}">
+          {%- if section.settings.enable_zoom and media.media_type == 'image' -%}
+            <gallery-zoom-open class="gallery-zoom-open cursor-pointer w-full">
+          {%- endif -%}
+          {% render 'product-media',
+            media: media,
+            media_ratio: media_ratio,
+            loop: section.settings.enable_video_looping,
+            loading: loading,
+            is_first: forloop.first
+          %}
+          {%- if section.settings.enable_zoom and media.media_type == 'image' -%}
+            </gallery-zoom-open>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+
+    {%- if first_3d_model -%}
+      <button type="button"
+              class="media-xr-button btn btn--primary btn--icon-with-text w-full mt-4{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %}"
+              data-shopify-model3d-id="{{ first_3d_model.id }}"
+              data-shopify-title="{{ product.title | escape }}"
+              data-shopify-xr
+              data-shopify-xr-hidden>
+        {% render 'icon-3d-model' %}
+        {{ 'products.product.xr_button' | t }}
+      </button>
+    {%- endif -%}
+
+    {%- if media_count > 1 -%}
+      <div class="media-ctrl{% unless section.settings.media_thumbs == 'always' %} media-ctrl--lg-down-static{% endunless %} flex items-center justify-center mt-2{% if section.settings.media_layout == 'stacked' %} sm:hidden{% endif %} no-js-hidden" data-total-items="{{ media_count }}">
+        <button type="button" class="media-ctrl__btn btn" name="prev" aria-controls="media-viewer" disabled>
+          <span class="visually-hidden">{{ 'products.product.media.previous' | t }}</span>
+          {% render 'icon-chevron-left' %}
+        </button>
+        <div class="media-ctrl__counter text-sm">
+          <span class="media-ctrl__current-item">1</span>
+          <span aria-hidden="true"> / </span>
+          <span class="visually-hidden">{{ 'products.product.media.of' | t }}</span>
+          <span class="media-ctrl__total-items">{{ media_count }}</span>
+        </div>
+        <button type="button" class="media-ctrl__btn btn" name="next" aria-controls="media-viewer">
+          <span class="visually-hidden">{{ 'products.product.media.next' | t }}</span>
+          {% render 'icon-chevron-right' %}
+        </button>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if media_count > 1 and section.settings.media_thumbs != 'never' -%}
+    {%- unless section.settings.media_layout == 'stacked' and section.settings.media_thumbs == 'desktop' -%}
+      <div class="media-gallery__thumbs{% if section.settings.media_thumbs == 'desktop' %} hidden lg:block{% endif %}{% if section.settings.media_layout == 'stacked' %} md:hidden{% endif %} no-js-hidden">
+        <ul class="media-thumbs flex" role="list">
+          {%- for media in product.media -%}
+            {%- liquid
+              if media.media_type == 'model'
+                assign model_index = model_index | default: 0 | plus: 1
+              elsif media.media_type == 'video' or media.media_type == 'external_video'
+                assign video_index = video_index | default: 0 | plus: 1
+              elsif media.media_type == 'image'
+                assign image_index = image_index | default: 0 | plus: 1
+              endif
+
+              assign active = false
+              if media == current_variant.featured_media or current_variant.featured_media == null and forloop.index == 1
+                assign active = true
+              endif
+            -%}
+            <li class="media-thumbs__item" data-media-id="{{ media.id }}">
+              <button class="media-thumbs__btn media relative w-full{% if active %} is-active{% endif %}"{% if active %} aria-current="true"{% endif %} aria-controls="media-viewer" style="padding-top: {{ 1 | divided_by: media_ratio | times: 100 }}%;">
+                <span class="visually-hidden">
+                  {%- if media.media_type == 'image' -%}
+                    {{- 'products.product.media.load_image' | t: index: image_index -}}
+                  {%- elsif media.media_type == 'model' -%}
+                    {{- 'products.product.media.load_model' | t: index: model_index -}}
+                  {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                    {{- 'products.product.media.load_video' | t: index: video_index -}}
+                  {%- endif -%}
+                </span>
+
+                {%- if media.media_type == 'model' -%}
+                  <span class="media-thumbs__badge absolute flex items-center justify-center pointer-events-none">
+                    {%- render 'icon-3d-model' -%}
+                  </span>
+                {%- elsif media.media_type == 'video' or media.media_type == 'external_video' -%}
+                  <span class="media-thumbs__badge absolute flex items-center justify-center pointer-events-none">
+                    {%- render 'icon-video' -%}
+                  </span>
+                {%- endif -%}
+
+                {% render 'image',
+                  image: media,
+                  src_width: 100,
+                  srcset_2x: true,
+                  loading: loading,
+                  class: 'img-fit img-fit--contain w-full'
+                %}
+              </button>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+    {%- endunless -%}
+  {%- endif -%}
+
+  {%- if section.settings.enable_zoom -%}
+    {%- render 'gallery-zoom', product: product, zoom_size: 5000 -%}
+  {%- endif -%}
+
+  {%- if section.settings.enable_media_grouping -%}
+    {%- liquid
+      assign media_grouping_options = section.settings.media_grouping_option | replace: ', ', ',' | split: ','
+      for option in product.options
+        if media_grouping_options contains option
+          assign groupOptionName = option
+          assign groupOptionIndex = forloop.index0
+          assign groupOptionProperty = 'option' | append: forloop.index
+          assign sortedVariants = product.variants | sort: groupOptionProperty
+          break
+        endif
+      endfor
+      assign currentGroup = null
+    -%}
+    {%- if groupOptionName -%}
+      <script class="js-data-variant-media" type="application/json">
+        {
+          "groupOptionName": {{- groupOptionName | json -}},
+          "groupOptionIndex": {{- groupOptionIndex }},
+          "media": {
+            {%- assign standardMediaFound = false -%}
+            {%- for media in product.media -%}
+              {%- liquid
+                for variant in sortedVariants
+                  if variant.featured_media and variant.featured_media.id == media.id
+                    assign currentGroup = variant.options[groupOptionIndex]
+                  endif
+                endfor
+                unless media.alt contains 'all-groups'
+                  assign standardMediaFound = true
+                endunless
+              -%}
+              {%- unless forloop.first -%},{%- endunless -%}
+              "{{ media.id }}": {
+                {%- if media.alt contains 'all-groups' -%}
+                  "group": true, "position": "{% if standardMediaFound %}end{% else %}start{% endif %}"
+                {%- else -%}
+                  "group": {{ currentGroup | json }}
+                {%- endif -%}
+              }
+            {%- endfor -%}
+          }
+        }
+      </script>
+    {%- endif -%}
+  {%- endif -%}
+</media-gallery>

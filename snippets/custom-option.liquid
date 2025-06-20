@@ -1,0 +1,70 @@
+{%- comment -%}
+  Parameters:
+  - product_form_id {String} - ID of the product purchase form.
+  - block {Object} - Block settings for custom options.
+
+  Usage:
+  {% render 'custom_option',
+    product_form_id: product_form_id,
+    block: block
+  %}
+{%- endcomment -%}
+
+{%- if block.settings.label != blank -%}
+  {%- liquid
+    assign custom_option_input_id = product_form_id | append: '-custom-' | append: forloop.index
+    assign custom_input_name = block.settings.label | escape | prepend: 'properties[' | append: ']'
+  -%}
+  <div class="product-info__block custom-option" {{ block.shopify_attributes }}>
+    {% case block.settings.type %}
+      {%- when 'text' -%}
+        <div class="option-selector">
+          <label class="label" for="{{ custom_option_input_id }}">{{ block.settings.label | escape }}</label>
+          {% if block.settings.text_lines == 'one' %}
+            <input type="text" class="input w-full" id="{{ custom_option_input_id }}" form="{{ product_form_id }}" name="{{ custom_input_name }}" {% if block.settings.text_required %}required{% endif %}>
+          {% else %}
+            <textarea class="input w-full" id="{{ custom_option_input_id }}" rows="3" form="{{ product_form_id }}" name="{{ custom_input_name }}" {% if block.settings.text_required %}required{% endif %}></textarea>
+          {% endif %}
+        </div>
+
+      {%- when 'checkbox' -%}
+        <div class="option-selector">
+          <input type="hidden" form="{{ product_form_id }}" name="{{ custom_input_name }}" value="{{ block.settings.checkbox_unchecked_value | escape }}">
+          <input id="custom-option--{{ block.id }}" type="checkbox" form="{{ product_form_id }}" name="{{ custom_input_name }}" value="{{ block.settings.checkbox_checked_value | escape }}" class="checkbox">
+          <label for="custom-option--{{ block.id }}" class="w-full">{{ block.settings.label | escape }}</label>
+        </div>
+
+      {%- when 'multiple' -%}
+        {%- assign custom_options = block.settings.multiple_options | newline_to_br | strip_newlines | split: '<br />' -%}
+
+        {%- if block.settings.multiple_style == 'dropdown' -%}
+
+          <div class="option-selector option-selector--custom" data-selector-type="dropdown">
+            <script src="{{ 'custom-select.js' | asset_url }}" defer></script>
+            {% render 'custom-select',
+              id: custom_option_input_id,
+              label: block.settings.label,
+              option_values: custom_options,
+              selected_value: custom_options.first,
+              include_native: true,
+              native_name: custom_input_name,
+              native_form_id: product_form_id
+            %}
+          </div>
+
+        {%- else -%}
+          <fieldset class="option-selector" data-selector-type="radio">
+            <legend class="label">{{ block.settings.label | escape }}</legend>
+            <ul role="list">
+              {%- for option in custom_options -%}
+                <li class="mb-1">
+                  <input id="{{ custom_option_input_id }}-option-{{ forloop.index }}" class="radio" type="radio" form="{{ product_form_id }}" name="{{ custom_input_name }}" value="{{ option | escape }}"{% if forloop.first %} checked{% endif %}>
+                  <label for="{{ custom_option_input_id }}-option-{{ forloop.index }}">{{ option | escape }}</label>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </fieldset>
+        {%- endif -%}
+    {%- endcase -%}
+  </div>
+{%- endif -%}

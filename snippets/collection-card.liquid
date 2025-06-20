@@ -1,0 +1,80 @@
+{%- comment -%}
+  Parameters:
+  - collection {Object} - Collection object.
+  - image {Object} - Image object (optional).
+  - image_ratio {Number} - Aspect ratio for the image (optional).
+
+  Usage:
+  {% render 'collection-card', collection: collection %}
+{%- endcomment -%}
+
+{%- liquid
+  unless collection == empty
+    if image == blank 
+      if settings.coll_card_image_src == 'product' or collection.featured_image == blank
+        assign image = collection.products.first.featured_media.preview_image
+      else
+        assign image = collection.featured_image
+      endif
+    endif
+  endunless
+
+  if image_ratio == nil
+    if section.settings.card_image_ratio == 'shortest' or section.settings.card_image_ratio == 'tallest'
+      assign image_ratio = 1
+    else
+      assign image_ratio = section.settings.card_image_ratio
+    endif
+  elsif image_ratio == 0 or image_ratio == 99
+    assign image_ratio = 1
+  endif
+-%}
+
+<div class="{% unless settings.coll_card_image_ratio == '1-circle' %}card {% endunless %}relative flex flex-col{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
+  <div class="card__media relative">
+    <a href="{{ collection.url }}" class="media media-hover-effect block relative{% if settings.coll_card_image_ratio == '1-circle' %} media--round{% endif %}" tabindex="-1" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+      {%- if collection != empty and image != blank -%}
+        {%- liquid
+          capture sizes
+            render 'sizes-attribute', grid: true, min: 1, sm: 2, lg: 3, xl: 4
+          endcapture
+
+          if settings.coll_card_image_fit == 'contain'
+            assign class = 'img-fit img-fit--contain'
+          else
+            # Tailwind: object-top object-center object-bottom
+            assign class = 'img-fit object-' | append: settings.coll_card_image_position
+          endif
+        -%}
+        {% render 'image',
+          image: image,
+          widths: '320, 480, 600, 700, 800, 1000, 1280',
+          src_width: 640,
+          sizes: sizes,
+          class: class
+        %}
+      {%- else -%}
+        {%- capture placeholder_name -%}collection-{{ 'now' | date: '%N' | modulo: 6 | plus: 1 }}{%- endcapture -%}
+        {{ placeholder_name | placeholder_svg_tag: 'media__placeholder img-fit' }}
+      {%- endif -%}
+    </a>
+  </div>
+  <div class="card__info relative align-ltr-{{ settings.coll_card_text_alignment }}">
+    <div class="card__title">
+      {%- if collection != blank -%}
+        <a href="{{ collection.url }}" class="card-link">{{ collection.title | escape }}</a>
+      {%- else -%}
+        {{- 'onboarding.collection.title' | t -}}
+      {%- endif -%}
+    </div>
+    {%- if settings.coll_card_show_count -%}
+      <div class="text-sm">
+        {%- if collection != blank -%}
+          {{ 'sections.collection.product_count' | t: count: collection.all_products_count }}
+        {%- else -%}
+          {{ 'sections.collection.product_count' | t: count: 10 }}
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>

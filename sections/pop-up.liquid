@@ -1,0 +1,418 @@
+{%- if section.blocks.size > 0 -%}
+  {%- unless section.settings.show_to_guests_only and customer and request.design_mode == false -%}
+    <link rel="stylesheet" href="{{ 'modal.css' | asset_url }}">
+    <script src="{{ 'pop-up.js' | asset_url }}" defer="defer"></script>
+
+    {%- liquid
+      assign bg_color = section.settings.bg_color
+      assign heading_color = section.settings.heading_color
+      assign text_color = section.settings.text_color
+      assign breakpoint_sm = 640
+    -%}
+
+    {%- style -%}
+      #{{ section.id }} .modal__window {
+        {%- if bg_color != 'rgba(0,0,0,0)' -%}
+          --bg-color: {{ bg_color.rgba }};
+        {%- endif -%}
+
+        {%- if heading_color != 'rgba(0,0,0,0)' and heading_color != bg_color -%}
+          --heading-color: {{ heading_color.rgb }};
+        {%- endif -%}
+
+        {%- if text_color != 'rgba(0,0,0,0)' and text_color != bg_color -%}
+          --text-color: {{ text_color.rgb }};
+          --link-color: {{ text_color.rgb }};
+        {%- endif -%}
+
+        width: {{ section.settings.width }}px;
+      }
+      #{{ section.id }} .btn--primary {
+        {%- if section.settings.button_colors == 'heading' -%}
+          border-color: rgb(var(--heading-color));
+          background-color: rgb(var(--heading-color));
+          color: rgba(var(--bg-color));
+        {%- elsif section.settings.button_colors == 'text' -%}
+          border-color: rgb(var(--text-color));
+          background-color: rgb(var(--text-color));
+          color: rgba(var(--bg-color));
+        {%- endif -%}
+      }
+      @media (min-width: {{ breakpoint_sm }}px) {
+        #{{ section.id }} .modal__content { overflow: auto; }
+        {%- if section.settings.image != blank -%}
+          min-width: 600px;
+        {%- else -%}
+          min-width: 400px;
+        {%- endif -%}
+      }
+    {%- endstyle -%}
+
+    <pop-up class="modal invisible fixed top-0 left-0 w-full h-full flex {{ section.settings.position }}"
+            id="{{ section.id }}"
+            data-trigger="{{ section.settings.trigger }}"
+            data-delay="{{ section.settings.delay }}"
+            data-dismiss-days="{% if section.settings.dismiss_days > 0 %}{{ section.settings.dismiss_days }}{% else %}400{% endif %}"
+            data-mode="{{ section.settings.mode }}"
+            data-show-on-mobile="{{ section.settings.show_on_mobile }}">
+      <div class="modal__window flex relative bg-theme-bg text-theme-text text-start has-motion" role="dialog" aria-labelledby="{{ section.id }}-heading" aria-modal="true" tabindex="-1">
+        <button type="button" class="modal__close-btn absolute text-current js-close-modal">
+          {% render 'icon-close' %}
+          <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+        </button>
+        <div class="flex-auto {% if section.settings.image != blank %}flex{% if section.settings.layout == 'image_last' %} flex-row-reverse{% endif %}{% else %}modal__content {{ section.settings.text_align }}{% endif %}">
+          {%- if section.settings.image != blank -%}
+            {%- assign sizes = section.settings.width | times: 2 | append: 'px' -%}
+            <div class="modal__image media relative hidden md:block">
+              {% render 'image',
+                image: section.settings.image,
+                widths: '460, 700, 860, 1296',
+                src_width: 700,
+                sizes: sizes,
+                class: 'img-fit'
+              %}
+            </div>
+
+            <div class="modal__content flex-auto h-full {{ section.settings.text_align }}">
+          {%- endif -%}
+
+          {%- for block in section.blocks -%}
+            {%- case block.type -%}
+              {%- when 'heading' -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="section__block section__block--heading {{ block.settings.heading_size }}" id="{{ section.id }}-heading" {{ block.shopify_attributes }}>
+                    {{- block.settings.heading -}}
+                  </h2>
+                {%- endif -%}
+
+              {%- when 'subheading' -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="section__block subheading" {{ block.shopify_attributes }}>
+                    {{- block.settings.text | escape -}}
+                  </p>
+                {%- endif -%}
+
+              {%- when 'text' -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="section__block rte" {{ block.shopify_attributes }}>
+                    {{ block.settings.text }}
+                  </div>
+                {%- endif -%}
+
+              {%- when 'newsletter-signup' -%}
+                <div class="section__block form-width mx-auto" {{ block.shopify_attributes }}>
+                  {%- assign form_id = section.id | append: '-sign-up' -%}
+                  {% render 'newsletter-signup', id: form_id, tag: 'pop-up', combined: false %}
+                </div>
+
+              {%- when 'social' -%}
+                <div class="section__block" {{ block.shopify_attributes }}>
+                  {%- assign social_class = section.settings.text_align | split: '-' | last | prepend: 'justify-' -%}
+                  {% render 'social-media', icon: settings.social_custom_icon, class: social_class %}
+                </div>
+
+            {%- endcase -%}
+          {%- endfor -%}
+
+          {%- if section.settings.image != blank -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    </pop-up>
+  {%- endunless -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Pop-up",
+  "tag": "section",
+  "class": "cc-pop-up",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Trigger"
+    },
+    {
+      "type": "paragraph",
+      "content": "Choose the action which triggers the popup to show."
+    },
+    {
+      "type": "select",
+      "id": "trigger",
+      "label": "Show trigger",
+      "info": "\"Exit intent\" will show the popup when the user moves the cursor as if they're about to exit the site. Does not work on mobile.",
+      "options": [
+        {
+          "value": "delay",
+          "label": "Delay"
+        },
+        {
+          "value": "exit",
+          "label": "Exit intent"
+        }
+      ],
+      "default": "delay"
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "Delay seconds",
+      "info": "Only applies when the \"Trigger\" is \"Delay\".",
+      "default": 5,
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "s"
+    },
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_to_guests_only",
+      "label": "Show to guest users only",
+      "info": "Not shown to logged in customers.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_on_mobile",
+      "label": "Show on mobile",
+      "info": "Hiding the popup on mobile could help SEO.",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "dismiss_days",
+      "label": "Days to remain dismissed",
+      "default": 30,
+      "info": "Number of days before showing the pop-up again after it's closed. Set to 0 to never show again.",
+      "min": 0,
+      "max": 30,
+      "step": 1
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "Width",
+      "default": 480,
+      "min": 400,
+      "max": 800,
+      "step": 10,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "justify-center items-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-start items-end",
+          "label": "Bottom left"
+        },
+        {
+          "value": "justify-end items-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "justify-center items-center"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-start",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-end",
+          "label": "Right"
+        }
+      ],
+      "default": "text-center"
+    },
+    {
+      "type": "header",
+      "content": "Image (optional)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "For best results, use a square or portrait shaped image with a minimum width of 800px. Image is not shown on mobile."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image position",
+      "options": [
+        {
+          "value": "image_first",
+          "label": "Left"
+        },
+        {
+          "value": "image_last",
+          "label": "Right"
+        }
+      ],
+      "default": "image_first"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#555555"
+    },
+    {
+      "type": "select",
+      "id": "button_colors",
+      "label": "Button colors",
+      "options": [
+        {
+          "value": "heading",
+          "label": "Heading color"
+        },
+        {
+          "value": "text",
+          "label": "Text color"
+        }
+      ],
+      "default": "text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Sign up and save"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h4",
+              "label": "Smaller"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            }
+          ],
+          "default": "h2"
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subheading",
+          "default": "Subheading"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Entice customers to sign up for your mailing list with discounts or exclusive offers.</p>"
+        }
+      ]
+    },
+    {
+      "type": "newsletter-signup",
+      "name": "Newsletter sign-up",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Customers who subscribe will have an account created for them. [Learn more](https://help.shopify.com/en/manual/customers/manage-customers)"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social links",
+      "limit": 1
+    }
+  ],
+  "presets": [
+    {
+      "name": "Pop-up",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "newsletter-signup"
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "aside"
+    ]
+  }
+}
+{% endschema %}

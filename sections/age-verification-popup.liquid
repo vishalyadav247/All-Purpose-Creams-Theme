@@ -1,0 +1,406 @@
+{%- if section.blocks.size > 0 -%}
+  {{ 'modal.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'age-verification-pop-up.js' | asset_url }}" defer="defer"></script>
+
+  {%- liquid
+    assign bg_color = section.settings.bg_color
+    assign bg = section.settings.bg_grad | default: bg_color
+    assign heading_color = section.settings.heading_color
+    assign text_color = section.settings.text_color
+  -%}
+
+  {%- style -%}
+    #{{ section.id }}.modal {
+      --modal-overlay-opacity: {{ section.settings.modal_overlay_opacity | divided_by: 100.0 }};
+      z-index: 1000;
+    }
+
+    #{{ section.id }} .modal__window {
+      background: {{ bg }};
+      --bg-color: {{ bg_color.rgb }};
+      --heading-color: {{ heading_color.rgb }};
+      --text-color: {{ text_color.rgb }};
+      --link-color: {{ text_color.rgb }};
+    }
+
+    {%- if section.settings.bg_image != blank and bg != 'rgba(0,0,0,0)' -%}
+      #{{ section.id }} .modal__background-image::after {
+        background-color: {{ bg_color }};
+        opacity: {{ section.settings.tint_opacity }}%;
+      }
+    {%- endif -%}
+  {%- endstyle -%}
+
+  <age-verification-pop-up class="modal invisible fixed top-0 left-0 w-full h-full flex {{ section.settings.position }}"
+          id="{{ section.id }}"
+          data-mode="{{ section.settings.mode }}">
+    <div class="
+      modal__window
+      flex
+      relative
+      bg-theme-bg
+      text-theme-text
+      text-start
+      has-motion
+      modal__window--shrink" role="dialog" aria-labelledby="{{ section.id }}-heading" aria-modal="true" tabindex="-1">
+      <div class="flex-auto modal__content modal__content--p-even relative {{ section.settings.text_align }}">
+        {%- capture sizes %}{% render 'sizes-attribute' %}{% endcapture -%}
+        {%- if section.settings.bg_image != blank -%}
+          <div class="modal__background-image media media--has-overlay absolute top-0 left-0 h-full w-full z-[-1]">
+            {% render 'image',
+            image: section.settings.bg_image,
+            widths: '460, 700, 860, 1296',
+            src_width: 700,
+            sizes: sizes,
+            class: 'img-fit'
+            %}
+          </div>
+        {%- endif -%}
+
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'heading' -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="{{ block.settings.heading_size }}" id="{{ section.id }}-heading" {{ block.shopify_attributes }}>
+                  {{- block.settings.heading | escape -}}
+                </h2>
+              {%- endif -%}
+
+            {%- when 'subheading' -%}
+              {%- if block.settings.text != blank -%}
+                <p class="section__block subheading" {{ block.shopify_attributes }}>
+                  {{- block.settings.text | escape -}}
+                </p>
+              {%- endif -%}
+
+            {%- when 'text' -%}
+              {%- if block.settings.text != blank -%}
+                <div class="section__block rte {{ block.settings.text_size }}" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </div>
+              {%- endif -%}
+
+            {%- when 'button' -%}
+              {%- if block.settings.button_proceed_label != blank or block.settings.button_cancel_label != blank -%}
+                <div class="section__block section__block--button" {{ block.shopify_attributes }}>
+                  {%- liquid
+                    assign button_proceed_bg_color = block.settings.button_proceed_bg_color
+                    assign button_proceed_text_color = block.settings.button_proceed_text_color
+                    assign button_proceed_bg_color_hover = button_proceed_bg_color | color_mix: button_proceed_text_color, 85 | color_lighten: 3
+                    assign button_cancel_bg_color = block.settings.button_cancel_bg_color
+                    assign button_cancel_text_color = block.settings.button_cancel_text_color
+                    assign button_cancel_bg_color_hover = button_cancel_bg_color | color_mix: button_cancel_text_color, 85 | color_lighten: 3
+                  -%}
+                  {%- style -%}
+                    #{{ section.id }} .modal__window .btn--popup-1 {
+                      --btn-bg-color: {{ button_proceed_bg_color.rgb }};
+                      --btn-text-color: {{ button_proceed_text_color.rgb }};
+                      --btn-bg-hover-color: {{ button_proceed_bg_color_hover.rgb }};
+                      --btn-alt-text-color: {{ button_proceed_bg_color_hover.rgb }};
+                      --link-color: {{ button_proceed_text_color.rgb }};
+                    }
+                    #{{ section.id }} .modal__window .btn--popup-2 {
+                      --btn-bg-color: {{ button_cancel_bg_color.rgb }};
+                      --btn-text-color: {{ button_cancel_text_color.rgb }};
+                      --btn-bg-hover-color: {{ button_cancel_bg_color_hover.rgb }};
+                      --btn-alt-text-color: {{ button_cancel_bg_color_hover.rgb }};
+                      --link-color: {{ button_cancel_text_color.rgb }};
+                    }
+                  {%- endstyle -%}
+
+                  <div class="gap-5 inline-flex flex-wrap items-center{% if section.settings.text_align == 'text-start' %} justify-start{% elsif section.settings.text_align == 'text-end' %} justify-end{% else %} justify-center{% endif %}">
+                    {%- if block.settings.button_proceed_label != blank %}
+                      <button class="btn btn--primary btn--popup-1 js-close-modal">
+                        {{- block.settings.button_proceed_label | escape -}}
+                      </button>
+                    {%- endif -%}
+                    {%- if block.settings.button_cancel_label != blank %}
+                      <button class="btn btn--primary btn--popup-2 js-cancel-button">
+                        {{- block.settings.button_cancel_label | escape -}}
+                      </button>
+                    {%- endif -%}
+                  </div>
+                  {%- if block.settings.button_cancel_label != blank %}
+                    <div class="age-verification-message overflow-hidden js-cancel-message" hidden>
+                      <div class="pt-6 rte">{{ block.settings.cancel_text }}</div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </age-verification-pop-up>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Age verification pop-up",
+  "tag": "section",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Position",
+      "options": [
+        {
+          "value": "justify-center items-center",
+          "label": "Center"
+        },
+        {
+          "value": "justify-start items-end",
+          "label": "Bottom left"
+        },
+        {
+          "value": "justify-end items-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "justify-center items-center"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        {
+          "value": "text-start",
+          "label": "Left"
+        },
+        {
+          "value": "text-center",
+          "label": "Center"
+        },
+        {
+          "value": "text-end",
+          "label": "Right"
+        }
+      ],
+      "default": "text-start"
+    },
+    {
+      "type": "header",
+      "content": "Background image (optional)"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Image",
+      "info": "If set, the background color below is used as the tint."
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#070707"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#070707"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color_background",
+      "id": "bg_grad",
+      "label": "Background gradient",
+      "info": "If set, replaces the background color."
+    },
+    {
+      "type": "range",
+      "id": "tint_opacity",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "label": "Background image tint opacity",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "modal_overlay_opacity",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "label": "Pop-up background tint opacity",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Age verification"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h5",
+              "label": "Smallest"
+            },
+            {
+              "value": "h4",
+              "label": "Smaller"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            },
+            {
+              "value": "h0",
+              "label": "Larger"
+            }
+          ],
+          "default": "h4"
+        }
+      ]
+    },
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subheading",
+          "default": "Subheading"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 2,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>You must be at least 18 years old to access this site.</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "A button block is required and allows customers to enter your store."
+        },
+        {
+          "type": "header",
+          "content": "Proceed button"
+        },
+        {
+          "type": "text",
+          "id": "button_proceed_label",
+          "label": "Button label",
+          "info": "Clicking the button will close the popup.",
+          "default": "I am over 18"
+        },
+        {
+          "type": "color",
+          "id": "button_proceed_bg_color",
+          "label": "Background",
+          "default": "#070707"
+        },
+        {
+          "type": "color",
+          "id": "button_proceed_text_color",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Cancel button"
+        },
+        {
+          "type": "text",
+          "id": "button_cancel_label",
+          "label": "Button label"
+        },
+        {
+          "type": "color",
+          "id": "button_cancel_bg_color",
+          "label": "Background",
+          "default": "#555555"
+        },
+        {
+          "type": "color",
+          "id": "button_cancel_text_color",
+          "label": "Text",
+          "default": "#ffffff"
+        },
+        {
+          "type": "richtext",
+          "id": "cancel_text",
+          "label": "Cancel text",
+          "default": "<p>We sell age restricted products, so you won't be permitted to purchase from our store.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Age verification pop-up",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        },
+        {
+          "type": "button",
+          "settings": {
+            "button_proceed_label": "I am over 18",
+            "button_cancel_label": "I am under 18"
+          }
+        }
+      ]
+    }
+  ],
+  "enabled_on": {
+    "groups": [
+      "aside"
+    ]
+  }
+}
+{% endschema %}

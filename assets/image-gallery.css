@@ -1,0 +1,12 @@
+@media (min-width: 768px) {
+  .cc-image-gallery .col-span-3 .text-overlay,
+.cc-image-gallery .col-span-4 .text-overlay {
+    max-width: calc(24vw - var(--gutter) * 2);
+  }
+  .cc-image-gallery .col-span-6 .text-overlay {
+    max-width: calc(32vw - var(--gutter) * 2);
+  }
+  .cc-image-gallery .col-span-8 .text-overlay {
+    max-width: calc(40vw - var(--gutter) * 2);
+  }
+}

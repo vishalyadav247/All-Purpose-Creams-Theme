@@ -1,0 +1,455 @@
+{%- comment %}theme-check-disable LiquidTag{% endcomment -%}
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+  assign skip_block_count = 0
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)'
+    assign bg_color = false
+  endif
+
+  if section.settings.boundary_effect != blank
+    assign bg_color = true
+  endif
+
+  if color_scheme == 'none' and section.settings.boundary_effect != blank
+    assign color_scheme = 'page'
+  endif
+-%}
+
+{%- if section.blocks.size > 0 -%}
+  {%- style -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'text' and block.settings.text_size > 100 -%}
+        {%- assign width_scale = block.settings.text_size | minus: 100 | divided_by: 10 -%}
+        #{{ section.id }} .reading-width { max-width: {{ 45 | plus: width_scale }}em; }
+        #{{ section.id }} .rte { font-size: {{ block.settings.text_size | divided_by: 100.0 }}em; }
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endstyle -%}
+
+  <div class="section
+      {% if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+      {%- unless section.settings.full_width %} section--page-width{% endunless %}
+      {%- if bg_color %} section--padded{% endif %}
+      {%- if bg_color and section.settings.full_width %} section--m-0{% endif %}
+      {%- unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}
+      {%- unless section.settings.full_width %} content-block{% endunless %}" id="{{ section.id }}">
+    <div class="{% if section.settings.full_width or bg_color %}container {% endif %}{% if section.settings.full_width_content == false %}reading-width {% endif %}align-ltr-{{ section.settings.text_alignment }} mb-1" data-cc-animate>
+      {%- for block in section.blocks -%}
+        {%- liquid
+          if skip_block_count > 0
+            assign skip_block_count = skip_block_count | minus: 1
+            continue
+          endif
+        -%}
+        {%- case block.type -%}
+          {%- when 'subheading' -%}
+            {%- if block.settings.text != blank -%}
+              <p class="section__block subheading" {{ block.shopify_attributes }}>
+                {{- block.settings.text | escape -}}
+              </p>
+            {%- endif -%}
+
+          {%- when 'heading' -%}
+            {%- if block.settings.heading != blank -%}
+              {%- if block.settings.heading_h1 -%}
+                <h1 class="section__block section__block--heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                  {{- block.settings.heading | escape -}}
+                </h1>
+              {%- else -%}
+                <h2 class="section__block section__block--heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                  {{- block.settings.heading | escape -}}
+                </h2>
+              {%- endif -%}
+            {%- endif -%}
+
+          {%- when 'text' -%}
+            {%- if block.settings.text != blank -%}
+              <div class="section__block rte" {{ block.shopify_attributes }}>
+                {{ block.settings.text }}
+              </div>
+            {%- endif -%}
+
+          {%- when 'countdown' -%}
+            <div class="section__block no-js-hidden countdown-font-{{ block.settings.number_font }} countdown-dividers-{% if block.settings.show_dividers %}on{% else %}off{% endif %}" {{ block.shopify_attributes }}>
+              {%- style -%}
+                #{{ section.id }} .countdown__grid {
+                  --countdown-font-size: calc(({{ block.settings.number_size }} / 1.25) * var(--fluid-1-25));
+                  --coundown-divider-color: {% if block.settings.divider_color.alpha > 0 %}{{ block.settings.divider_color }}{% else %}currentColor{% endif %};
+                }
+              {%- endstyle -%}
+              <script src="{{ 'countdown-timer.js' | asset_url }}" defer="defer"></script>
+              {% render 'countdown-timer',
+                end_date: block.settings.end_date,
+                end_time: block.settings.end_time,
+                end_text: block.settings.end_text,
+                end_midnight: true,
+                hide_on_end: block.settings.hide_on_end,
+                show_labels: block.settings.show_timer_labels
+              %}
+            </div>
+
+          {%- when 'button' -%}
+            {%- if block.settings.button_label != blank -%}
+              <div class="section__block section__block--button" {{ block.shopify_attributes }}>
+                <div class="btn-row flex flex-wrap content-align-{{ section.settings.text_alignment }}">
+                  <a class="{{ block.settings.button_style }}" {% if block.settings.button_link == blank %}role="link" aria-disabled="true"{% else %}href="{{ block.settings.button_link }}"{% endif %}>
+                    {{- block.settings.button_label | escape -}}
+                  </a>
+
+                  {%- assign skip_block_count = 0 -%}
+                  {%- for next_block in section.blocks offset: forloop.index -%}
+                    {%- if next_block.type == 'button' -%}
+                      {%- assign skip_block_count = skip_block_count | plus: 1 -%}
+                      <a class="{{ next_block.settings.button_style }}" {% if next_block.settings.button_link == blank %}role="link" aria-disabled="true"{% else %}href="{{ next_block.settings.button_link }}"{% endif %}>
+                        {{- next_block.settings.button_label | escape -}}
+                      </a>
+                    {%- else -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            {%- endif -%}
+
+          {%- when 'page' -%}
+            {%- if block.settings.page != blank -%}
+              <div class="section__block rte" {{ block.shopify_attributes }}>
+                {{ pages[block.settings.page].content }}
+              </div>
+            {%- endif -%}
+
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Rich text",
+  "tag": "section",
+  "class": "cc-rich-text",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_alignment",
+      "label": "Content alignment",
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width_content",
+      "label": "Full width content",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width background",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subheading",
+          "default": "Subheading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Talk about your brand"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h4",
+              "label": "Smaller"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            },
+            {
+              "value": "h0",
+              "label": "Larger"
+            }
+          ],
+          "default": "h2"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_h1",
+          "label": "Set as page heading (uses h1 tag)",
+          "info": "For optimum SEO, a page should only have one h1 and it should be the first heading on the page.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Use this text to share information about your store with your customers. Describe a product, share announcements, or welcome customers to your store.</p>"
+        },
+        {
+          "type": "range",
+          "id": "text_size",
+          "min": 100,
+          "max": 150,
+          "step": 10,
+          "unit": "%",
+          "label": "Text scale",
+          "default": 100
+        }
+      ]
+    },
+    {
+      "type": "countdown",
+      "name": "Countdown timer",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "end_date",
+          "label": "End date",
+          "info": "Format: YYYY-MM-DD."
+        },
+        {
+          "type": "text",
+          "id": "end_time",
+          "label": "End time (optional)",
+          "info": "Format: 17:00 (24 hour clock)."
+        },
+        {
+          "type": "richtext",
+          "id": "end_text",
+          "label": "End text",
+          "info": "This shows when the date and time elapses."
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_on_end",
+          "label": "Hide the timer when the date and time elapses",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "number_size",
+          "min": 34,
+          "max": 84,
+          "step": 2,
+          "unit": "px",
+          "label": "Number size",
+          "default": 36
+        },
+        {
+          "type": "select",
+          "id": "number_font",
+          "label": "Number font",
+          "options": [
+            {
+              "label": "Text font",
+              "value": "base"
+            },
+            {
+              "label": "Heading font",
+              "value": "heading"
+            }
+          ],
+          "default": "base"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_dividers",
+          "label": "Show dividers",
+          "default": true
+        },
+        {
+          "type": "color",
+          "id": "divider_color",
+          "label": "Divider color",
+          "info": "Set to none/transparent to inherit text color",
+          "default": "rgba(0,0,0,0)"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_timer_labels",
+          "label": "Show labels",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "Consecutive buttons will show on the same row"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "feature-link",
+              "label": "Link"
+            },
+            {
+              "value": "btn btn--primary",
+              "label": "Primary button"
+            },
+            {
+              "value": "btn btn--secondary",
+              "label": "Secondary button"
+            }
+          ],
+          "default": "feature-link"
+        }
+      ]
+    },
+    {
+      "type": "page",
+      "name": "Page",
+      "settings": [
+        {
+          "type": "page",
+          "id": "page",
+          "label": "Page"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Rich text",
+      "blocks": [
+        {
+          "type": "heading"
+        },
+        {
+          "type": "text"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

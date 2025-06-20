@@ -1,0 +1,227 @@
+{%- if settings.enable_quick_add -%}
+  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'product.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  if section.settings.layout == 'carousel'
+    assign carousel = true
+    assign grid_classes = 'grid-flow-col auto-cols-' | append: settings.prod_card_mob_per_row
+
+    if section.settings.card_size == 'small'
+      assign grid_classes = grid_classes | append: ' md:auto-cols-3 lg:auto-cols-4 xl:auto-cols-5'
+    elsif section.settings.card_size == 'medium'
+      assign grid_classes = grid_classes | append: ' sm:auto-cols-2 lg:auto-cols-3 xl:auto-cols-4'
+    else
+      assign grid_classes = grid_classes | append: ' sm:auto-cols-2 lg:auto-cols-3'
+    endif
+  else
+    assign carousel = false
+    assign grid_classes = 'grid-cols-' | append: settings.prod_card_mob_per_row
+
+    if section.settings.card_size == 'small'
+      assign grid_classes = grid_classes | append: ' md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'
+    elsif section.settings.card_size == 'medium'
+      assign grid_classes = grid_classes | append: ' sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
+    else
+      assign grid_classes = grid_classes | append: ' md:grid-cols-2 xl:grid-cols-3'
+    endif
+  endif
+-%}
+
+<recently-viewed class="section" data-url="{{ routes.search_url }}?section_id={{ section.id }}&type=product" data-limit="{{ section.settings.limit }}"{% if request.page_type == 'product' %} data-exclude="{{ product.id }}"{% endif %}>
+  {%- if request.page_type == 'search' and search.performed and search.results_count > 0 -%}
+    {%- if carousel -%}
+      <carousel-slider class="carousel block xl:overflow-hidden" inactive>
+    {%- endif -%}
+
+    <div class="container">
+      {%- if carousel and settings.slider_show_arrows != 'never' -%}
+        <div class="carousel__header flex items-center justify-between mb-6">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="section__heading flex-auto mb-0">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+
+          <div class="slider-nav {% if settings.slider_show_arrows == 'hover' %}slider-nav--show-on-hover no-hover-hidden {% endif %}hidden md:flex no-js-hidden">
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="prev" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+              {% render 'icon-arrow-left' %}
+            </button>
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="next" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        </div>
+      {%- elsif section.settings.heading != blank -%}
+        <h2 class="section__heading">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if carousel -%}
+        <div class="slider" id="slider-{{ section.id }}">
+          <div class="container">
+      {%- endif -%}
+
+      <ul class="{% if carousel %}slider__grid {% endif %}grid {{ grid_classes }} gap-x-theme gap-y-card" role="list">
+        {%- for product in search.results -%}
+          <li class="flex flex-col{% if carousel %} slider__item{% endif %}">
+            {% render 'product-card', product: product %}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if carousel -%}
+          </div>
+        </div> {% # slider %}
+      {%- endif -%}
+    </div>
+
+    {%- if carousel -%}
+      </carousel-slider>
+    {%- endif -%}
+  {%- endif -%}
+</recently-viewed>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!customElements.get('recently-viewed')) {
+      class RecentlyViewed extends HTMLElement {
+        constructor() {
+          super();
+          this.fetchAttempts = 0;
+          window.initLazyScript(this, this.init.bind(this), 500);
+        }
+
+        async init() {
+          try {
+            const response = await fetch(`${this.dataset.url}&q=${this.getSearchQuery()}`);
+            if (!response.ok) throw new Error(response.status);
+
+            const tmpl = document.createElement('template');
+            tmpl.innerHTML = await response.text();
+
+            const el = tmpl.content.querySelector('recently-viewed');
+            if (el && el.hasChildNodes()) {
+              this.innerHTML = el.innerHTML;
+            }
+          } catch (error) {
+            this.fetchAttempts += 1;
+
+            if (this.fetchAttempts === 3) {
+              console.log(error);
+            } else {
+              this.init();
+            }
+          }
+        }
+
+        getSearchQuery() {
+          const items = JSON.parse(localStorage.getItem('cc-recently-viewed') || '[]');
+
+          if (this.dataset.exclude && items.includes(Number(this.dataset.exclude))) {
+            items.splice(items.indexOf(Number(this.dataset.exclude)), 1);
+          }
+
+          return items.map((item) => `id:${item}`).slice(0, this.dataset.limit).join(' OR ');
+        }
+      }
+
+      customElements.define('recently-viewed', RecentlyViewed);
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Recently viewed products",
+  "tag": "section",
+  "class": "cc-recently-viewed",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "If no products have been viewed, the section will not be shown."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "select",
+      "id": "card_size",
+      "label": "Product card size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Maximum products to show",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently viewed products"
+    }
+  ],
+  "templates": [
+    "article",
+    "blog",
+    "cart",
+    "collection",
+    "customers/account",
+    "customers/activate_account",
+    "customers/addresses",
+    "customers/login",
+    "customers/order",
+    "customers/register",
+    "customers/reset_password",
+    "index",
+    "list-collections",
+    "page",
+    "product",
+    "search"
+  ]
+}
+{% endschema %}

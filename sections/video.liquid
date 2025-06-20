@@ -1,0 +1,685 @@
+{%- comment %}theme-check-disable LiquidTag{% endcomment -%}
+<link rel="stylesheet" href="{{ 'video.css' | asset_url }}">
+
+{%- if section.blocks.size > 0 -%}
+  <link rel="stylesheet" href="{{ 'text-overlay.css' | asset_url }}">
+{%- endif -%}
+
+<script src="{{ 'video.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign using_video_tag = false
+  assign full_width = false
+  assign autoplay = section.settings.video_autoplay
+  assign controls = true
+  if autoplay
+    assign controls = false
+  endif
+  assign overlay_position = section.settings.overlay_position | split: ' '
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+  assign full_width_bg = false
+  assign skip_block_count = 0
+
+  if section.settings.video_shopify != blank
+    assign using_video_tag = true
+  endif
+
+  if section.settings.video_size == 'full'
+    assign full_width = true
+  endif
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)'
+    assign bg_color = false
+  endif
+
+  if section.settings.boundary_effect != blank
+    assign bg_color = true
+  endif
+
+  if color_scheme == 'none' and section.settings.boundary_effect != blank
+    assign color_scheme = 'page'
+  endif
+
+  if bg_color and section.settings.full_width_bg == true
+    assign full_width_bg = true
+  endif
+
+  assign breakpoint_sm = 640
+  assign breakpoint_sm_down = breakpoint_sm | minus: 0.02
+
+-%}
+
+{%- style -%}
+  {%- if section.blocks.size > 0 -%}
+    {%- if full_width -%}
+      #{{ section.id }} .video-section::after { content: ''; padding-top: 56.25%; }
+      #{{ section.id }} deferred-media > .video-section__play-btn { visibility: hidden; }
+
+      {%- unless autoplay -%}
+        #{{ section.id }} .video-section--played .text-overlay { visibility: hidden; }
+      {%- endunless -%}
+
+      {%- if bg_color or section.settings.text_border_width > 0 -%}
+        #{{ section.id }} .text-overlay {
+          {%- if section.settings.text_border_width > 0 -%}
+            border: {{ section.settings.text_border_width }}px solid {{ section.settings.text_border_color }};
+          {%- endif -%}
+
+          {%- if bg_color -%}
+            background-color: rgba(var(--bg-color) / {{ section.settings.text_bg_opacity | divided_by: 100.0 }});
+            background-image: var(--bg-gradient, none);
+          {%- endif -%}
+        }
+      {%- endif -%}
+
+      {%- if bg_color -%}
+        #{{ section.id }} .text-overlay {
+          background-color: rgba(var(--bg-color) / {{ section.settings.text_bg_opacity | divided_by: 100.0 }});
+        }
+
+        #{{ section.id }} .text-overlay .video-section__play-btn { color: currentColor; }
+      {%- else -%}
+        #{{ section.id }} .text-overlay { --heading-color: {{ section.settings.text_color_without_scheme.rgb }}; }
+        #{{ section.id }} .text-overlay,
+        #{{ section.id }} .text-overlay__heading,
+        #{{ section.id }} .video-section__play-btn { color: {{ section.settings.text_color_without_scheme }}; }
+      {%- endif -%}
+    {%- else -%}
+      #{{ section.id }} .text-overlay {
+        width: auto;
+        max-width: 47em;
+        margin-top: 0;
+        {% if section.settings.overlay_text_align == 'left' %}
+          margin-inline-end: auto;
+        {% elsif section.settings.overlay_text_align == 'right' %}
+          margin-inline-start: auto;
+        {% else %}
+          margin-left: auto;
+          margin-right: auto;
+        {% endif %}
+      }
+
+      {%- if bg_color -%}
+        @media (max-width: {{ breakpoint_sm_down }}px) {
+          #{{ section.id }} .text-overlay {
+            padding: 0 calc(2 * var(--gutter));
+          }
+        }
+      {%- endif -%}
+
+      #{{ section.id }} .video-section__play-btn { color: {{ section.settings.text_color_without_scheme }}; }
+    {%- endif -%}
+  {%- else -%}
+    #{{ section.id }} .video-section__play-btn { color: {{ section.settings.text_color_without_scheme }}; }
+  {%- endif -%}
+
+  {%- if section.settings.tint_opacity > 0 -%}
+    #{{ section.id }} .media::after {
+      background-color: rgba({{ section.settings.tint_color.rgb }} / {{ section.settings.tint_opacity | divided_by: 100.0 }});
+    }
+  {%- endif -%}
+{%- endstyle -%}
+
+{%- capture video_component -%}
+  <video-component class="{% if using_video_tag %}has-video{% else %}has-iframe{% endif %} block w-full h-full"
+                   {%- unless using_video_tag %}data-video-url="{{ section.settings.video_external | escape }}" {% endunless -%}
+                   data-autoplay="{% if autoplay %}true{% else %}false{% endif %}"
+                   data-background="{% if full_width and autoplay %}true{% else %}false{% endif %}"
+                   data-description="{{ section.settings.video_description }}">
+    {%- if using_video_tag -%}
+      {{ section.settings.video_shopify | video_tag: playsinline: true, autoplay: autoplay, muted: autoplay, loop: autoplay, controls: controls, poster: '' | replace: '<img ', '<img loading="lazy" hidden ' }}
+    {%- else -%}
+      <div></div>
+    {%- endif -%}
+  </video-component>
+{%- endcapture -%}
+
+<div class="section
+    {%- if full_width or full_width_bg %} section--m-0{% endif %}
+    {%- unless full_width or full_width_bg %} section--page-width content-block{% endunless %}
+    {%- unless bg_color == false %}
+      {%- if full_width == false %} section--padded{% endif %}
+    {%- endunless %}
+    {%- unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}
+      {%- if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+    {%- endunless %}" id="{{ section.id }}">
+  <div class="video-section{% if full_width %} video-section--full-width{% else %} content-block{% endif %} relative flex{% unless full_width %} flex-col{% if section.settings.video_size == 'sm' %} reading-width{% elsif section.settings.video_size == 'md' %} section--page-width container{% else %} container{% endif %}{% endunless %} mx-auto overflow-hidden">
+
+    {%- if section.blocks.size > 0 -%}
+      {%- if full_width -%}
+        <div class="container flex {{ overlay_position | first }} {{ overlay_position | last }}">
+      {%- endif -%}
+        <div class="
+            text-overlay
+            {%- if full_width %}
+              {%- if section.settings.text_border_width > 0 or bg_color %} text-overlay--box
+              {%- else %}
+                {%- if section.settings.overlay_text_align == 'center' %} px-4{% else %} px-2{% endif %}
+                sm:px-0
+              {%- endif %}
+            {%- endif %}
+            align-ltr-{{ section.settings.overlay_text_align }}
+            {%- if full_width and autoplay == false %} video-played-hidden{% endif %}"
+            {%- if section.settings.text_border_width > 0 or bg_color %} style="--border-radius: {{ section.settings.text_border_radius }}px"{% endif %}>
+          {%- for block in section.blocks -%}
+            {%- liquid
+              if skip_block_count > 0
+                assign skip_block_count = skip_block_count | minus: 1
+                continue
+              endif
+            -%}
+            {%- case block.type -%}
+              {%- when 'subheading' -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="text-overlay__block subheading" {{ block.shopify_attributes }}>
+                    {{- block.settings.text | escape -}}
+                  </p>
+                {%- endif -%}
+
+              {%- when 'heading' -%}
+                {%- if block.settings.heading != blank -%}
+                  <h2 class="text-overlay__block text-overlay__heading {{ block.settings.heading_size }}" {{ block.shopify_attributes }}>
+                    {{- block.settings.heading | newline_to_br -}}
+                  </h2>
+                {%- endif -%}
+
+              {%- when 'text' -%}
+                {%- if block.settings.text != blank -%}
+                  <div class="text-overlay__block rte{% if block.settings.enlarge_text %} text-lg{% endif %}" {{ block.shopify_attributes }}>
+                    {{ block.settings.text }}
+                  </div>
+                {%- endif -%}
+
+              {%- when 'button' -%}
+                {%- if block.settings.button_label != blank -%}
+                  <div class="text-overlay__block text-overlay__button" {{ block.shopify_attributes }}>
+                    <div class="btn-row flex flex-wrap content-align-{{ section.settings.overlay_text_align }}">
+                      <a class="btn {{ block.settings.button_style }}" {% if block.settings.button_link == blank %}role="link" aria-disabled="true"{% else %}href="{{ block.settings.button_link }}"{% endif %}>
+                        {{- block.settings.button_label | escape -}}
+                      </a>
+
+                      {%- assign skip_block_count = 0 -%}
+                      {%- for next_block in section.blocks offset: forloop.index -%}
+                        {%- if next_block.type == 'button' -%}
+                          {%- assign skip_block_count = skip_block_count | plus: 1 -%}
+                          <a class="btn {{ next_block.settings.button_style }}" {% if next_block.settings.button_link == blank %}role="link" aria-disabled="true"{% else %}href="{{ next_block.settings.button_link }}"{% endif %}>
+                            {{- next_block.settings.button_label | escape -}}
+                          </a>
+                        {%- else -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- endif -%}
+
+            {%- endcase -%}
+          {%- endfor -%}
+
+          {%- if full_width and autoplay == false -%}
+            <load-media>
+              <button type="button" class="video-section__play-btn{% if section.blocks.size > 0 %} mt-6{% endif %}">
+                <span class="visually-hidden">{{ 'general.icon_labels.play' | t }}</span>
+                {%- render 'icon-play' -%}
+              </button>
+            </load-media>
+          {%- endif -%}
+        </div>
+      {%- if full_width -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+
+    <div class="video-section__media block w-full
+        {%- if section.blocks.size > 0 and full_width %} absolute top-0 left-0 h-full
+        {%- else %} relative
+        {%- endif %}
+        {%- if full_width == false %} content-block overflow-hidden{% endif %}">
+      {%- if autoplay -%}
+        <div class="{% if full_width %}video-section__bg-video pointer-events-none {% endif %}absolute top-0 left-0 w-full h-full no-js-hidden">
+          {{ video_component }}
+        </div>
+      {%- else -%}
+        <deferred-media class="absolute top-0 left-0 w-full h-full no-js-hidden">
+          <button type="button" class="video-section__play-btn absolute top-0 left-0 flex justify-center items-center w-full h-full video-played-hidden js-load-media">
+            <span class="visually-hidden">{{ 'general.icon_labels.play' | t }}</span>
+            {%- render 'icon-play' -%}
+          </button>
+          <template>
+            {{ video_component }}
+          </template>
+        </deferred-media>
+      {%- endif -%}
+
+      <div class="media media--has-overlay absolute top-0 left-0 w-full h-full{% unless full_width and autoplay %} video-played-hidden{% endunless %}">
+        {%- liquid
+          assign sizes = false
+          assign class = 'img-fit'
+
+          if full_width and autoplay
+            assign class = 'img-fit video-played-hidden'
+          endif
+        -%}
+        {%- if section.settings.poster_image != blank or section.settings.video_shopify != blank -%}
+          {%- assign poster_image = section.settings.poster_image | default: section.settings.video_shopify.preview_image -%}
+          {%- unless full_width -%}
+            {%- capture sizes -%}
+              {%- render 'sizes-attribute', min: '100vw', sm: 'page', max: 'page' -%}
+            {%- endcapture -%}
+          {%- endunless -%}
+          {% render 'image',
+            image: poster_image,
+            widths: '750, 856, 1440, 1680, 1920, 2560',
+            src_width: 1680,
+            sizes: sizes,
+            class: class
+          %}
+        {%- else -%}
+          {%- assign class = class | prepend: 'media__placeholder ' -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: class }}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% javascript %}
+  class LoadMedia extends HTMLElement {
+    connectedCallback() {
+      const button = this.querySelector('button');
+      const deferredMediaBtn = this.closest('.video-section').querySelector('.js-load-media');
+      button.addEventListener('click', () => deferredMediaBtn.click());
+    }
+  }
+  customElements.define('load-media', LoadMedia);
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Video",
+  "tag": "section",
+  "class": "cc-video",
+  "settings": [
+    {
+      "type": "video",
+      "id": "video_shopify",
+      "label": "Video upload",
+      "info": "Hosted by Shopify. Replaces External video if both are set."
+    },
+    {
+      "type": "text",
+      "id": "video_external",
+      "label": "External video",
+      "info": "Supports YouTube and Vimeo",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "text",
+      "id": "video_description",
+      "label": "Video alt text",
+      "info": "Describe the video for customers using screen readers."
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Custom cover image",
+      "info": "Shows while the video is loading, or if it cannot autoplay."
+    },
+    {
+      "type": "select",
+      "id": "video_size",
+      "label": "Video size",
+      "options": [
+        {
+          "value": "sm",
+          "label": "Small"
+        },
+        {
+          "value": "md",
+          "label": "Medium"
+        },
+        {
+          "value": "lg",
+          "label": "Large"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay",
+      "info": "Video will be muted",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "text_alignment",
+      "id": "overlay_text_align",
+      "label": "Text alignment",
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Text overlay",
+      "info": "Applies to full width video only."
+    },
+    {
+      "type": "select",
+      "id": "overlay_position",
+      "label": "Overlay position",
+      "options": [
+        {
+          "value": "justify-start items-start",
+          "label": "Top left"
+        },
+        {
+          "value": "justify-center items-start",
+          "label": "Top center"
+        },
+        {
+          "value": "justify-end items-start",
+          "label": "Top right"
+        },
+        {
+          "value": "justify-start items-center",
+          "label": "Middle left"
+        },
+        {
+          "value": "justify-center items-center",
+          "label": "Middle center"
+        },
+        {
+          "value": "justify-end items-center",
+          "label": "Middle right"
+        },
+        {
+          "value": "justify-start items-end",
+          "label": "Bottom left"
+        },
+        {
+          "value": "justify-center items-end",
+          "label": "Bottom center"
+        },
+        {
+          "value": "justify-end items-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "justify-center items-center"
+    },
+    {
+      "type": "range",
+      "id": "text_border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "text_border_color",
+      "label": "Border color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "text_border_radius",
+      "label": "Corner radius",
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Video tint"
+    },
+    {
+      "type": "color",
+      "id": "tint_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "tint_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Opacity",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "color",
+      "id": "text_color_without_scheme",
+      "label": "Overlay text color",
+      "info": "Overridden by color scheme",
+      "default": "#ffffff"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width_bg",
+      "label": "Make section background full width",
+      "default": true,
+      "info": "Applied when a color scheme is used."
+    },
+    {
+      "type": "range",
+      "id": "text_bg_opacity",
+      "label": "Text background opacity (over image)",
+      "info": "Incompatible with gradients",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subheading",
+          "default": "Subheading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Video"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h4",
+              "label": "Smaller"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            },
+            {
+              "value": "h0",
+              "label": "Larger"
+            }
+          ],
+          "default": "h2"
+        },
+        {
+          "type": "checkbox",
+          "id": "heading_h1",
+          "label": "Set as page heading (uses h1 tag)",
+          "info": "For optimum SEO, a page should only have one h1 and it should be the first heading on the page.",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Add text to a video to showcase a detail of your brand or product line.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "enlarge_text",
+          "label": "Enlarge text",
+          "default": false
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Read more"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "btn--primary",
+              "label": "Primary"
+            },
+            {
+              "value": "btn--secondary",
+              "label": "Secondary"
+            },
+            {
+              "value": "btn--hollow",
+              "label": "Hollow"
+            }
+          ],
+          "default": "btn--secondary"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

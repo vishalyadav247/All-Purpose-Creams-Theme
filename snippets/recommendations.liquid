@@ -1,0 +1,136 @@
+{%- comment -%}
+  Parameters:
+  - is_cart {Boolean} - Recommendations are for the cart contents.
+  - intent {Boolean} - Recommendations intent - 'related' or 'complementary' (optional, default is 'related').
+  - products_to_show {Number} - Maximum number of products to show.
+  - heading {String} - Heading for the recommendations (optional).
+  - layout {String} - Layout for the cards - 'carousel' or 'grid' (optional, default is 'carousel').
+  - related_cards {Boolean} - Card style should be 'related' (optional, default is false).
+  - mini_card {Boolean} - Use mini card layout (optional, default is false)
+  - grid_classes {String} - Classes for the grid
+
+  Usage:
+  {% render 'recommendations',
+    intent: 'complementary',
+    products_to_show: section.settings.products_to_show,
+    heading: section.settings.heading,
+    related_cards: true,
+    grid_classes: 'grid grid-cols-1 gap-y-4'
+  %}
+{%- endcomment -%}
+
+{%- if settings.enable_quick_add -%}
+  <link rel="stylesheet" href="{{ 'quick-add.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'product.css' | asset_url }}" media="print" onload="this.media='all'">
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'variant-picker.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- liquid
+  unless intent
+    assign intent = 'related'
+  endunless
+
+  if layout == 'carousel' or layout == nil
+    assign carousel = true
+  else
+    assign carousel = false
+  endif
+
+  if is_cart
+    # Fetch 4 extra in case a recommended product is already in the cart, and therefore not shown.
+    assign limit = products_to_show | plus: 4
+    assign product_id = cart.items.first.product_id
+  else
+    assign limit = products_to_show
+    assign product_id = product.id
+  endif
+-%}
+
+<product-recommendations class="{% if related_cards %}mt-12{% else %}section{% endif %} block"{% if is_cart %} id="cart-recommendations"{% endif %} data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&limit={{ limit }}&intent={{ intent }}" data-product-id="{{ product_id }}">
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- if carousel -%}
+      <carousel-slider class="carousel block xl:overflow-hidden" inactive>
+    {%- endif -%}
+
+    {%- unless related_cards -%}
+      <div class="container">
+    {%- endunless -%}
+
+      {%- if carousel -%}
+        <div class="{% if related_cards %}mb-2{% else %}carousel__header mb-6{% endif %} flex items-center justify-between">
+          {%- if heading != blank -%}
+            <h2 class="flex-auto mb-0 {% if related_cards %}h5 text-start{% else %}section__heading{% endif %}">
+              {{- heading | escape -}}
+            </h2>
+          {%- endif -%}
+
+          <div class="slider-nav flex no-js-hidden">
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="prev" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+              {% render 'icon-arrow-left' %}
+            </button>
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="next" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        </div>
+      {%- elsif heading != blank -%}
+        <h2 class="{% if related_cards %}h5 mb-4 text-start{% else %}section__heading{% endif %}">
+          {{- heading | escape -}}
+        </h2>
+      {%- endif -%}
+
+      {%- if carousel -%}
+        <div class="slider{% if related_cards %} slider--no-container slider--no-scrollbar{% endif %}" id="slider-{{ section.id }}">
+          {%- unless related_cards -%}
+            <div class="container">
+          {%- endunless -%}
+      {%- endif -%}
+
+      <ul class="{% if carousel %}slider__grid {% endif %}{{ grid_classes }}" role="list">
+        {%- assign prod_count = 0 -%}
+        {%- for recommendation in recommendations.products -%}
+          {%- liquid
+            if is_cart
+              if prod_count == products_to_show
+                break
+              endif
+
+              assign cart_matches = cart.items | where: 'product_id', recommendation.id
+              if cart_matches.size == 0
+                assign prod_count = prod_count | plus: 1
+              else
+                echo 'cart_matches.size:' | append: cart_matches.size
+                continue
+              endif
+            endif
+          -%}
+          <li class="flex flex-col{% if carousel %} slider__item{% endif %}">
+            {%- if mini_card -%}
+              {% render 'product-card-mini', product: recommendation %}
+            {%- else -%}
+              {% render 'product-card', product: recommendation, related_card: related_cards, animate: forloop.index %}
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if carousel -%}
+          {%- unless related_cards -%}
+            </div>
+          {%- endunless -%}
+        </div> {% # slider %}
+      {%- endif -%}
+
+    {%- unless related_cards -%}
+      </div> {% # container %}
+    {%- endunless -%}
+
+    {%- if carousel -%}
+      </carousel-slider>
+    {%- endif -%}
+  {%- endif -%}
+</product-recommendations>

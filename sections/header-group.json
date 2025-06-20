@@ -1,0 +1,52 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement": {
+      "type": "announcement",
+      "settings": {
+        "home_page_only": false,
+        "font_size": 14,
+        "read_time": 7
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "enable_sticky": true,
+        "logo": "{{ shop.brand.logo }}",
+        "logo_width": 105,
+        "logo_h1": true,
+        "logo_align_left": true,
+        "enable_logo_shrink": true,
+        "enable_transparency": true,
+        "text_over_media_color": "#ffffff",
+        "menu_linklist": "supp-new",
+        "enable_inline_nav": true,
+        "inline_nav_font_size": 15,
+        "nav_font_size": 40,
+        "search_menu_title": "",
+        "search_menu_linklist": "",
+        "contact_info_in_mega": true,
+        "contact_info_phone": "",
+        "contact_info_email": "",
+        "show_social_links": false,
+        "enable_country_selector": true,
+        "enable_language_selector": true
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}

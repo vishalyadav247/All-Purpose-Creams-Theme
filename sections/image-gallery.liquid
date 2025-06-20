@@ -1,0 +1,402 @@
+<link rel="stylesheet" href="{{ 'image-gallery.css' | asset_url }}">
+<link rel="stylesheet" href="{{ 'text-overlay.css' | asset_url }}">
+
+{%- liquid
+  if section.settings.full_width
+    assign bg_color = false
+    assign color_scheme = 'none'
+  else
+    assign color_scheme = section.settings.color_scheme
+    assign bg_color = false
+
+    if color_scheme == '1'
+      assign bg_color = settings.color_scheme_1_bg
+      assign bg_gradient = settings.color_scheme_1_gradient
+    elsif color_scheme == '2'
+      assign bg_color = settings.color_scheme_2_bg
+      assign bg_gradient = settings.color_scheme_2_gradient
+    elsif color_scheme == '3'
+      assign bg_color = settings.color_scheme_3_bg
+      assign bg_gradient = settings.color_scheme_3_gradient
+    endif
+
+    if bg_gradient != blank
+      assign bg_color = true
+    elsif bg_color ==  blank or bg_color == 'rgba(0,0,0,0)' or bg_color == settings.bg_color
+      assign bg_color = false
+    endif
+
+    if section.settings.boundary_effect != blank
+      assign bg_color = true
+    endif
+
+    if color_scheme == 'none' and section.settings.boundary_effect != blank
+      assign bg_color = true
+      assign color_scheme = 'page'
+    endif
+  endif
+-%}
+{% style %}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.title != blank or block.settings.subheading != blank or block.settings.cta_text != blank -%}
+      #{{ block.id }} {
+        --heading-color: {{ block.settings.text_color.rgb }};
+        --text-color: {{ block.settings.text_color.rgb }};
+        --link-color: {{ block.settings.text_color.rgb }};
+      }
+      #{{ block.id }} .media::after {
+        {%- unless block.settings.tint_color == 'rgba(0,0,0,0)' -%}
+          background-color: rgba({{ block.settings.tint_color.rgb }} / {{ block.settings.tint_opacity | divided_by: 100.0 }});
+        {%- endunless -%}
+      }
+    {%- endif -%}
+  {%- endfor -%}
+{% endstyle %}
+
+<div class="section
+  {%- if section.settings.full_width %} section--m-0{% endif %}
+  {%- if bg_color %} section--padded section--m-0{% endif %}
+  {%- if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+  {%- unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}" data-cc-animate>
+  <div class="section__content section__content--no-padding{% unless section.settings.full_width %} container{% endunless %} md:grid grid-cols-12">
+    {%- for block in section.blocks -%}
+    <div class="{{ block.settings.size }} relative overflow-hidden{% if block.settings.link != blank %} media-hover-effect feature-link-hover-parent{% endif %}" id="{{ block.id }}" {{ block.shopify_attributes }}>
+        {%- if block.settings.link != blank -%}
+          <a class="block h-full zoom-out" href="{{ block.settings.link }}" data-cc-animate>
+        {%- else -%}
+          <div class="h-full zoom-out" data-cc-animate>
+        {%- endif -%}
+
+          {%- if block.settings.image -%}
+            {%- liquid
+              assign img = block.settings.image
+
+              case block.settings.size
+                when 'col-span-3'
+                  capture sizes
+                  render 'sizes-attribute', grid: true, min: 1, md: 4
+                  endcapture
+
+                when 'col-span-4'
+                  capture sizes
+                  render 'sizes-attribute', grid: true, min: 1, md: 3
+                  endcapture
+
+                when 'col-span-6'
+                  capture sizes
+                  render 'sizes-attribute', grid: true, min: 1, md: 2
+                  endcapture
+
+                when 'col-span-8'
+                  capture sizes
+                  render 'sizes-attribute', grid: true, min: 1, md: 1.5
+                  endcapture
+
+                when 'col-span-12'
+                  capture sizes
+                  render 'sizes-attribute', grid: true, min: 1
+                  endcapture
+              endcase
+            -%}
+            <div class="media media--has-overlay relative h-full" style="padding-top: {{ 1 | divided_by: img.aspect_ratio | times: 100 }}%;">
+              {% render 'image',
+                image: block.settings.image,
+                widths: '300, 480, 600, 700, 800, 960, 1200, 1600, 1920',
+                src_width: 1200,
+                sizes: sizes,
+                class: 'img-fit'
+              %}
+            </div>
+          {%- else -%}
+            <div class="media media--has-overlay relative h-full" style="padding-top: 100%">
+              {%- if block.settings.title == blank and block.settings.subheading == blank and block.settings.cta_text == blank -%}
+                {{- 'image' | placeholder_svg_tag: 'placeholder absolute top-0 left-0 w-full h-full' -}}
+              {%- else -%}
+                {{- 'image' | placeholder_svg_tag: 'placeholder dark absolute top-0 left-0 w-full h-full' -}}
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+
+          <div class="flex {{ section.settings.overlay_position }} align-ltr-{{ section.settings.overlay_text_align }} absolute top-0 left-0 w-full h-full p-6 md:p-8">
+            <div class="text-overlay">
+              {%- if block.settings.title != blank or block.settings.subheading != blank or block.settings.cta_text != blank -%}
+                {%- if block.settings.title != blank -%}
+                  <h2 data-cc-animate data-cc-animate-delay="0.1s">
+                    {{- block.settings.title | escape -}}
+                  </h2>
+                {%- endif -%}
+                {%- if block.settings.subheading != blank -%}
+                  <p class="text-lg" data-cc-animate data-cc-animate-delay="0.2s">
+                    {{ block.settings.subheading | escape }}
+                  </p>
+                {%- endif -%}
+                {%- if block.settings.cta_text != blank and block.settings.link != blank -%}
+                  <span class="feature-link" data-cc-animate data-cc-animate-delay="0.3s">{{ block.settings.cta_text | escape }}</span>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </div>
+
+        {%- if block.settings.link != blank -%}
+          </a>
+        {%- else -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image gallery",
+  "class": "cc-image-gallery",
+  "max_blocks": 20,
+  "settings": [
+    {
+      "type": "header",
+      "content": "Text overlay"
+    },
+    {
+      "type": "select",
+      "id": "overlay_position",
+      "label": "Text position",
+      "options": [
+        {
+          "value": "justify-start items-start",
+          "label": "Top left"
+        },
+        {
+          "value": "justify-center items-start",
+          "label": "Top center"
+        },
+        {
+          "value": "justify-end items-start",
+          "label": "Top right"
+        },
+        {
+          "value": "justify-start items-center",
+          "label": "Middle left"
+        },
+        {
+          "value": "justify-center items-center",
+          "label": "Middle center"
+        },
+        {
+          "value": "justify-end items-center",
+          "label": "Middle right"
+        },
+        {
+          "value": "justify-start items-end",
+          "label": "Bottom left"
+        },
+        {
+          "value": "justify-center items-end",
+          "label": "Bottom center"
+        },
+        {
+          "value": "justify-end items-end",
+          "label": "Bottom right"
+        }
+      ],
+      "default": "justify-center items-center"
+    },
+    {
+      "type": "text_alignment",
+      "id": "overlay_text_align",
+      "label": "Text alignment",
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Make section full width",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "info": "Applies when not full width",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "color",
+          "id": "tint_color",
+          "label": "Tint color",
+          "default": "#000000"
+        },
+        {
+          "type": "range",
+          "id": "tint_opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "unit": "%",
+          "label": "Tint opacity",
+          "default": 20
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Width",
+          "default": "col-span-4",
+          "options": [
+            {
+              "value": "col-span-3",
+              "label": "Quarter"
+            },
+            {
+              "value": "col-span-4",
+              "label": "Third"
+            },
+            {
+              "value": "col-span-6",
+              "label": "Half"
+            },
+            {
+              "value": "col-span-8",
+              "label": "Two-thirds"
+            },
+            {
+              "value": "col-span-12",
+              "label": "Full"
+            }
+          ]
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "header",
+          "content": "Text overlay"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Heading",
+          "default": "Image title"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "Link text",
+          "default": "See more"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image gallery",
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "tint_opacity": 20,
+            "size": "col-span-8"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "tint_opacity": 10,
+            "size": "col-span-4"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "tint_opacity": 30,
+            "size": "col-span-6"
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "tint_opacity": 20,
+            "size": "col-span-6"
+          }
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

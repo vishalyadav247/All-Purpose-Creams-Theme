@@ -1,0 +1,155 @@
+:root {
+  --page-width: {{ settings.max_page_width }}px;
+  --gutter-sm: 16px;
+  --gutter-md: 32px;
+  --gutter-lg: 48px;
+  --header-height: 84px;
+
+  --section-gap: {{ settings.section_gap }};
+  --grid-column-gap: {{ settings.grid_column_gap }}px;
+  --content-border-radius: {{ settings.content_border_radius }}px;
+  --card-border-radius: {{ settings.card_border_radius }}px;
+
+  --heading-font-family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+  --heading-font-style: {{ settings.heading_font.style }};
+  --heading-font-weight: {{ settings.heading_font.weight }};
+  --heading-base-size: {{ settings.heading_base_size }};
+  --heading-type-scale: {{ settings.heading_type_scale }};
+  --heading-letter-spacing: {{ settings.heading_letter_spacing | divided_by: 100.0 }}em;
+  {%- if settings.heading_uppercase %}
+  --heading-text-transform: uppercase;
+  {%- else %}
+  --heading-text-transform: none;
+  {%- endif %}
+  {%- if settings.subheading_uppercase %}
+  --subheading-letter-spacing: 0.06em;
+  --subheading-text-transform: uppercase;
+  {%- else %}
+  --subheading-letter-spacing: 0;
+  --subheading-text-transform: none;
+  {%- endif %}
+  --body-font-family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+  --body-font-style: {{ settings.body_font.style }};
+  --body-font-weight: {{ settings.body_font.weight }};
+  --body-font-size: {{ settings.body_font_size }};
+
+  --bg-color: {{ settings.bg_color.rgb }};
+  --heading-color: {{ settings.heading_color.rgb }};
+  --text-color: {{ settings.text_color.rgb }};
+  --link-color: {{ settings.link_color.rgb }};
+  --sale-price-color: {{ settings.sale_price_color.rgb }};
+  --star-color: {{ settings.star_color.rgb }};
+  {%- if settings.overlay_bg_blur > 0 -%}
+  --overlay-backdrop-filter: blur({{ settings.overlay_bg_blur }}px);
+  {%- else -%}
+  --overlay-backdrop-filter: none;
+  {%- endif -%}
+
+  --color-scheme-1-bg: {% if settings.color_scheme_1_bg.alpha > 0 %}{{ settings.color_scheme_1_bg.rgb }}{% else %}{{ settings.bg_color.rgb }}{% endif %};
+  --color-scheme-1-gradient: {{ settings.color_scheme_1_gradient }};
+  --color-scheme-1-heading: {{ settings.color_scheme_1_heading.rgb }};
+  --color-scheme-1-text: {{ settings.color_scheme_1_text.rgb }};
+  --color-scheme-1-btn-bg: {{ settings.color_scheme_1_btn_bg.rgb }};
+  --color-scheme-1-btn-text: {{ settings.color_scheme_1_btn_text.rgb }};
+  --color-scheme-2-bg: {% if settings.color_scheme_2_bg.alpha > 0 %}{{ settings.color_scheme_2_bg.rgb }}{% else %}{{ settings.bg_color.rgb }}{% endif %};
+  --color-scheme-2-gradient: {{ settings.color_scheme_2_gradient }};
+  --color-scheme-2-heading: {{ settings.color_scheme_2_heading.rgb }};
+  --color-scheme-2-text: {{ settings.color_scheme_2_text.rgb }};
+  --color-scheme-2-btn-bg: {{ settings.color_scheme_2_btn_bg.rgb }};
+  --color-scheme-2-btn-text: {{ settings.color_scheme_2_btn_text.rgb }};
+  --color-scheme-3-bg: {% if settings.color_scheme_3_bg.alpha > 0 %}{{ settings.color_scheme_3_bg.rgb }}{% else %}{{ settings.bg_color.rgb }}{% endif %};
+  --color-scheme-3-gradient: {{ settings.color_scheme_3_gradient }};
+  --color-scheme-3-heading: {{ settings.color_scheme_3_heading.rgb }};
+  --color-scheme-3-text: {{ settings.color_scheme_3_text.rgb }};
+  --color-scheme-3-btn-bg: {{ settings.color_scheme_3_btn_bg.rgb }};
+  --color-scheme-3-btn-text: {{ settings.color_scheme_3_btn_text.rgb }};
+
+  {% unless settings.card_bg_color.alpha == 0 -%}
+  --card-bg-color: {{ settings.card_bg_color.rgb }};
+  --card-text-color: {{ settings.card_text_color.rgb }};
+  {%- endunless %}
+
+  --error-bg-color: {{ settings.error_bg_color.rgb }};
+  --error-text-color: {{ settings.error_text_color.rgb }};
+  --success-bg-color: {{ settings.success_bg_color.rgb }};
+  --success-text-color: {{ settings.success_text_color.rgb }};
+  --inventory-ok-text-color: {{ settings.inventory_ok_text_color.rgb }};
+  --inventory-low-text-color: {{ settings.inventory_low_text_color.rgb }};
+
+  --btn-bg-color: {{ settings.button_bg_color.rgb }};
+  --btn-text-color: {{ settings.button_text_color.rgb }};
+  --btn-alt-bg-color: {{ settings.button_alt_bg_color.rgb }};
+  --btn-alt-bg-alpha: {{ settings.button_alt_bg_color.alpha }};
+  --btn-alt-text-color: {{ settings.button_alt_text_color.rgb }};
+  --btn-border-width: {{ settings.button_border_width }}px;
+  --btn-letter-spacing: {{ settings.button_letter_spacing | divided_by: 100.0 }}em;
+
+  {%- if settings.button_border_radius > 1 %}
+  --btn-border-radius: {{ settings.button_border_radius | plus: settings.button_border_width }}px;
+  {%- endif -%}
+  {%- if settings.button_text_uppercase %}
+  --btn-text-transform: uppercase;
+  --btn-font-size: 1.4rem;
+  {%- else -%}
+  --btn-font-size: 1.5rem;
+  {%- endif %}
+
+  --input-bg-color: {{ settings.input_bg_color.rgba }};
+  --input-text-color: {{ settings.input_text_color.rgb }};
+  --input-border-width: {{ settings.input_border_width }}px;
+  {%- if settings.input_border_radius > 1 %}
+  --input-border-radius: {{ settings.input_border_radius | plus: settings.button_border_width }}px;
+  {%- endif -%}
+
+  {%- assign input_color_brightness = settings.input_bg_color | color_brightness -%}
+  {%- if input_color_brightness > 128 %}
+  --input-bg-color-diff-3: {{ settings.input_bg_color | color_darken: 3 }};
+  {%- else -%}
+  --input-bg-color-diff-3: {{ settings.input_bg_color | color_lighten: 3 }};
+  {%- endif %}
+
+  --drawer-bg-color: {{ settings.drawer_bg_color.rgb }};
+  --drawer-heading-color: {{ settings.drawer_heading_color.rgb }};
+  --drawer-text-color: {{ settings.drawer_text_color.rgb }};
+
+  --modal-border-radius: {{ settings.modal_border_radius }}px;
+  --modal-overlay-color: {{ settings.modal_overlay_color.rgb }};
+  --modal-overlay-opacity: {{ settings.modal_overlay_opacity | divided_by: 100.0 }};
+
+  --label-bg-color: {{ settings.label_bg_color.rgb }};
+  --label-text-color: {{ settings.label_text_color.rgb }};
+  --sale-label-bg-color: {{ settings.sale_label_bg_color.rgb }};
+  --sale-label-text-color: {{ settings.sale_label_text_color.rgb }};
+  --low-stock-label-bg-color: {{ settings.low_stock_label_bg_color.rgb }};
+  --low-stock-label-text-color: {{ settings.low_stock_label_text_color.rgb }};
+  --new-label-bg-color: {{ settings.new_label_bg_color.rgb }};
+  --new-label-text-color: {{ settings.new_label_text_color.rgb }};
+  --preorder-label-bg-color: {{ settings.preorder_label_bg_color.rgb }};
+  --preorder-label-text-color: {{ settings.preorder_label_text_color.rgb }};
+  --sold-out-label-bg-color: {{ settings.sold_out_label_bg_color.rgb }};
+  --sold-out-label-text-color: {{ settings.sold_out_label_text_color.rgb }};
+
+  --free-shipping-bg-color: {{ settings.free_shipping_bg_color.rgb }};
+  --free-shipping-color: {{ settings.free_shipping_color.rgb }};
+  --free-shipping-border-radius: {{ settings.free_shipping_border_radius }};
+
+  --swatch-size: 40px;
+  {% if settings.swatch_shape == 'circle' -%}
+  --swatch-radius: 50%;
+  --swatch-media-padding-top: 100%;
+  --swatch-media-object-position: {{ settings.prod_card_image_position }};
+  {% endif -%}
+  --payment-terms-bg-color: {{ settings.bg_color }};
+
+  {% if settings.animations_enabled %}
+    {%- if settings.animation_speed == 'fast' -%}
+      --aos-animate-duration: 0.5s;
+    {%- elsif settings.animation_speed == 'medium' -%}
+      --aos-animate-duration: 1s;
+    {%- elsif settings.animation_speed == 'slow' -%}
+      --aos-animate-duration: 1.3s;
+    {%- endif -%}
+  {%- endif -%}
+}
+
+{%- render 'content-boundary-styles' -%}

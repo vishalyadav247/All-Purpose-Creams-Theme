@@ -1,0 +1,290 @@
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)'
+    assign bg_color = false
+  endif
+
+  if section.settings.boundary_effect != blank
+    assign bg_color = true
+  endif
+
+  if color_scheme == 'none' and section.settings.boundary_effect != blank
+    assign color_scheme = 'page'
+  endif
+
+  if section.settings.image_ratio == 'shortest'
+    assign image_ratio = 0
+    for article in section.settings.blog.articles limit: 4
+      if article.image.aspect_ratio > image_ratio
+        assign image_ratio = article.image.aspect_ratio
+      endif
+    endfor
+  elsif section.settings.image_ratio == 'tallest'
+    assign image_ratio = 99
+    for article in section.settings.blog.articles limit: 4
+      if article.image.aspect_ratio < image_ratio
+        assign image_ratio = article.image.aspect_ratio
+      endif
+    endfor
+  else
+    assign image_ratio = section.settings.image_ratio
+  endif
+-%}
+
+<div class="section
+  {% if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+  {%- if bg_color %} section--padded section--m-0{% endif %}
+  {%- unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+  <div class="container">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="section__heading text-center" data-cc-animate>
+        {%- if section.settings.blog != blank -%}<a href="{{ blogs[section.settings.blog].url }}">{%- endif -%}
+          {{- section.settings.heading -}}
+        {%- if section.settings.blog != blank -%}</a>{%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 lg:gap-x-10 gap-y-10">
+      {%- if section.settings.blog != blank -%}
+        {%- assign blog = blogs[section.settings.blog] -%}
+
+        {%- if blog.articles.size > 0 -%}
+          {%- assign article = blog.articles.first -%}
+          <div data-cc-animate>
+            {%- if article.image != blank -%}
+              <a class="block" href="{{ article.url }}">
+                <div class="media media-hover-effect relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                  {%- capture sizes -%}
+                    {%- render 'sizes-attribute', min: 'page', sm: 'page', md: 'calc(50vw - 32px)', lg: 'calc(50vw - 48px)', xl: '640px' -%}
+                  {%- endcapture -%}
+                  {% render 'image',
+                    image: article.image,
+                    widths: '640, 960, 1280, 1600',
+                    mobile_widths: '670, 800',
+                    src_width: 640,
+                    sizes: sizes,
+                    class: 'img-fit'
+                  %}
+                </div>
+              </a>
+            {%- endif -%}
+            <div class="mt-6">
+              <h3 class="m-0"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+              <div class="rte mt-4">
+                {%- if article.excerpt == blank -%}
+                  <p>{{ article.content | strip_html | truncatewords: 35 }}</p>
+                {%- else -%}
+                  {{ article.excerpt }}
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 gap-y-10 md:gap-y-5">
+            {%- for article in blog.articles limit: 3 offset: 1 -%}
+              {%- assign animate_delay = forloop.index | times: 0.15 -%}
+              <div class="grid grid-cols-1{% if article.image != blank %} sm:grid-cols-[45%_auto] gap-x-5 gap-y-5{% endif %}" data-cc-animate data-cc-animate-delay="{{ animate_delay }}s">
+                {%- if article.image != blank -%}
+                  <a class="block" href="{{ article.url }}">
+                    <div class="media media-hover-effect relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                      {%- capture sizes -%}
+                        {%- render 'sizes-attribute', min: 'page', sm: 'page', md: 'calc(50vw - 32px)', lg: 'calc(50vw - 48px)', xl: '640px' -%}
+                      {%- endcapture -%}
+                      {% render 'image',
+                        image: article.image,
+                        widths: '300, 400, 600, 700, 800',
+                        src_width: 300,
+                        sizes: sizes,
+                        class: 'img-fit'
+                      %}
+                    </div>
+                  </a>
+                {%- endif -%}
+                <div>
+                  <h3 class="h5 m-0"><a href="{{ article.url }}">{{ article.title }}</a></h3>
+                  <div class="rte mt-4">
+                    {%- if article.excerpt == blank -%}
+                      <p>{{ article.content | strip_html | truncatewords: 20 }}</p>
+                    {%- else -%}
+                      {{ article.excerpt | strip_html | truncatewords: 20 }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {%- else -%}
+          <p>{{ 'onboarding.blog.empty' | t }}</p>
+        {%- endif -%}
+
+      {%- else -%}
+
+        <div data-cc-animate>
+          <div class="meida relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+            {{ 'image' | placeholder_svg_tag: 'media__placeholder img-fit' }}
+          </div>
+          <div class="rte mt-6">
+            <h3>{{ 'onboarding.article.title' | t }}</h3>
+            <p>{{ 'onboarding.article.excerpt' | t }}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 gap-y-10 md:gap-y-5">
+          {%- for i in (1..3) -%}
+            {%- assign animate_delay = i | times: 0.15 -%}
+            <div class="grid grid-cols-1 sm:grid-cols-[45%_auto] gap-x-5 gap-y-5" data-cc-animate data-cc-animate-delay="{{ animate_delay }}s">
+              <div class="media relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                {{ 'image' | placeholder_svg_tag: 'media__placeholder img-fit' }}
+              </div>
+              <div class="rte">
+                <h3 class="h5">{{ 'onboarding.article.title' | t }}</h3>
+                <p class="mt-4">{{ 'onboarding.article.excerpt' | t }}</p>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if section.settings.show_view_all -%}
+      <div class="section__footer container text-center">
+        <a href="{{ blogs[section.settings.blog].url }}" class="btn btn--secondary">{{ 'sections.featured_blog.view_all' | t }}</a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "tag": "section",
+  "class": "cc-featured-blog",
+  "settings": [
+    {
+      "id": "heading",
+      "type": "text",
+      "label": "Heading"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View all' button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "shortest",
+          "label": "Adapt (shortest image)"
+        },
+        {
+          "value": "tallest",
+          "label": "Adapt (tallest image)"
+        },
+        {
+          "value": "1.78",
+          "label": "Wide"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.75",
+          "label": "Portrait"
+        }
+      ],
+      "default": "1.33"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

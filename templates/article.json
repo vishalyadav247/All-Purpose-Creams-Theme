@@ -1,0 +1,51 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner-art",
+      "settings": {
+        "hero_height_desktop": 400,
+        "hero_height_mobile": 240,
+        "bg_style": "image",
+        "boundary_effect": "",
+        "show_contrast_logo": true,
+        "hero_bg_color": "#e4e4e4",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#3f3f3f",
+        "image_align": "object-center",
+        "hero_tint_color": "#141414",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": true,
+        "show_author": true,
+        "show_date": true
+      }
+    },
+    "main": {
+      "type": "main-article",
+      "settings": {
+        "show_tags": true,
+        "show_featured_products": true,
+        "share_twitter": true,
+        "share_facebook": true,
+        "share_pinterest": true,
+        "more_stories_image_ratio": "shortest",
+        "more_stories_show_author": true,
+        "more_stories_show_date": true,
+        "more_stories_color_scheme": "1"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "main"
+  ]
+}

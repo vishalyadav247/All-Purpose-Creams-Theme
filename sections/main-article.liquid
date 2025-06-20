@@ -1,0 +1,450 @@
+<link rel="stylesheet" href="{{ 'article.css' | asset_url }}">
+<script src="{{ 'article-products.js' | asset_url }}" defer></script>
+
+<div class="section section--page-width">
+  <div class="article reading-width">
+    <div class="rte" data-cc-animate>
+      {{ article.content }}
+    </div>
+
+    <div class="md:flex justify-between items-start mt-6" data-cc-animate>
+      {%- if section.settings.show_tags and article.tags.size > 0 -%}
+        <div class="md:me-8">
+          <p class="font-bold">{{ 'blogs.article.find_similar' | t }}:</p>
+          {% for tag in article.tags %}
+            <a class="pill me-4 mb-4 inline-block" href="{{ blog.url }}/tagged/{{ tag | handle }}">{{ tag }}</a>
+          {% endfor %}
+        </div>
+      {%- endif -%}
+
+      {% if section.settings.share_twitter or section.settings.share_facebook or section.settings.share_pinterest %}
+        <div class="social-share flex-none mt-4 md:mt-0">
+          <p class="social-share__heading font-bold">{{ 'general.social.share_heading' | t }}:</p>
+          {% render 'social-share',
+            share_title: article.title,
+            share_url: article.url,
+            share_image: article.image,
+            share_twitter: section.settings.share_twitter,
+            share_facebook: section.settings.share_facebook,
+            share_pinterest: section.settings.share_pinterest
+          %}
+        </div>
+      {% endif %}
+    </div>
+
+    {%- if blog.comments_enabled? -%}
+      <div class="mt-16 p-4 md:p-10 bg-panel-bg" id="comments-{{ article.id }}" data-cc-animate data-cc-animate-delay="0.1s">
+        {%- if article.comments_count > 0 -%}
+          <div class="article__comments mb-12">
+            <h2 class="h4 mb-6">{{ 'blogs.comments.title' | t }}</h2>
+
+            {%- paginate article.comments by 30 -%}
+              {% comment %} If a comment was just submitted with no blank field, let's show it {% endcomment %}
+              {%- if comment.status == 'pending' and comment.content -%}
+                <article class="comment" id="{{ comment.id }}">
+                  {{ comment.content }}
+                  <footer class="text-sm">
+                    &mdash; <span class="comment__author">{{ comment.author }}</span>
+                  </footer>
+                </article>
+              {%- endif -%}
+
+              {%- for comment in article.comments -%}
+                <article class="comment" id="{{ comment.id }}">
+                  {{ comment.content }}
+                  <footer class="text-sm">
+                    &mdash;
+                    <span class="comment__author">{{ 'blogs.comments.author_meta' | t: author: comment.author }}</span>
+                    <span class="comment__date">{{ comment.created_at | time_tag: format: 'date' }}</span>
+                  </footer>
+                </article>
+
+                {%- unless forloop.last -%}
+                  <hr>
+                {%- endunless -%}
+              {%- endfor -%}
+
+              {%- render 'pagination', paginate: paginate -%}
+            {%- endpaginate -%}
+          </div>
+        {%- endif -%}
+
+        {% form 'new_comment', article, class: 'form' %}
+          <h2 class="h4 mb-6">{{ 'blogs.comments.form_title' | t }}</h2>
+
+          {%- liquid
+            assign post_message = 'blogs.comments.success' | t
+            if blog.moderated? and comment.status == 'unapproved'
+              assign post_message = 'blogs.comments.success_moderated' | t
+            endif
+          -%}
+
+          {%- if form.posted_successfully? -%}
+            <div class="alert mb-8 bg-success-bg text-success-text" role="status">
+              {{ post_message }}
+            </div>
+          {%- elsif form.errors -%}
+            <div class="alert mb-8 bg-error-bg text-error-text" role="alert">
+              <h2 class="h5 text-current">{{ 'blogs.comments.error_heading' | t }}</h2>
+              <ul class="styled-list">
+                {%- for field in form.errors -%}
+                  <li>
+                    <a class="link text-current" href="#comment-{{ field }}">
+                      {%- if form.errors.translated_fields[field] contains 'author' %}
+                        {{- 'blogs.comments.name' | t }}
+                      {%- elsif form.errors.translated_fields[field] contains 'body' %}
+                        {{- 'blogs.comments.message' | t }}
+                      {%- else %}
+                        {{- form.errors.translated_fields[field] }}
+                      {%- endif -%}
+                      {{ form.errors.messages[field] -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="form__field required">
+            <label class="label" for="comment-author">{{ 'blogs.comments.name' | t }}</label>
+            <input type="text"
+                  class="input w-full"
+                  id="comment-author"
+                  name="comment[author]"
+                  placeholder="{{ 'blogs.comments.name' | t }}"
+                  autocomplete="name"
+                  value="{{ form.author }}"
+                  {%- if form.errors contains 'author' %}
+                    aria-invalid="true"
+                    aria-describedby="comment-author-error"
+                  {% endif -%}
+                  aria-required="true"
+                  required>
+            {%- if form.errors contains 'author' -%}
+              <p class="form__field-error" id="comment-author-error">
+                {{ 'blogs.comments.name' | t }} {{ form.errors.messages['author'] }}
+              </p>
+            {%- endif -%}
+          </div>
+
+          <div class="form__field required">
+            <label class="label" for="comment-email">{{ 'blogs.comments.email' | t }}</label>
+            <input type="email"
+                  class="input w-full"
+                  id="comment-email"
+                  name="comment[email]"
+                  autocomplete="email"
+                  value="{{ form.email }}"
+                  {%- if form.errors contains 'email' %}
+                    aria-invalid="true"
+                    aria-describedby="comment-email-error"
+                  {% endif -%}
+                  aria-required="true"
+                  required>
+            {%- if form.errors contains 'email' -%}
+              <p class="form__field-error" id="comment-email-error">
+                {{ 'blogs.comments.email' | t }} {{ form.errors.messages['email'] }}
+              </p>
+            {%- endif -%}
+          </div>
+
+          <div class="form__field required">
+            <label class="label" for="comment-body">{{ 'blogs.comments.message' | t }}</label>
+            <textarea class="input w-full"
+                      id="comment-body"
+                      name="comment[body]"
+                      rows="5"
+                      {%- if form.errors contains 'body' %}
+                        aria-invalid="true"
+                        aria-describedby="comment-body-error"
+                      {% endif -%}
+                      aria-required="true"
+                      required>{{ form.body }}</textarea>
+            {%- if form.errors contains 'body' -%}
+              <p class="form__field-error" id="comment-body-error">
+                {{ 'blogs.comments.message' | t }} {{ form.errors.messages['body'] }}
+              </p>
+            {%- endif -%}
+          </div>
+
+          {%- if blog.moderated? -%}
+            <p>{{ 'blogs.comments.moderated' | t }}</p>
+          {%- endif -%}
+
+          <div class="mt-6">
+            <button class="btn btn--primary">{{ 'blogs.comments.post' | t }}</button>
+          </div>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if section.settings.show_featured_products -%}
+  {% render 'article-products', content: article.content %}
+{%- endif -%}
+
+{%- if blog.previous_article or blog.next_article -%}
+  {%- liquid
+    if section.settings.more_stories_image_ratio == 'shortest'
+      if blog.previous_article and blog.previous_article.image
+        assign image_ratio = blog.previous_article.image.aspect_ratio
+      endif
+      if blog.next_article and blog.next_article.image and blog.next_article.image.aspect_ratio > image_ratio
+        assign image_ratio = blog.next_article.image.aspect_ratio
+      endif
+    elsif section.settings.more_stories_image_ratio == 'tallest'
+      if blog.previous_article and blog.previous_article.image
+        assign image_ratio = blog.previous_article.image.aspect_ratio
+      endif
+      if blog.next_article and blog.next_article.image and blog.next_article.image.aspect_ratio < image_ratio
+        assign image_ratio = blog.next_article.image.aspect_ratio
+      endif
+    else
+      assign image_ratio = section.settings.more_stories_image_ratio
+    endif
+
+
+    assign color_scheme = section.settings.more_stories_color_scheme
+    assign bg_color = false
+
+    if color_scheme == '1'
+      assign bg_color = settings.color_scheme_1_bg
+      assign bg_gradient = settings.color_scheme_1_gradient
+    elsif color_scheme == '2'
+      assign bg_color = settings.color_scheme_2_bg
+      assign bg_gradient = settings.color_scheme_2_gradient
+    elsif color_scheme == '3'
+      assign bg_color = settings.color_scheme_3_bg
+      assign bg_gradient = settings.color_scheme_3_gradient
+    endif
+
+    if bg_gradient != blank
+      assign bg_color = true
+    elsif bg_color ==  blank or bg_color == 'rgba(0,0,0,0)' or bg_color == settings.bg_color
+      assign bg_color = false
+    endif
+  -%}
+
+  <div class="section{% if bg_color %} section--padded{% endif %}{% if bg_color %} section--m-0{% endif %}{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+    <div class="container">
+      <h2 class="section__heading h3" data-cc-animate>
+        <a href="{{ blog.url }}">{{ 'blogs.article.other_posts_title' | t }}</a>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-theme gap-y-10">
+        {%- if blog.previous_article -%}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-5" data-cc-animate data-cc-animate-delay="0.2s">
+            {%- if blog.previous_article.image != blank -%}
+              <a class="block" href="{{ blog.previous_article.url }}">
+                <div class="media relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                  {%- capture sizes -%}
+                    {%- render 'sizes-attribute', grid: true, min: 1, sm: 2, md: 4, xl: 4 -%}
+                  {%- endcapture -%}
+                  {% render 'image',
+                    image: blog.previous_article.image,
+                    widths: '320, 480, 600, 700, 800, 1000',
+                    src_width: 640,
+                    sizes: sizes,
+                    class: 'img-fit'
+                  %}
+                </div>
+              </a>
+            {%- endif -%}
+            <div>
+              <h3 class="h5 text-current"><a href="{{ blog.previous_article.url }}">{{ blog.previous_article.title | escape }}</a></h3>
+              <div class="rte hide-until-lg">
+                {%- if blog.previous_article.excerpt == blank -%}
+                  <p>{{ blog.previous_article.content | strip_html | truncate: 150 }}</p>
+                {%- else -%}
+                  {{ blog.previous_article.excerpt }}
+                {%- endif -%}
+              </div>
+              {% if section.settings.more_stories_show_author or section.settings.more_stories_show_date %}
+                <div class="text-sm text-theme-heading uppercase tracking-wider mt-4">
+                  {% if section.settings.more_stories_show_author %}
+                    <span>{{ blog.previous_article.author }}</span>
+                  {% endif %}
+
+                  {% if section.settings.more_stories_show_date %}
+                    {% if section.settings.more_stories_show_author %}<span class="px-1">&middot;</span>{% endif %}
+                    <span class="whitespace-nowrap">{{ blog.previous_article.published_at | time_tag: format: 'date' }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if blog.next_article -%}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-5 gap-y-5" data-cc-animate data-cc-animate-delay="0.3s">
+            {%- if blog.next_article.image != blank -%}
+              <a class="block" href="{{ blog.next_article.url }}">
+                <div class="media relative overflow-hidden card-corners" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
+                  {%- capture sizes -%}
+                    {%- render 'sizes-attribute', grid: true, min: 1, sm: 2, md: 4, xl: 4 -%}
+                  {%- endcapture -%}
+                  {% render 'image',
+                    image: blog.next_article.image,
+                    widths: '320, 480, 600, 700, 800, 1000',
+                    src_width: 640,
+                    sizes: sizes,
+                    class: 'img-fit'
+                  %}
+                </div>
+              </a>
+            {%- endif -%}
+            <div>
+              <h3 class="h5 text-current"><a href="{{ blog.next_article.url }}">{{ blog.next_article.title | escape }}</a></h3>
+              <div class="rte hide-until-lg">
+                {%- if blog.next_article.excerpt == blank -%}
+                  <p>{{ blog.next_article.content | strip_html | truncate: 150 }}</p>
+                {%- else -%}
+                  {{ blog.next_article.excerpt }}
+                {%- endif -%}
+              </div>
+              {% if section.settings.more_stories_show_author or section.settings.more_stories_show_date %}
+                <div class="text-sm text-theme-heading uppercase tracking-wider mt-4">
+                  {% if section.settings.more_stories_show_author %}
+                    <span>{{ blog.next_article.author }}</span>
+                  {% endif %}
+
+                  {% if section.settings.more_stories_show_date %}
+                    {% if section.settings.more_stories_show_author %}<span class="px-1">&middot;</span>{% endif %}
+                    <span class="whitespace-nowrap">{{ blog.next_article.published_at | time_tag: format: 'date' }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+<script>
+  document.querySelectorAll('.rte > table').forEach((table) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'scrollable-table';
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
+  });
+</script>
+
+{% render 'structured-data-article', article: article %}
+
+{% schema %}
+{
+  "name": "Article",
+  "class": "cc-main-article",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "Show tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured_products",
+      "label": "Show featured products",
+      "info": "Shows products that are linked in the article",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Article footer"
+    },
+    {
+      "type": "checkbox",
+      "id": "share_twitter",
+      "label": "Show X (formerly Twitter) share button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_facebook",
+      "label": "Show Facebook share button",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "share_pinterest",
+      "label": "Show Pinterest share button",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Next and previous stories"
+    },
+    {
+      "type": "select",
+      "id": "more_stories_image_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "shortest",
+          "label": "Adapt (shortest image)"
+        },
+        {
+          "value": "tallest",
+          "label": "Adapt (tallest image)"
+        },
+        {
+          "value": "1.78",
+          "label": "Wide"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.75",
+          "label": "Portrait"
+        }
+      ],
+      "default": "1.33"
+    },
+    {
+      "type": "checkbox",
+      "id": "more_stories_show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "more_stories_show_date",
+      "label": "Show article published date",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "more_stories_color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "1"
+    }
+  ]
+}
+{% endschema %}

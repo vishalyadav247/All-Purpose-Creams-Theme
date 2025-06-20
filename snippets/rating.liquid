@@ -1,0 +1,35 @@
+{%- comment -%}
+  Parameters:
+  - rating_value {Number} - Rating value.
+  - rating_count {Number} - Number of ratings (optional).
+  - rating_count_format {String} - Short or long format (optional, defaults to long).
+
+  Usage:
+  {% render 'rating',
+    rating_value: product.metafields.reviews.rating.value,
+    rating_count: product.metafields.reviews.rating_count,
+    rating_count_format: 'short'
+  %}
+{%- endcomment -%}
+
+{%- liquid
+  assign decimal = rating_value.rating | modulo: 1
+  assign stars_rating = rating_value.rating | floor
+
+  if decimal >= 0.3 and decimal <= 0.7
+    assign stars_rating = stars_rating | plus: 0.5
+  elsif decimal > 0.7
+    assign stars_rating = rating_value.rating | ceil
+  endif
+-%}
+
+<div class="rating" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: rating_value, rating_max: rating_value.scale_max }}">
+  <span class="rating__stars" aria-hidden="true" style="--rating: {{ stars_rating }}; --rating-max: {{ rating_value.scale_max }};">★★★★★</span>
+  {% if rating_count != blank and rating_count_format == 'short' -%}
+    <span class="rating__count">({{ rating_count }})</span>
+  {% elsif rating_count != blank -%}
+    <span class="rating__count">
+      {{ 'products.product.reviews_count' | t: count: rating_count }}
+    </span>
+  {%- endif %}
+</div>

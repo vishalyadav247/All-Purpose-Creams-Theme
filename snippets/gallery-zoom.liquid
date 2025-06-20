@@ -1,0 +1,52 @@
+{%- comment -%}
+  Parameters:
+  - product {Product}: Current product.
+  - zoom_size {String}: The largest image size to load when zoomed in.
+
+  Usage:
+  {% render 'gallery-zoom', product: product, zoom_size: zoom_size %}
+{%- endcomment -%}
+
+{%- liquid
+  assign image_media = product.media | where: 'media_type', 'image'
+-%}
+<link rel="stylesheet" href="{{ 'gallery-zoom.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'modal.css' | asset_url }}" media="print" onload="this.media='all'">
+<script src="{{ 'gallery-zoom.js' | asset_url }}" defer="defer"></script>
+
+<template class="js-media-zoom-template">
+  <modal-dialog class="modal modal--full-screen gallery-zoom-modal invisible fixed top-0 left-0 w-full h-full flex items-center justify-center" role="dialog" aria-label="{{ 'products.product.media.gallery_viewer' | t }}" aria-modal="true" tabindex="-1">
+    <div class="modal__window relative bg-theme-bg text-theme-text text-start overflow-hidden has-motion">
+      <div class="modal__content flex-auto h-full rte">
+        <gallery-zoom class="gallery-zoom{% if image_media.size == 1 %} gallery-zoom--single-image{% endif %} block relative h-full" tabindex="-1">
+          <div class="gallery-zoom__zoom-container absolute w-full h-full"></div>
+
+          <div class="gallery-zoom__thumbs absolute left-0 w-full px-2 bottom-2 sm:bottom-4 whitespace-nowrap text-center overflow-auto"{% if image_media.size == 1 %} hidden{% endif %}>
+            {%- for media in image_media -%}
+              <button class="gallery-zoom__thumb inline-block" data-zoom-url="{{ media.preview_image | image_url: width: zoom_size }}" data-media-id="{{ media.id }}">
+                {{- media.preview_image | image_url: width: 122 | image_tag: class: 'gallery-zoom__thumb-img block' -}}
+              </button>
+            {%- endfor -%}
+          </div>
+
+          <div class="gallery-zoom__controls pointer-events-none relative h-full flex items-center justify-between">
+            <button class="gallery-zoom__button gallery-zoom__prev pointer-events-auto has-ltr-icon"{% if image_media.size == 1 %} hidden{% endif %}>
+              <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+              {% render 'icon-chevron-left' %}
+            </button>
+
+            <button class="gallery-zoom__button gallery-zoom__next pointer-events-auto has-ltr-icon"{% if image_media.size == 1 %} hidden{% endif %}>
+              <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+              {% render 'icon-chevron-right' %}
+            </button>
+
+            <button type="button" class="gallery-zoom__button gallery-zoom__close pointer-events-auto absolute top-0 right-0 js-close-modal">
+              {% render 'icon-close' %}
+              <span class="visually-hidden">{{ 'accessibility.close' | t }}</span>
+            </button>
+          </div>
+        </gallery-zoom>
+      </div>
+    </div>
+  </modal-dialog>
+</template>

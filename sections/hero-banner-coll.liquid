@@ -1,0 +1,245 @@
+{%- liquid
+  assign banner_classes = ''
+  assign has_image = false
+
+  unless section.settings.bg_style == 'none'
+    if section.settings.image != blank
+      assign has_image = true
+      assign img = section.settings.image
+    elsif collection.featured_image
+      assign has_image = true
+      assign img = collection.featured_image
+      assign focal_point = section.settings.image_align
+    endif
+
+    if section.settings.bg_style == 'image' and has_image
+      assign banner_classes = ' banner--bg banner--bg-image'
+    else
+      assign banner_classes = ' banner--bg banner--bg-color'
+    endif
+  endunless
+
+  unless section.settings.show_breadcrumbs
+    assign banner_classes = banner_classes | append: ' banner--no-breadcrumbs'
+  endunless
+-%}
+
+{%- style -%}
+  :root {
+    --hero-height-mobile: {{ section.settings.hero_height_mobile }}px;
+    --hero-height-desktop: {{ section.settings.hero_height_desktop }}px;
+    --hero-height-diff: {{ section.settings.hero_height_desktop | minus: section.settings.hero_height_mobile }};
+    --hero-bg-color: {{ section.settings.hero_bg_color.rgb }};
+    {%- if section.settings.hero_bg_gradient != blank %}
+    --hero-bg-gradient: {{ section.settings.hero_bg_gradient }};
+    {%- endif %}
+    --hero-text-color: {{ section.settings.hero_text_color.rgb }};
+    --hero-tint-color: {{ section.settings.hero_tint_color.rgb }};
+    --hero-tint-opacity: {{ section.settings.hero_tint_opacity }};
+    --hero-tint-text-color: {{ section.settings.hero_tint_text_color.rgb }};
+  }
+{%- endstyle -%}
+
+<div class="banner{{ banner_classes }} relative flex flex-col justify-center items-center{% if section.settings.bg_style != 'none' and section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}"{% if section.settings.show_contrast_logo %} data-show-contrast-logo{% endif %}>
+  {%- if section.settings.bg_style == 'image' and has_image -%}
+    {% render 'hero-banner-image', img: img, focal_point: focal_point %}
+    <span class="banner__overlay absolute top-0 left-0 w-full h-full"></span>
+  {%- endif -%}
+
+  <div class="banner__text container reading-width relative text-center" data-cc-animate>
+    <h1{% unless section.settings.bg_style == 'none' %} class="text-current"{% endunless %}>
+      {{- collection.title | escape_once -}}
+    </h1>
+    {%- if collection.description != blank and section.settings.show_description -%}
+      <div class="rte reading-width text-center text-lg" data-cc-animate data-cc-animate-delay="0.1s">
+        {{ collection.description }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.show_breadcrumbs -%}
+    {% render 'breadcrumbs' %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "class": "section-banner banner-candidate",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The hero banner contains the main page title (h1 tag). If you choose to hide it, we advise you to provide an h1 title in another section (video or image banner for example) for SEO purposes."
+    },
+    {
+      "type": "range",
+      "id": "hero_height_desktop",
+      "label": "Height (desktop)",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "default": 360,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "hero_height_mobile",
+      "label": "Height (mobile)",
+      "min": 150,
+      "max": 400,
+      "step": 10,
+      "default": 240,
+      "unit": "px"
+    },
+    {
+      "type": "select",
+      "id": "bg_style",
+      "label": "Background style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "color",
+          "label": "Color"
+        },
+        {
+          "value": "image",
+          "label": "Image"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Bottom boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "bottom",
+          "label": "On"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contrast_logo",
+      "label": "Allow alternative logo",
+      "info": "Logo is configured in the header section settings. Always enabled for images.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "hero_bg_color",
+      "label": "Background color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color_background",
+      "id": "hero_bg_gradient",
+      "label": "Background gradient (optional)"
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "select",
+      "id": "image_align",
+      "label": "Collection image alignment",
+      "info": "Used to keep the subject of your image in view, when cropped to a fixed shape",
+      "options": [
+        {
+          "value": "object-top",
+          "label": "Top"
+        },
+        {
+          "value": "object-left",
+          "label": "Left"
+        },
+        {
+          "value": "object-center",
+          "label": "Center"
+        },
+        {
+          "value": "object-right",
+          "label": "Right"
+        },
+        {
+          "value": "object-bottom",
+          "label": "Bottom"
+        }
+      ],
+      "default": "object-center"
+    },
+    {
+      "type": "paragraph",
+      "content": "Alternatively, select a custom image to show on ALL collection pages that use this template."
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Custom image",
+      "info": "For best results, use an image with 16:9 aspect ratio and width of 3200px."
+    },
+    {
+      "type": "header",
+      "content": "Image overlay"
+    },
+    {
+      "type": "color",
+      "id": "hero_tint_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "hero_tint_opacity",
+      "label": "Overlay tint",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "hero_tint_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "Show collection description",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

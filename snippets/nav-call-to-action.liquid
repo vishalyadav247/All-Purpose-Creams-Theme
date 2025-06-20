@@ -1,0 +1,50 @@
+{%- comment -%}
+  Parameters:
+  - block {Object} - Block object.
+  - menu {String} - Parent menu ('drawer' or 'inline').
+  - first_cta {Boolean} - CTA is the first one (optional, default is false).
+  - column_count {Number} - Number of columns in parent container (required when menu is 'inline')
+
+  Usage:
+  {% render 'nav-call-to-action', block: block, menu: 'drawer', first_cta: true %}
+{%- endcomment -%}
+
+{%- if block.settings.image != blank or block.settings.title != blank or block.settings.button_label != blank -%}
+  <li class="nav-ctas__cta{% if first_cta %} nav-ctas__cta--first{% endif %}{% if block.settings.image == blank %} nav-ctas__cta--no-image{% endif %}" {{ block.shopify_attributes }}>
+    <a class="nav-cta flex relative overflow-hidden{% if block.settings.cta_link != blank %} media-hover-effect feature-link-hover-parent{% endif %}" {% if block.settings.cta_link != blank %}href="{{ block.settings.cta_link }}"{% else %}role="link" aria-disabled="true"{% endif %} id="cta-{{ block.id }}" data-cc-animate-click>
+      {%- if block.settings.image != blank -%}
+        {%- style -%}
+          #cta-{{ block.id }}::after { padding-top: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%; }
+        {%- endstyle -%}
+
+        <div class="media absolute top-0 left-0 w-full h-full" style="padding-top: {{ 1 | divided_by: block.settings.image.aspect_ratio | times: 100 }}%;">
+          {%- liquid
+            if menu == 'inline'
+             assign sizes = 'calc((100vw - 96) / ' | append: column_count | append: ')'
+             render 'image', image: block.settings.image, widths: '300, 450, 600, 750', src_width: 300, sizes: sizes, class: 'img-fit', loading: 'lazy', attributes: 'hidden'
+           else
+             capture sizes
+               render 'sizes-attribute', min: 'calc(100vw - 64px)', sm: '436px', md: '340px', lg: 'calc(50vw - 160px)', xl: false, max: '560px'
+             endcapture
+             render 'image', image: block.settings.image, widths: '560, 630, 750, 960, 1120', src_width: 560, sizes: sizes, class: 'img-fit', loading: 'lazy', attributes: 'hidden'
+           endif
+          -%}
+        </div>
+      {%- endif -%}
+
+      <div class="text-overlay relative text-center flex flex-col justify-center items-center w-full"{% unless block.settings.promo_tint_color == 'rgba(0,0,0,0)' %} style="background-color: rgba({{ block.settings.promo_tint_color.rgb }} / {{ block.settings.promo_tint_opacity | divided_by: 100.0 }}); color: {{ block.settings.promo_text_color }};"{% endunless %}>
+        {%- if block.settings.title != blank -%}
+          <h2 class="h3 text-current">
+            {{- block.settings.title -}}
+          </h2>
+        {%- endif -%}
+
+        {%- if block.settings.button_label != blank -%}
+          <div class="feature-link text-xs">
+            {{- block.settings.button_label | escape -}}
+          </div>
+        {%- endif -%}
+      </div>
+    </a>
+  </li>
+{%- endif -%}

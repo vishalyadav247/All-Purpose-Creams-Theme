@@ -1,0 +1,514 @@
+{%- if section.blocks.size > 0 -%}
+  {%- liquid
+    assign mod_2 = section.blocks.size | modulo: 2
+    assign mod_3 = section.blocks.size | modulo: 3
+    assign split_col_widths = false
+    assign col_class = ''
+
+    if section.settings.layout == 'carousel'
+      assign carousel = true
+
+      if section.blocks.size == 2
+        assign grid_classes = 'grid-cols-1 md:grid-cols-2'
+      else
+        assign grid_classes = 'grid-flow-col auto-cols-1 md:auto-cols-2 lg:auto-cols-3 xl:auto-cols-4'
+      endif
+    else
+      assign carousel = false
+      assign grid_classes = 'grid-cols-1 md:grid-cols-6'
+
+      if mod_2 == 0 and mod_3 > 0
+        assign col_class = 'md:col-span-3'
+      elsif mod_3 == 0
+        assign col_class = 'md:col-span-2'
+      else
+        assign split_col_widths = true
+      endif
+    endif
+
+    if section.settings.image_ratio == 'shortest'
+      assign image_ratio = 0
+      for block in section.blocks
+        if block.settings.image.aspect_ratio > image_ratio
+          assign image_ratio = block.settings.image.aspect_ratio
+        endif
+      endfor
+    elsif section.settings.image_ratio == 'tallest'
+      assign image_ratio = 99
+      for block in section.blocks
+        if block.settings.image.aspect_ratio < image_ratio
+          assign image_ratio = block.settings.image.aspect_ratio
+        endif
+      endfor
+    else
+      assign image_ratio = section.settings.image_ratio
+    endif
+
+    assign color_scheme = section.settings.color_scheme
+    assign bg_color = false
+
+    if color_scheme == '1'
+      assign bg_color = settings.color_scheme_1_bg
+      assign bg_gradient = settings.color_scheme_1_gradient
+    elsif color_scheme == '2'
+      assign bg_color = settings.color_scheme_2_bg
+      assign bg_gradient = settings.color_scheme_2_gradient
+    elsif color_scheme == '3'
+      assign bg_color = settings.color_scheme_3_bg
+      assign bg_gradient = settings.color_scheme_3_gradient
+    endif
+
+    if bg_gradient != blank
+      assign bg_color = true
+    elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)'
+      assign bg_color = false
+    endif
+
+    if section.settings.boundary_effect != blank and bg_color == false
+      assign bg_color = settings.bg_color
+    endif
+
+    if color_scheme == 'none' and section.settings.boundary_effect != blank
+      assign color_scheme = 'page'
+    endif
+  -%}
+
+  {%- unless color_scheme == 'none' or section.settings.bg_style == 'none' -%}
+    {%- style -%}
+      {%- if section.settings.bg_style == 'section' and bg_color -%}
+        #{{ section.id }} .card { background-color: {{ settings.bg_color }}; color: {{ settings.text_color }}; }
+        #{{ section.id }} .card__heading { color: {{ settings.heading_color }}; }
+        #{{ section.id }} .feature-link { color: currentColor; }
+      {%- elsif section.settings.bg_style == 'column' and bg_color -%}
+        #{{ section.id }} .feature-link { color: currentColor; }
+      {%- endif -%}
+    {%- endstyle -%}
+  {%- endunless -%}
+
+  {%- if section.settings.image_ratio != 'natural' -%}
+    {%- style -%}
+      #{{ section.id }} .card__media { padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%; }
+    {%- endstyle -%}
+  {%- endif -%}
+
+  <div class="multi-column section{% unless section.settings.full_width %} section--page-width{% endunless %}{% if bg_color %} section--padded{% endif %}{% if bg_color and section.settings.full_width %} section--m-0{% endif %}{% if carousel %} section--px-0{% endif %}{% if section.settings.bg_style == 'section' and color_scheme != 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endif %}{% if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}{% unless section.settings.full_width %} content-block{% endunless %}" id="{{ section.id }}">
+    {%- if carousel -%}
+      <carousel-slider class="carousel block xl:overflow-hidden" inactive>
+    {%- endif -%}
+
+    <div class="container">
+      {%- if carousel -%}
+        <div class="carousel__header flex items-center justify-between mb-6">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="section__heading flex-auto mb-0">{{ section.settings.heading | escape }}</h2>
+          {%- endif -%}
+
+          <div class="slider-nav flex no-js-hidden">
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="prev" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+              {% render 'icon-arrow-left' %}
+            </button>
+            <button type="button" class="slider-nav__btn btn has-ltr-icon" name="next" aria-controls="slider-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        </div>
+      {%- elsif section.settings.heading != blank -%}
+        <h2 class="section__heading mb-6{% if section.settings.column_align == 'center' %} text-center{% endif %}">{{ section.settings.heading | escape }}</h2>
+      {%- endif -%}
+
+      {%- if carousel -%}
+        <div class="slider" id="slider-{{ section.id }}">
+          {%- if section.settings.full_width -%}
+            <div class="container">
+          {%- endif -%}
+      {%- endif -%}
+
+      <ul class="{% if carousel %}slider__grid {% endif %}grid {{ grid_classes }} gap-theme gap-y-10" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            if split_col_widths and mod_3 == 1
+              if forloop.index <= 3
+                assign col_class = 'md:col-span-2'
+              else
+                assign col_class = 'md:col-span-3'
+              endif
+            elsif split_col_widths and mod_3 == 2
+              if forloop.index <= 2
+                assign col_class = 'md:col-span-3'
+              else
+                assign col_class = 'md:col-span-2'
+              endif
+            endif
+          -%}
+          <li class="{% if carousel %}slider__item {% endif %}{{ col_class }}" {{ block.shopify_attributes }}>
+            <div class="card relative flex flex-col items-start h-full fade-in
+                {%- unless bg_color == false or section.settings.bg_style == 'none' or color_scheme == 'none' %}
+                  {%- if section.settings.bg_style == 'column' %} card--bg-color{% endif %}
+                {%- else %}
+                  card--round-media
+                {%- endunless %}
+                {%- if section.settings.bg_style == 'column' and color_scheme != 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endif %}
+                {%- if section.settings.column_align == 'center' %} text-center{% endif %}"
+                data-cc-animate
+                data-cc-animate-delay="{{ forloop.index | times: 0.2 }}s">
+
+              {%- if block.settings.show_image -%}
+                {%- if block.settings.image != blank -%}
+                  {%- liquid
+                    assign cols = col_class | slice: -1, 1 | plus: 0
+                    assign class = false
+
+                    if section.settings.image_ratio != 'natural'
+                      assign class = 'img-fit'
+                    endif
+                  -%}
+                  {%- capture sizes %}{% render 'sizes-attribute', grid: true, min: 1, md: cols %}{% endcapture -%}
+                  <div class="card__media media relative w-full">
+                    {% render 'image',
+                      image: block.settings.image,
+                      widths: '375, 670, 800, 1200',
+                      src_width: 375,
+                      sizes: sizes,
+                      class: class
+                    %}
+                  </div>
+                {%- else -%}
+                  <div class="media relative h-full w-full">
+                    {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
+                  </div>
+                {%- endif -%}
+              {%- endif -%}
+
+              <div class="card__info flex flex-col flex-auto
+                {%- if section.settings.column_align == 'center' %} items-center{% else %} items-start{% endif %}
+                {%- unless bg_color == false or section.settings.bg_style == 'none' or color_scheme == 'none' %} p-5{% endunless %}">
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="card__heading {{ block.settings.heading_size }}">{{ block.settings.heading | escape }}</h3>
+                {%- endif -%}
+
+                {%- if block.settings.text != blank -%}
+                  <div class="card__rte flex-auto rte">
+                    {{ block.settings.text }}
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.button_label != blank -%}
+                  <div class="mt-6 mb-2">
+                    <a class="{{ block.settings.button_style }}" {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}>
+                      {{- block.settings.button_label | escape -}}
+                    </a>
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if carousel -%}
+          {%- if section.settings.full_width -%}
+            </div>
+          {%- endif -%}
+        </div> {% # slider %}
+      {%- endif -%}
+    </div>
+
+    {%- if carousel -%}
+      </carousel-slider>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="section__footer container text-center">
+        <a class="btn btn--secondary"{% if section.settings.button_link == blank %} role="link" aria-disabled="true"{% else %} href="{{ section.settings.button_link }}"{% endif %}>
+          {{ section.settings.button_label | escape }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Multi-column",
+  "tag": "section",
+  "class": "cc-multi-column",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Multi-column"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        },
+        {
+          "value": "grid",
+          "label": "Grid"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "select",
+      "id": "column_align",
+      "label": "Content alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image shape (aspect ratio)",
+      "options": [
+        {
+          "value": "natural",
+          "label": "Natural"
+        },
+        {
+          "value": "shortest",
+          "label": "Height of shortest image"
+        },
+        {
+          "value": "tallest",
+          "label": "Height of tallest image"
+        },
+        {
+          "value": "1.78",
+          "label": "Wide"
+        },
+        {
+          "value": "1.33",
+          "label": "Landscape"
+        },
+        {
+          "value": "1",
+          "label": "Square"
+        },
+        {
+          "value": "0.75",
+          "label": "Portrait"
+        }
+      ],
+      "default": "shortest"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width background",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "bg_style",
+      "label": "Background style",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "section",
+          "label": "Section"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "blocks": [
+    {
+      "type": "column",
+      "name": "Column",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_image",
+          "label": "Show image",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Column"
+        },
+        {
+          "type": "select",
+          "id": "heading_size",
+          "label": "Heading size",
+          "options": [
+            {
+              "value": "h4",
+              "label": "Smaller"
+            },
+            {
+              "value": "h3",
+              "label": "Small"
+            },
+            {
+              "value": "h2",
+              "label": "Medium"
+            },
+            {
+              "value": "h1",
+              "label": "Large"
+            }
+          ],
+          "default": "h3"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Pair text with an image to focus on a product, collection or blog post. Add details on availability, style, or even provide a review.</p>"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "button_style",
+          "label": "Button style",
+          "options": [
+            {
+              "value": "feature-link",
+              "label": "Link"
+            },
+            {
+              "value": "btn btn--primary",
+              "label": "Primary button"
+            },
+            {
+              "value": "btn btn--secondary",
+              "label": "Secondary button"
+            }
+          ],
+          "default": "feature-link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Multi-column",
+      "blocks": [
+        {
+          "type": "column"
+        },
+        {
+          "type": "column"
+        },
+        {
+          "type": "column"
+        }
+      ]
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

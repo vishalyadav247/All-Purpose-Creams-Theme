@@ -1,0 +1,392 @@
+{%- assign color_scheme = section.settings.color_scheme -%}
+{%- unless color_scheme == 'none' -%}
+  {%- liquid
+    assign bg_color = false
+
+    if color_scheme == '1'
+      assign bg_color = settings.color_scheme_1_bg
+      assign bg_gradient = settings.color_scheme_1_gradient
+    elsif color_scheme == '2'
+      assign bg_color = settings.color_scheme_2_bg
+      assign bg_gradient = settings.color_scheme_2_gradient
+    elsif color_scheme == '3'
+      assign bg_color = settings.color_scheme_3_bg
+      assign bg_gradient = settings.color_scheme_3_gradient
+    endif
+
+    if bg_gradient != blank
+      assign bg_color = true
+    elsif bg_color == 'rgba(0,0,0,0)' or bg_color == settings.bg_color
+      assign bg_color = false
+    endif
+
+    if section.settings.boundary_effect != blank and bg_color == false
+      assign bg_color = settings.bg_color
+    endif
+
+    if color_scheme == 'none' and section.settings.boundary_effect != blank
+      assign bg_color = settings.bg_color
+      assign color_scheme = 'page'
+    endif
+  -%}
+
+  {%- if section.settings.bg_style == 'section' -%}
+    {%- if bg_color %}
+      {%- style -%}
+        #{{ section.id }} {
+          {%- if bg_gradient != blank -%}
+            background-image: {{ bg_gradient }};
+          {%- else -%}
+            background-color: {{ bg_color }};
+          {%- endif -%}
+        }
+
+        #{{ section.id }} .media-with-text { background-color: {{ settings.bg_color }}; }
+      {%- endstyle -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endunless -%}
+
+{%- liquid
+  if section.settings.image != blank
+    assign image = section.settings.image
+  elsif section.settings.media_type == 'video' and section.settings.video_shopify != blank
+    assign image = section.settings.video_shopify.preview_image
+  endif
+
+  assign controls = true
+  if section.settings.video_autoplay
+    assign controls = false
+  endif
+-%}
+
+{%- if section.settings.video_shopify != blank or section.settings.video_external != blank -%}
+  <link rel="stylesheet" href="{{ 'video.css' | asset_url }}">
+  <script src="{{ 'video.js' | asset_url }}" defer="defer"></script>
+
+  {%- capture video_component -%}
+    <video-component class="absolute top-0 left-0 w-full h-full"
+                    {%- unless section.settings.video_shopify %} data-video-url="{{ section.settings.video_external | escape }}"{% endunless %}
+                    data-autoplay="{% if section.settings.video_autoplay %}true{% else %}false{% endif %}"
+                    data-background="false"
+                    data-description="{{ section.settings.video_description }}">
+      {%- if section.settings.video_shopify != blank -%}
+        {{ section.settings.video_shopify | video_tag: playsinline: true, autoplay: section.settings.video_autoplay, muted: section.settings.video_autoplay, controls: controls, poster: '' | replace: '<img ', '<img loading="lazy" hidden ' }}
+      {%- else -%}
+        <div></div>
+      {%- endif -%}
+    </video-component>
+  {%- endcapture -%}
+
+  {%- style -%}
+    #{{ section.id }} .video-section__media {
+      {%- if section.settings.video_shopify != blank -%}
+        padding-top: {{ 100.0 | divided_by: section.settings.video_shopify.aspect_ratio }}%;
+      {%- elsif section.settings.image != blank -%}
+        padding-top: {{ 100.0 | divided_by: section.settings.image.aspect_ratio }}%;
+      {%- endif -%}
+    }
+  {%- endstyle -%}
+{%- endif -%}
+
+<div class="section
+    {%- if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
+    {%- if section.settings.bg_style == 'content' and section.settings.boundary_effect != blank %} section--padded section--m-0
+    {%- else %} section--padded section--m-0
+    {%- endif %}" id="{{ section.id }}" data-cc-animate>
+
+  <div class="container">
+    <div class="media-with-text md:grid md:grid-cols-2{% if section.settings.bg_style == 'content' and color_scheme != 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endif %}{% if bg_color %} content-block{% endif %} overflow-hidden">
+      <div class="media-with-text__media relative{% if section.settings.media_type == 'video' %} video-section{% endif %} flex flex-col justify-center{% if section.settings.layout == 'right' %} md:order-1{% endif %} h-full overflow-hidden{% unless bg_color %} content-block{% endunless %}">
+        {% if image %}
+          <div class="media w-full h-full{% if section.settings.media_type == 'video' %} absolute top-0 left-0 video-played-hidden{% else %} relative{% endif %}" style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100 }}%;" data-cc-animate>
+            {%- capture sizes -%}
+              {%- render 'sizes-attribute', min: 'page', sm: 'page', md: 'calc(50vw - 32px)', lg: 'calc(50vw - 48px)', xl: '600px' -%}
+            {%- endcapture -%}
+            {% render 'image',
+              image: image,
+              widths: '600, 800, 1000, 1200, 1400',
+              mobile_widths: '670, 800',
+              src_width: 600,
+              sizes: sizes,
+              class: 'img-fit'
+            %}
+          </div>
+        {% elsif section.settings.media_type == 'video' %}
+          <div class="media h-full w-full absolute top-0 left-0 video-played-hidden">
+            {{ 'image' | placeholder_svg_tag: 'media__placeholder dark h-full w-full absolute top-0 left-0' }}
+          </div>
+        {% else %}
+          <div class="media relative h-full">
+            {{ 'image' | placeholder_svg_tag: 'media__placeholder dark' }}
+          </div>
+        {% endif %}
+
+        {%- if section.settings.media_type == 'video' -%}
+          {%- if section.settings.video_autoplay -%}
+            <div class="video-section__media block w-full no-js-hidden">
+              {{ video_component }}
+            </div>
+          {%- else -%}
+            <deferred-media class="video-section__media block w-full no-js-hidden">
+              <button type="button" class="video-section__play-btn video-played-hidden absolute top-0 left-0 flex justify-center items-center w-full h-full js-load-media">
+                <span class="visually-hidden">{{ 'general.icon_labels.play' | t }}</span>
+                {%- render 'icon-play' -%}
+              </button>
+              <template>
+                {{ video_component }}
+              </template>
+            </deferred-media>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+
+      <div class="media-with-text__text flex flex-col justify-center h-full align-ltr-{{ section.settings.text_alignment }}{% if section.settings.text_center_mobile %} md-down-text-center{% endif %}
+          {%- if bg_color == settings.bg_color or color_scheme == 'none' %} pt-8 md:p-10 lg:p-12 xl:p-20
+          {%- else %} p-8 md:p-10 lg:p-12 xl:p-20
+          {%- endif %} mx-auto max-w-prose">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="section__heading fade-in-up" data-cc-animate data-cc-animate-delay="0.1s">
+            {{- section.settings.heading | escape -}}
+          </h2>
+        {%- endif -%}
+
+        {%- if section.settings.text != blank -%}
+          <div class="rte fade-in-up" data-cc-animate data-cc-animate-delay="0.2s">
+            {{ section.settings.text }}
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.button_text != blank -%}
+          <div class="media-with-text__link mt-8 fade-in-up" data-cc-animate data-cc-animate-delay="0.3s">
+            <a class="{{ section.settings.button_style }}" {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}>
+              {{ section.settings.button_text | escape }}
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Media with text",
+  "class": "cc-media-with-text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        {
+          "value": "image",
+          "label": "Image"
+        },
+        {
+          "value": "video",
+          "label": "Video"
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "For best results, use an image with a minimum width of 1200px."
+    },
+    {
+      "type": "header",
+      "content": "Video",
+      "info": "The image above will show if the video is loading or autoplay is disabled."
+    },
+    {
+      "type": "video",
+      "id": "video_shopify",
+      "label": "Video upload",
+      "info": "Hosted by Shopify. Replaces External video if both are set."
+    },
+    {
+      "type": "text",
+      "id": "video_external",
+      "label": "External video",
+      "info": "Supports YouTube and Vimeo",
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"
+    },
+    {
+      "type": "text",
+      "id": "video_description",
+      "label": "Video alt text",
+      "info": "Describe the video for customers using screen readers."
+    },
+    {
+      "type": "checkbox",
+      "id": "video_autoplay",
+      "label": "Autoplay",
+      "info": "Video will be muted",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Media with text"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Pair text with media to give focus to a selected product, collection or blog post. Add details on availability, style or even provide a review.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button label",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button style",
+      "options": [
+        {
+          "value": "feature-link",
+          "label": "Link"
+        },
+        {
+          "value": "btn btn--primary",
+          "label": "Primary button"
+        },
+        {
+          "value": "btn btn--secondary",
+          "label": "Secondary button"
+        }
+      ],
+      "default": "feature-link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Media position on large screens",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text_alignment",
+      "id": "text_alignment",
+      "label": "Text alignment",
+      "default": "left"
+    },
+    {
+      "type": "checkbox",
+      "id": "text_center_mobile",
+      "label": "Center align text on mobile",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "select",
+      "id": "bg_style",
+      "label": "Color scheme applies to",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "section",
+          "label": "Section"
+        }
+      ],
+      "default": "content"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Top boundary effect",
+      "info": "Only applies to section background",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "top",
+          "label": "On"
+        },
+        {
+          "value": "top-flipped",
+          "label": "On (flipped)"
+        }
+      ],
+      "default": ""
+    }
+  ],
+  "presets": [
+    {
+      "name": "Media with text"
+    }
+  ],
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer",
+      "aside"
+    ]
+  }
+}
+{% endschema %}

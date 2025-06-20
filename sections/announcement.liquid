@@ -1,0 +1,146 @@
+{%- unless request.page_type != 'index' and section.settings.home_page_only -%}
+  {%- if section.blocks.size > 0 -%}
+
+    {{ 'slideshow.css' | asset_url | stylesheet_tag }}
+    {{ 'announcement.css' | asset_url | stylesheet_tag }}
+
+    {%- if section.blocks.size > 1 -%}
+      <script src="{{ 'slideshow.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'announcement-bar.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+
+    {%- style -%}
+      announcement-bar {
+        --announcement-text-color: {{ section.blocks.first.settings.text_color.rgb }};
+        --announcement-bg-color: {{ section.blocks.first.settings.bg_color }};
+        --announcement-bg-gradient: {{ section.blocks.first.settings.bg_gradient }};
+      }
+      .announcement__text {
+        font-size: calc({{ section.settings.font_size }} * 0.1rem);
+      }
+    {%- endstyle -%}
+
+    <announcement-bar class="block relative">
+      {%- for block in section.blocks offset: 1 -%}
+        <div class="announcement-bg absolute inset-0" data-index="{{ forloop.index }}" style="background: {{ block.settings.bg_gradient | default: block.settings.bg_color }}"></div>
+      {%- endfor -%}
+
+      <slide-show class="announcement block relative overflow-hidden" role="region" aria-roledescription="{{ 'sections.slideshow.carousel' | t }}" aria-label="{{ 'sections.slideshow.carousel' | t }}" data-autoplay="true" data-speed="{{ section.settings.read_time }}" data-transition="slide-fade">
+        <div class="slideshow flex relative" id="slideshow-{{ section.id }}" aria-live="polite" aria-atomic="true">
+          {%- for block in section.blocks -%}
+            <div class="slideshow__slide announcement__slide{% if forloop.first %} is-active{% endif %} w-full"
+                role="group" aria-roledescription="{{ 'sections.slideshow.slide' | t }}"
+                aria-label="{{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+                {%- unless forloop.first %} tabindex="-1"{% endunless %}
+                data-index="{{ forloop.index0 }}"
+                data-text-color="{{ block.settings.text_color.rgb }}"
+                style="--announcement-text-color: {{ block.settings.text_color.rgb }}"
+                {{ block.shopify_attributes }}>
+
+              <figure class="m-0 py-2 has-motion">
+                <blockquote class="text-center m-0 rte announcement__text">
+                  {{- block.settings.text -}}
+                </blockquote>
+              </figure>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        {%- if section.blocks.size > 1 -%}
+          <div class="slideshow-nav absolute inset-0 flex items-center justify-between no-js-hidden">
+            <button type="button" class="slideshow-nav__btn btn relative z-1 hidden has-ltr-icon" name="prev" aria-controls="slideshow-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.previous' | t }}</span>
+              {% render 'chevron-left',
+                width: section.settings.font_size,
+                height: section.settings.font_size %}
+            </button>
+
+            <button type="button" class="slideshow-nav__btn btn relative z-1 hidden has-ltr-icon" name="next" aria-controls="slideshow-{{ section.id }}">
+              <span class="visually-hidden">{{ 'general.slider.next' | t }}</span>
+              {% render 'chevron-right',
+                width: section.settings.font_size,
+                height: section.settings.font_size %}
+            </button>
+          </div>
+        {%- endif -%}
+      </slide-show>
+    </announcement-bar>
+
+  {%- endif -%}
+{%- endunless -%}
+
+{% schema %}
+{
+  "name": "Announcement",
+  "class": "cc-announcement",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "checkbox",
+      "id": "home_page_only",
+      "label": "Show on home page only",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Text size",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "read_time",
+      "min": 3,
+      "max": 15,
+      "step": 1,
+      "unit": "s",
+      "label": "Announcement read time",
+      "default": 7
+    }
+  ],
+  "max_blocks": 5,
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "Welcome to our store. <a href='#' title='#'>Learn more</a>",
+          "info": "If you have multiple announcements, keep them short as they may wrap on smaller screens."
+        },
+        {
+          "type": "header",
+          "content": "Style"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background color",
+          "default": "#3f3f3f"
+        },
+        {
+          "type": "color_background",
+          "id": "bg_gradient",
+          "label": "Background gradient (optional)"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

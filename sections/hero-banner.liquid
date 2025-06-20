@@ -1,0 +1,236 @@
+{%- comment %}theme-check-disable UndefinedObject{% endcomment -%}
+{%- liquid
+  assign banner_classes = ''
+
+  if section.settings.enable_bg
+    if section.settings.image != blank
+      assign banner_classes = 'banner--bg banner--bg-image'
+    else
+      assign banner_classes = 'banner--bg banner--bg-color'
+    endif
+  endif
+
+  unless section.settings.show_breadcrumbs
+    assign banner_classes = banner_classes | append: ' banner--no-breadcrumbs'
+  endunless
+
+  case template.name
+    when 'cart'
+      assign title = 'cart.general.title' | t
+    when 'list-collections'
+      assign title = 'sections.collection_list.title' | t
+    when 'search'
+      assign title = 'templates.search.title' | t
+    when 'login'
+      assign title = 'customer.login.title' | t
+    when 'register'
+      assign title = 'customer.register.title' | t
+    when 'activate_account'
+      assign title = 'customer.activate_account.title'
+    when 'account'
+      assign title = 'customer.account.title' | t
+    when 'addresses'
+      assign title = 'customer.addresses.title' | t
+    when 'order'
+      assign title = 'customer.order.title' | t: name: order.name
+    when 'reset_password'
+      assign title = 'customer.reset_password.title' | t
+    else
+      assign title = [template.name].title
+  endcase
+-%}
+
+{%- style -%}
+  :root {
+    --hero-height-mobile: {{ section.settings.hero_height_mobile }}px;
+    --hero-height-desktop: {{ section.settings.hero_height_desktop }}px;
+    --hero-height-diff: {{ section.settings.hero_height_desktop | minus: section.settings.hero_height_mobile }};
+    --hero-bg-color: {{ section.settings.hero_bg_color.rgb }};
+    {%- if section.settings.hero_bg_gradient != blank %}
+    --hero-bg-gradient: {{ section.settings.hero_bg_gradient }};
+    {%- endif %}
+    --hero-text-color: {{ section.settings.hero_text_color.rgb }};
+    --hero-tint-color: {{ section.settings.hero_tint_color.rgb }};
+    --hero-tint-opacity: {{ section.settings.hero_tint_opacity }};
+    --hero-tint-text-color: {{ section.settings.hero_tint_text_color.rgb }};
+  }
+{%- endstyle -%}
+
+<div class="banner {{ banner_classes }} relative flex flex-col justify-center items-center{% if section.settings.enable_bg and section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}"{% if section.settings.show_contrast_logo %} data-show-contrast-logo{% endif %}>
+  {%- if section.settings.enable_bg and section.settings.image != blank -%}
+    {% render 'hero-banner-image', img: section.settings.image %}
+    <span class="banner__overlay absolute top-0 left-0 w-full h-full"></span>
+  {%- endif -%}
+
+  <div class="banner__text container reading-width relative text-center" data-cc-animate>
+    <h1 {%- if section.settings.enable_bg %} class="text-current"{% endif %}>
+      {%- if request.page_type == 'blog' and current_tags -%}
+        <a href="{{ blog.url }}">{{ blog.title | link_to: blog.url }}</a>
+        {% for tag in current_tags %} / {{ tag }}{% endfor %}
+      {%- else -%}
+        {{ title }}
+      {%- endif -%}
+    </h1>
+
+    {%- if request.page_type == 'customers/order' -%}
+      <div class="mb-6" data-cc-animate>
+        {%- assign order_date = order.created_at | date: format: 'date_at_time' -%}
+        {{ 'customer.order.date' | t: date: order_date }}
+      </div>
+    {%- endif -%}
+
+    {%- if request.page_type == 'customers/activate_account' -%}
+      <div>{{ 'customer.activate_account.subtext' | t }}</div>
+    {%- elsif request.page_type == 'customers/reset_password' -%}
+      <div>{{ 'customer.reset_password.subtext' | t: email: email }}</div>
+    {%- elsif request.page_type contains 'customers' -%}
+      {%- unless request.page_type == 'customers/login' or request.page_type == 'customers/register' -%}
+        <div>
+          {%- unless request.page_type == 'customers/account' -%}
+            <a class="link" href="{{ routes.account_url }}">{{ 'customer.account.home' | t }}</a>&nbsp; &nbsp;
+          {%- endunless -%}
+          <a class="link" href="{{ routes.account_logout_url }}">{{ 'customer.account.log_out' | t }}</a>
+        </div>
+      {%- endunless -%}
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.show_breadcrumbs -%}
+    {%- liquid
+      assign show_rss_link = false
+      if request.page_type == 'blog'
+        assign show_rss_link = true
+      endif
+    -%}
+    {% render 'breadcrumbs', show_rss_link: show_rss_link %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "class": "section-banner banner-candidate",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "The hero banner contains the main page title (h1 tag). If you choose to hide it, we advise you to provide an h1 title in another section (video or image banner for example) for SEO purposes."
+    },
+    {
+      "type": "range",
+      "id": "hero_height_desktop",
+      "label": "Height (desktop)",
+      "min": 200,
+      "max": 600,
+      "step": 10,
+      "default": 360,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "hero_height_mobile",
+      "label": "Height (mobile)",
+      "min": 150,
+      "max": 400,
+      "step": 10,
+      "default": 240,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_bg",
+      "label": "Enable background",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "boundary_effect",
+      "label": "Bottom boundary effect",
+      "options": [
+        {
+          "value": "",
+          "label": "Off"
+        },
+        {
+          "value": "bottom",
+          "label": "On"
+        }
+      ],
+      "default": "bottom"
+    },
+    {
+      "type": "header",
+      "content": "Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_contrast_logo",
+      "label": "Allow alternative logo",
+      "info": "Logo is configured in the header section settings. Always enabled for images.",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "hero_bg_color",
+      "label": "Background color",
+      "default": "#eeeeee"
+    },
+    {
+      "type": "color_background",
+      "id": "hero_bg_gradient",
+      "label": "Background gradient (optional)"
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": "Text color",
+      "default": "#333333"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Shown on all pages using this template. For best results, use an image with 16:9 aspect ratio and width of 3200px."
+    },
+    {
+      "type": "header",
+      "content": "Image overlay"
+    },
+    {
+      "type": "color",
+      "id": "hero_tint_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "hero_tint_opacity",
+      "label": "Overlay tint",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "hero_tint_text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_breadcrumbs",
+      "label": "Show breadcrumbs",
+      "default": false
+    }
+  ]
+}
+{% endschema %}

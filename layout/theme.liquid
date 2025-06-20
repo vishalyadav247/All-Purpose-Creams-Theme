@@ -1,0 +1,220 @@
+{%- liquid
+  assign rtl_langs = 'ar,arc,dv,fa,ha,he,khw,ks,ku,ps,ur,yi' | split: ','
+  assign current_lang = localization.language.iso_code | split: '-' | first
+  if rtl_langs contains current_lang
+    assign lang_dir = 'rtl'
+  else
+    assign lang_dir = 'ltr'
+  endif
+
+  assign body_font_bold = settings.body_font | font_modify: 'weight', 'bolder'
+  assign body_font_italic = settings.body_font | font_modify: 'style', 'italic'
+  assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+-%}
+
+<!doctype html>
+<html class="h-full no-js" lang="{{ request.locale.iso_code }}" dir="{{ lang_dir }}">
+<head>
+  {%- render 'doc-head-core' -%}
+  {%- render 'doc-head-social' -%}
+
+  {%- style %}
+    {{ settings.body_font | font_face: font_display: 'swap' -}}
+    {{ body_font_bold | font_face: font_display: 'swap' -}}
+    {{ body_font_italic | font_face: font_display: 'swap' -}}
+    {{ body_font_bold_italic | font_face: font_display: 'swap' -}}
+    {{ settings.heading_font | font_face: font_display: 'swap' -}}
+
+    {% render 'doc-head-styles' %}
+  {%- endstyle -%}
+
+  <link rel="stylesheet" href="{{ 'main.css' | asset_url }}">
+  <script src="{{ 'main.js' | asset_url }}" defer="defer"></script>
+
+  {%- unless settings.body_font.system? -%}
+    <link rel="preload" href="{{ settings.body_font | font_url }}" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  {%- endunless -%}
+
+  {%- unless settings.heading_font.system? -%}
+    <link rel="preload" href="{{ settings.heading_font | font_url }}" as="font" type="font/woff2" crossorigin fetchpriority="high">
+  {%- endunless -%}
+
+  {%- if request.page_type contains 'customers' -%}
+    <link rel="stylesheet" href="{{ 'customer.css' | asset_url }}">
+  {%- endif -%}
+
+  <link rel="stylesheet" href="{{ 'menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ 'menu-drawer.css' | asset_url }}"></noscript>
+
+  {%- if settings.swatch_source == 'theme' and settings.swatch_colors != blank -%}
+    <link rel="stylesheet" href="{{ 'swatches.css' | asset_url }}" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="{{ 'swatches.css' | asset_url }}"></noscript>
+  {%- endif -%}
+
+  {%- if settings.enable_search -%}
+    {%- if settings.enable_predictive_search or settings.enable_search_suggestions -%}
+      <link rel="stylesheet" href="{{ 'predictive-search.css' | asset_url }}" media="print" onload="this.media='all'">
+      <script src="{{ 'predictive-search.js' | asset_url }}" defer="defer"></script>
+      <script src="{{ 'tabs.js' | asset_url }}" defer="defer"></script>
+    {%- endif -%}
+  {%- endif -%}
+
+  {{ content_for_header }}
+
+  {%- if request.design_mode -%}
+    <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer" data-contact="{{ shop.email | escape }}"></script>
+  {%- endif -%}
+
+  {%- if settings.animations_enabled -%}
+    <script src="{{ 'animate-on-scroll.js' | asset_url }}" defer="defer"></script>
+    <link rel="stylesheet" href="{{ 'animate-on-scroll.css' | asset_url }}">
+  {%- endif -%}
+
+  <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+
+  {%- if settings.custom_html_head -%}
+    <!-- CC Custom Head Start -->
+    {{- settings.custom_html_head -}}
+    <!-- CC Custom Head End -->
+  {%- endif -%}
+</head>
+
+<body class="{% if settings.bg_color != settings.card_bg_color and settings.card_bg_color.alpha != 0 %}pad-card-info{% endif %}{% if settings.animations_enabled %} cc-animate-enabled{% endif %}{% if settings.content_boundary_style != blank %} content-boundary-enabled{% endif %}">
+  <a class="skip-link btn btn--primary visually-hidden" href="#main-content" data-ca-role="skip">
+    {{- 'accessibility.skip_to_content' | t -}}
+  </a>
+
+  {%- sections 'header-group' -%}
+
+
+  <main class="relative" id="main-content">
+    {%- if template.name == 'article' -%}
+      <article>
+    {%- endif -%}
+
+    <div class="main-content">
+      {{ content_for_layout }}
+    </div>
+
+    {%- if template.name == 'article' -%}
+      </article>
+    {%- endif -%}
+  </main>
+
+  {%- sections 'overlay-group' -%}
+  {%- sections 'footer-group' -%}
+
+  {%- liquid
+    if settings.enable_quick_add
+      render 'quick-add-drawer'
+    endif
+  -%}
+
+  <div class="overlay fixed top-0 right-0 bottom-0 left-0 js-overlay"></div>
+  <script>
+    window.theme = {
+      info: {
+        name: 'Alchemy',
+        version: '5.1.2'
+      },
+      mediaQueries: {
+        sm: '(min-width: 640px)',
+        md: '(min-width: 768px)',
+        lg: '(min-width: 1024px)',
+        xl: '(min-width: 1280px)',
+        xxl: '(min-width: 1536px)',
+        portrait: '(orientation: portrait)'
+      },
+      device: {
+        hasTouch: window.matchMedia('(any-pointer: coarse)').matches
+      },
+      routes: {
+        cart: '{{ routes.cart_url }}',
+        cartAdd: '{{ routes.cart_add_url }}',
+        cartChange: '{{ routes.cart_change_url }}',
+        cartUpdate: '{{ routes.cart_update_url }}',
+        predictiveSearch: '{{ routes.predictive_search_url }}'
+      },
+      settings: {
+        moneyWithCurrencyFormat: {{ shop.money_with_currency_format | json }},
+        prodCardImageRatio: '{{ settings.prod_card_image_ratio }}',
+        sliderItemsPerNav: '{{ settings.slider_items_per_nav }}',
+        pSearchLimit: 5,
+        pSearchLimitScope: 'each',
+        pSearchIncludeSkus: {{ settings.predictive_search_include_skus }},
+        pSearchIncludeTags: {{ settings.predictive_search_include_tags }},
+        afterAtc: {{ settings.after_add_to_cart | json }},
+        cartType: {{ settings.cart_type | json }}
+      },
+      strings: {
+        addCartNote: '{{ 'cart.note.add' | t }}',
+        editCartNote: '{{ 'cart.note.edit' | t }}',
+        cartError: '{{ 'cart.general.error' | t }}',
+        cartQtyError: '{{ 'cart.items.quantity_error' | t: quantity: '[quantity]' }}',
+        imageAvailable: '{{ 'products.product.media.image_available' | t: index: '[index]' }}',
+        noStock: '{{ 'products.variant.no_stock' | t }}',
+        noVariant: '{{ 'products.variant.non_existent' | t }}',
+        onlyXLeft: '{{ 'products.inventory.only_x_left' | t: quantity: '[quantity]' }}',
+        shippingCalculator: {
+          singleRate: '{{ 'cart.shipping_calculator.single_rate' | t }}',
+          multipleRates: '{{ 'cart.shipping_calculator.multiple_rates' | t }}',
+          noRates: '{{ 'cart.shipping_calculator.no_rates' | t }}'
+        },
+        viewDetails: '{{ 'products.product.view_details' | t }}'
+      },
+      scripts: {
+        cartItems: '{{ "cart-items.js" | asset_url }}',
+        countryProvinceSelector: '{{ "country-province-selector.js" | asset_url }}',
+        shippingCalculator: '{{ "shipping-calculator.js" | asset_url }}'
+      }
+    };
+
+    checkForBannerBehindHeader = () => {
+      const bodyClasses = document.body.classList;
+      const bc = document.querySelector('.main-content > .banner-candidate:first-child');
+      const activeBanner = document.querySelector('.active-banner');
+      if (activeBanner) activeBanner.classList.remove('active-banner');
+      bodyClasses.remove('has-image-banner', 'has-color-banner', 'no-banner', 'show-alt-logo', 'header-transparent');
+
+      if (bc && bc.classList.contains('section-banner')) {
+        const bannerSection =  document.querySelector('.section-banner');
+        const banner = document.querySelector('.banner');
+        if (banner.classList.contains('banner--bg')) {
+          bannerSection.classList.add('active-banner');
+          if (banner.classList.contains('banner--bg-color')) {
+            bodyClasses.add('has-color-banner');
+          } else if (banner.classList.contains('banner--bg-image')) {
+            bodyClasses.add('has-image-banner');
+          }
+        }
+      } else if (bc && !bc.querySelector('.section--page-width')) {
+        bodyClasses.add('has-image-banner');
+        bc.classList.add('active-banner');
+      }
+
+      if (bodyClasses.contains('has-color-banner') || bodyClasses.contains('has-image-banner')) {
+        if (document.querySelector('.header--transparent')) bodyClasses.add('header-transparent');
+        if (document.querySelector('[data-show-contrast-logo].banner')) bodyClasses.add('show-alt-logo');
+      } else {
+        bodyClasses.add('no-banner');
+      }
+    }
+    checkForBannerBehindHeader();
+
+    // Save product ID to localStorage, for use in the 'Recently viewed products' section.
+    {%- if request.page_type == 'product' %}
+      try {
+        const items = JSON.parse(localStorage.getItem('cc-recently-viewed') || '[]');
+
+        // If product ID is not already in the recently viewed list, add it to the beginning.
+        if (!items.includes({{ product.id | json }})) {
+          items.unshift({{ product.id | json }});
+        }
+
+        // Set recently viewed list and limit to 12 products.
+        localStorage.setItem('cc-recently-viewed', JSON.stringify(items.slice(0, 12)));
+      } catch (e) {}
+    {%- endif %}
+  </script>
+</body>
+</html>

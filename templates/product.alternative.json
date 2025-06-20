@@ -1,0 +1,262 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_section": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "heading": "Brand New {{ product.title }}",
+            "heading_size": "h1",
+            "heading_h1": true
+          }
+        },
+        "text_1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Get it while stocks last!</p>",
+            "enlarge_text": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_1",
+        "text_1"
+      ],
+      "settings": {}
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "vendor-text": {
+          "type": "vendor-text",
+          "settings": {}
+        },
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "show_tax_and_shipping": true,
+            "show_rating": true
+          }
+        },
+        "richtext_1": {
+          "type": "richtext",
+          "settings": {
+            "text": "<h6>Rich text to describe product features</h6>",
+            "icon": "check_mark_in_circle",
+            "reduce_margin": true
+          }
+        },
+        "richtext_2": {
+          "type": "richtext",
+          "settings": {
+            "text": "<h6>Rich text to describe product features</h6>",
+            "icon": "check_mark_in_circle",
+            "reduce_margin": true
+          }
+        },
+        "richtext_3": {
+          "type": "richtext",
+          "settings": {
+            "text": "<h6>Rich text to describe product features</h6>",
+            "icon": "check_mark_in_circle",
+            "reduce_margin": true
+          }
+        },
+        "divider-1": {
+          "type": "divider",
+          "settings": {}
+        },
+        "variant-picker": {
+          "type": "variant-picker",
+          "settings": {
+            "selector_style": "buttons",
+            "enable_dynamic_availability": true,
+            "enable_size_chart": false,
+            "size_chart_variant": "Size",
+            "size_chart_page": ""
+          }
+        },
+        "buy-buttons": {
+          "type": "buy-buttons",
+          "settings": {
+            "show_qty_selector": true,
+            "enable_dynamic_checkout": true,
+            "show_pickup_availability": true,
+            "show_backorder_text": true,
+            "show_gift_card_recipient": false,
+            "show_inventory_notice": "low",
+            "show_inventory_count": "low",
+            "inventory_threshold": 10
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+            "show_as_collapsible_content": true,
+            "icon": "none",
+            "open": false
+          }
+        },
+        "collapsible_content_1": {
+          "type": "collapsible-content",
+          "settings": {
+            "heading": "Collapsible content",
+            "icon": "none",
+            "text": "<p>Add further information about your product.</p>",
+            "open": false
+          }
+        },
+        "collapsible_content_2": {
+          "type": "collapsible-content",
+          "settings": {
+            "heading": "Collapsible content",
+            "icon": "none",
+            "text": "<p>Add further information about your product.</p>",
+            "open": false
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "vendor-text",
+        "title",
+        "price",
+        "richtext_1",
+        "richtext_2",
+        "richtext_3",
+        "divider-1",
+        "variant-picker",
+        "buy-buttons",
+        "description",
+        "collapsible_content_1",
+        "collapsible_content_2",
+        "share"
+      ],
+      "settings": {
+        "enable_sticky_columns": true,
+        "media_size": "large",
+        "media_layout": "stacked"
+      }
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "Shop similar products",
+        "layout": "carousel",
+        "card_size": "small",
+        "products_to_show": 5
+      }
+    },
+    "richtext": {
+      "type": "rich-text",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Rich Text Heading",
+            "heading_size": "h1",
+            "heading_h1": false
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "text"
+      ],
+      "settings": {
+        "text_alignment": "center",
+        "full_width_content": false,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    },
+    "video_section": {
+      "type": "video",
+      "blocks": {
+        "heading_1": {
+          "type": "heading",
+          "settings": {
+            "heading": "See it in action!",
+            "heading_size": "h1",
+            "heading_h1": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_1"
+      ],
+      "settings": {
+        "video_size": "full"
+      }
+    },
+    "multi_column_section": {
+      "type": "multi-column",
+      "blocks": {
+        "column_1": {
+          "type": "column",
+          "settings": {
+            "heading": "Feature",
+            "text": "<p>Add text to show off a special feature of your product. Add details on availability, style, or even provide a review.</p>",
+            "button_label": ""
+          }
+        },
+        "column_2": {
+          "type": "column",
+          "settings": {
+            "heading": "Feature",
+            "text": "<p>Pair text with an image to focus on some key product details. Add information on availability, style, or even provide a review.</p>",
+            "button_label": ""
+          }
+        },
+        "column_3": {
+          "type": "column",
+          "settings": {
+            "heading": "Feature",
+            "text": "<p>Add text to show off a special feature of your product. Add details about the feature, availability, style, or even provide a review.</p>",
+            "button_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_1",
+        "column_2",
+        "column_3"
+      ],
+      "settings": {
+        "heading": "Product features",
+        "full_width": true,
+        "color_scheme": "1"
+      }
+    }
+  },
+  "order": [
+    "image_banner_section",
+    "main",
+    "richtext",
+    "video_section",
+    "multi_column_section",
+    "related-products"
+  ]
+}

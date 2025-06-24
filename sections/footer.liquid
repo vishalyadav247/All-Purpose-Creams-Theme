@@ -99,7 +99,10 @@
               </p>
               <p class="flex align-center gap-theme">
                   {% render 'icon-phone2' %}
-                  {{ block.settings.phone }}
+                  
+                  <a href="tel:+1{{ block.settings.phone }}">
+                    {{ block.settings.phone }}
+                  </a>
               </p>
               <div class="address-lines flex gap-theme">
                 <div style="width: 26px;"></div>

@@ -26,10 +26,10 @@
             "enable_follow_on_shop": true
           }
         },
-        "address_fLBfNY": {
+        "address_iKfCHY": {
           "type": "address",
           "settings": {
-            "email": "contact@allpurposecreams.com  ",
+            "email": "contact@allpurposecreams.com",
             "phone": "(310) 596-7245",
             "address": "<p>All Purpose Creams</p><p>21175 State Hwy 249 Unit 484</p><p>Houston, TX 77070</p>"
           }
@@ -51,7 +51,7 @@
       },
       "block_order": [
         "text",
-        "address_fLBfNY",
+        "address_iKfCHY",
         "menu_1",
         "menu_2"
       ],

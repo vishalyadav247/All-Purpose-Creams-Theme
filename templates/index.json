@@ -148,7 +148,7 @@
         "text_alignment": "left",
         "text_center_mobile": true,
         "bg_style": "content",
-        "color_scheme": "1",
+        "color_scheme": "none",
         "boundary_effect": ""
       }
     },

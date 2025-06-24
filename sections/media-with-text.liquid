@@ -155,7 +155,7 @@
       <div class="media-with-text__text flex flex-col justify-center h-full align-ltr-{{ section.settings.text_alignment }}{% if section.settings.text_center_mobile %} md-down-text-center{% endif %}
           {%- if bg_color == settings.bg_color or color_scheme == 'none' %} pt-8 md:p-10 lg:p-12 xl:p-20
           {%- else %} p-8 md:p-10 lg:p-12 xl:p-20
-          {%- endif %} mx-auto max-w-prose">
+          {%- endif %} mx-auto max-w-prose" style="background-color:{{ section.settings.content_bg }};">
         {%- if section.settings.heading != blank -%}
           <h2 class="section__heading fade-in-up" data-cc-animate data-cc-animate-delay="0.1s">
             {{- section.settings.heading | escape -}}
@@ -374,6 +374,11 @@
         }
       ],
       "default": "1"
+    },
+    {
+      "type": "color",
+      "id": "content_bg",
+      "label": "Content Background"
     },
     {
       "type": "select",

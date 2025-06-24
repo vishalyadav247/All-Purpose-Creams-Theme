@@ -183,7 +183,9 @@
 
               <div class="card__info flex flex-col flex-auto
                 {%- if section.settings.column_align == 'center' %} items-center{% else %} items-start{% endif %}
-                {%- unless bg_color == false or section.settings.bg_style == 'none' or color_scheme == 'none' %} p-5{% endunless %}">
+                {%- unless bg_color == false or section.settings.bg_style == 'none' or color_scheme == 'none' %} p-5{% endunless %}"
+                style="background-color: {{block.settings.column-bg}};width:100%;"
+                >
                 {%- if block.settings.heading != blank -%}
                   <h3 class="card__heading {{ block.settings.heading_size }}">{{ block.settings.heading | escape }}</h3>
                 {%- endif -%}
@@ -194,13 +196,19 @@
                   </div>
                 {%- endif -%}
 
-                {%- if block.settings.button_label != blank -%}
-                  <div class="mt-6 mb-2">
-                    <a class="{{ block.settings.button_style }}" {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}>
-                      {{- block.settings.button_label | escape -}}
-                    </a>
-                  </div>
-                {%- endif -%}
+                <div class="mt-6 mb-2 multi-column-btn-wrapper">
+                  {% if block.settings.is-newsletter %}
+                    {%- assign form_id = section.id | append: '-signup' -%}
+                    {% render 'newsletter-signup', id: form_id, btn_label:block.settings.button_label, btn_color:'#0061B3' %}
+                  {% else %}
+                    {%- if block.settings.button_label != blank -%}
+                      <a class="{{ block.settings.button_style }}" {% if block.settings.button_link != blank %}href="{{ block.settings.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %}>
+                        {{- block.settings.button_label | escape -}}
+                      </a>
+                    {%- endif -%}
+                  {% endif %}
+                </div>
+                
               </div>
             </div>
           </li>
@@ -455,6 +463,12 @@
           "default": "<p>Pair text with an image to focus on a product, collection or blog post. Add details on availability, style, or even provide a review.</p>"
         },
         {
+          "type": "checkbox",
+          "id": "is-newsletter",
+          "label": "Show Newsletter",
+          "default": false
+        },
+        {
           "type": "text",
           "id": "button_label",
           "label": "Button label"
@@ -483,6 +497,11 @@
             }
           ],
           "default": "feature-link"
+        },
+        {
+          "type": "color",
+          "id": "column-bg",
+          "label": "Background Color"
         }
       ]
     }

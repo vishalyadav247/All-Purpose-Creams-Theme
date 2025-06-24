@@ -1,0 +1,61 @@
+<div class="section">
+    <div class="container">
+        <h2>{{ section.settings.section-heading  }}</h2>
+        <div class="custom-grid">
+            {% for item in section.blocks %}
+                <div>
+                    <a href="{{item.settings.grid-url}}"><img src="{{ item.settings.grid-image | img_url:'1920x' }}" alt="grid-image" width="100%" height="100%"></a>
+                    <a href="{{item.settings.grid-url}}"><h4>{{ item.settings.title }}</h4></a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% schema  %} 
+{
+    "name":"Custom Row Grid",
+    "class": "custom-row-grid-wrapper",
+    "settings": [
+        {
+            "type": "text",
+            "id": "section-heading",
+            "label": "Main Heading",
+            "placeholder": "Add Heading"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "grid-item",
+            "name":"Grid Item",
+            "limit": 4,
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "grid-image",
+                    "label": "Image"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label":"Title"
+                },
+                {
+                    "type": "url",
+                    "id": "grid-url",
+                    "label": "Link"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Custom Row Grid",
+            "blocks": [
+                {
+                    "type":"grid-item"
+                }
+            ]
+        }
+    ]
+}
+{% endschema %}

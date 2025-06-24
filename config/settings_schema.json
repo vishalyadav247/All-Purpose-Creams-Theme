@@ -486,7 +486,7 @@
         "label": "Section height",
         "options": [
           {
-            "value": "32",
+            "value": "30",
             "label": "Small"
           },
           {

@@ -34,15 +34,18 @@
 <footer class="footer{% if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% else %}{% if footer_transparent == true %} footer--transparent{% endif %}{% endif %}">
   {%- if section.blocks.size > 0 -%}
     <div class="container">
-      <div class="footer__main flex flex-wrap lg:flex-nowrap gap-12 gap-y-10">
+      <div class="footer__main">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
+
             {%- when 'link_list' -%}
               <div class="footer-block footer-block--links flex-1" {{ block.shopify_attributes }}>
-                <h2 class="footer-block__heading h6 mb-5 uppercase">{{ block.settings.heading | escape }}</h2>
+                {% if block.settings.heading != blank %}
+                  <h2 class="footer-block__heading h6 mb-5 uppercase">{{ block.settings.heading | escape }}</h2>
+                {% endif %}
                 <ul class="footer-menu" role="list">
                   {%- for link in block.settings.menu.links -%}
-                    <li class="footer-menu__item">
+                    <li class="footer-menu__item" {% if forloop.first and block.settings.heading == blank %}style="margin-top: 0;"{% endif %}>
                       <a href="{{ link.url }}">{{ link.title }}</a>
                     </li>
                   {%- endfor -%}
@@ -50,10 +53,13 @@
               </div>
 
             {%- when 'text' -%}
-              <div class="footer-block footer-block--text w-full md:flex-1 md:grow-[3]" {{ block.shopify_attributes }}>
+              <div class="footer-block footer-block--text flex-1" {{ block.shopify_attributes }}>
                 {%- if block.settings.image != blank -%}
-                  <div class="footer-block__image mb-8" style="max-width: {{ block.settings.image_width }}px;">
+                  <div class="footer-block__image" style="max-width: {{ block.settings.image_width }}px;">
                     {% render 'image', class: "footer-block__image", image: block.settings.image, src_width: block.settings.image_width, srcset_2x: true %}
+                    <div class="mt-2 flex justify-center">
+                      {% render 'social-media', icon: settings.social_custom_icon, icon_height: 34 %}
+                    </div>
                   </div>
                 {%- endif -%}
 
@@ -81,6 +87,22 @@
                   </div>
                 {%- endif -%}
               </div>
+
+            {%- when 'address' -%}
+            <div class="footer-block flex-3 grow-[3] address-block" >
+              <p class="flex align-center gap-theme">
+                  {%  render 'icon-fly' %}
+                  {{ block.settings.email }}
+              </p>
+              <p class="flex align-center gap-theme">
+                  {% render 'icon-phone2' %}
+                  {{ block.settings.phone }}
+              </p>
+              <div class="address-lines flex gap-theme">
+                <div style="width: 26px;"></div>
+                <div>{{ block.settings.address }}</div>
+              </div>
+            </div>
 
             {%- when 'newsletter-signup' -%}
               <div class="footer-block footer-block--newsletter w-full md:flex-1 lg:grow-[2]" {{ block.shopify_attributes }}>
@@ -321,6 +343,28 @@
         {
           "type": "paragraph",
           "content": "Customers who subscribe will have an account created for them. [Learn more](https://help.shopify.com/en/manual/customers/manage-customers)"
+        }
+      ]
+    },
+    {
+      "type": "address",
+      "name":"Address",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "email",
+          "label": "Email"
+        },
+        {
+          "type": "text",
+          "id": "phone",
+          "label": "Phone"
+        },
+        {
+          "type": "richtext",
+          "id": "address",
+          "label": "Address"
         }
       ]
     }

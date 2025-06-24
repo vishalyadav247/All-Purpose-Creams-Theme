@@ -476,7 +476,7 @@
       <div class="header-icons flex items-center justify-end">
         {%- if section.settings.enable_inline_nav -%}
           {%- if shop.customer_accounts_enabled -%}
-            <a class="header-icons__item hidden md:block" href="{{ routes.account_url }}">
+            <a class="header-icons__item" href="{{ routes.account_url }}">
               {% render 'icon-account' %}
               <span class="visually-hidden">{{ 'sections.header.log_in' | t }}</span>
             </a>

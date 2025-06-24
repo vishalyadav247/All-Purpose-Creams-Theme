@@ -1,0 +1,76 @@
+<div class="section">
+  <div class="container">
+    <h2>{{ section.settings.main-heading }}</h2>
+    <div class="testimonial-grid testimonial-slider">
+      {% for testimonial in section.blocks %}
+        <div class="testimonial-card">
+          <div class="testimonial-header">
+            <p
+              class="rating__stars"
+              aria-hidden="true"
+              style="--rating: {{ testimonial.settings.rating }}; --rating-max: 5;">★★★★★</p>
+            <p>
+              <strong>- {{ testimonial.settings.name }}</strong>
+            </p>
+          </div>
+          <div class="testimonial-content">
+            {{ testimonial.settings.testimonial }}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Testimonials Grid",
+    "class": "testimonials-grid-wrapper",
+    "settings": [
+      {
+        "type": "text",
+        "id": "main-heading",
+        "label": "Section Heading"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "testimonial",
+        "name": "Testimonial",
+        "settings": [
+          {
+            "type": "richtext",
+            "id": "testimonial",
+            "label": "Testimonial"
+          }, {
+            "type": "header",
+            "content": "Author"
+          }, {
+            "type": "text",
+            "id": "name",
+            "label": "Name"
+          }, {
+            "type": "range",
+            "id": "rating",
+            "label": "Rating",
+            "info": "Rate Us out of 5",
+            "min": 0,
+            "max": 5,
+            "step": 1,
+            "default": 1
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Testimonial Grid",
+        "blocks": [
+          {
+            "type": "testimonial"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

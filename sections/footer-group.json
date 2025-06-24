@@ -17,48 +17,50 @@
         "text": {
           "type": "text",
           "settings": {
+            "image": "shopify://shop_images/APC_logo_multicolor_5bcd74eb-519c-491d-89c8-63e7df3ad3a8.png",
             "image_width": 150,
-            "heading": "Talk about your store",
-            "text": "<p>Share store details, promotions, or brand content with your customers.</p>",
+            "heading": "",
+            "text": "",
             "button_label": "",
             "button_link": "",
             "enable_follow_on_shop": true
           }
         },
+        "address_fLBfNY": {
+          "type": "address",
+          "settings": {
+            "email": "contact@allpurposecreams.com  ",
+            "phone": "(310) 596-7245",
+            "address": "<p>All Purpose Creams</p><p>21175 State Hwy 249 Unit 484</p><p>Houston, TX 77070</p>"
+          }
+        },
         "menu_1": {
           "type": "link_list",
           "settings": {
-            "heading": "Footer links",
+            "heading": "",
             "menu": "footer"
           }
         },
         "menu_2": {
           "type": "link_list",
           "settings": {
-            "heading": "Footer links",
-            "menu": "footer"
-          }
-        },
-        "newsletter": {
-          "type": "newsletter-signup",
-          "settings": {
-            "heading": "Newsletter",
-            "text": "<p>Sign up for exclusive offers, original stories, events and more.</p>"
+            "heading": "",
+            "menu": "footer-new"
           }
         }
       },
       "block_order": [
         "text",
+        "address_fLBfNY",
         "menu_1",
-        "menu_2",
-        "newsletter"
+        "menu_2"
       ],
       "settings": {
-        "show_powered_by": true,
-        "show_social": true,
+        "show_powered_by": false,
+        "show_social": false,
         "show_payment_icons": true,
-        "enable_country_selector": true,
-        "enable_language_selector": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
         "boundary_effect": ""
       }
     }

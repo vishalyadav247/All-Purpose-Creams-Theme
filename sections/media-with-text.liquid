@@ -92,25 +92,36 @@
 <div class="section
     {%- if section.settings.boundary_effect != blank %} content-boundary content-boundary--{{ section.settings.boundary_effect }}{% endif %}
     {%- if section.settings.bg_style == 'content' and section.settings.boundary_effect != blank %} section--padded section--m-0
-    {%- else %} section--padded section--m-0
+    {%- else %}
     {%- endif %}" id="{{ section.id }}" data-cc-animate>
 
   <div class="container">
-    <div class="media-with-text md:grid md:grid-cols-2{% if section.settings.bg_style == 'content' and color_scheme != 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endif %}{% if bg_color %} content-block{% endif %} overflow-hidden">
+    <div class="media-with-text md:grid-cols-2{% if section.settings.bg_style == 'content' and color_scheme != 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endif %}{% if bg_color %} content-block{% endif %} overflow-hidden">
       <div class="media-with-text__media relative{% if section.settings.media_type == 'video' %} video-section{% endif %} flex flex-col justify-center{% if section.settings.layout == 'right' %} md:order-1{% endif %} h-full overflow-hidden{% unless bg_color %} content-block{% endunless %}">
         {% if image %}
-          <div class="media w-full h-full{% if section.settings.media_type == 'video' %} absolute top-0 left-0 video-played-hidden{% else %} relative{% endif %}" style="padding-top: {{ 1 | divided_by: image.aspect_ratio | times: 100 }}%;" data-cc-animate>
-            {%- capture sizes -%}
-              {%- render 'sizes-attribute', min: 'page', sm: 'page', md: 'calc(50vw - 32px)', lg: 'calc(50vw - 48px)', xl: '600px' -%}
-            {%- endcapture -%}
-            {% render 'image',
-              image: image,
-              widths: '600, 800, 1000, 1200, 1400',
-              mobile_widths: '670, 800',
-              src_width: 600,
-              sizes: sizes,
-              class: 'img-fit'
-            %}
+          <div class="media w-full h-full{% if section.settings.media_type == 'video' %} absolute top-0 left-0 video-played-hidden{% else %} relative{% endif %}" data-cc-animate>
+            <div class="media-carousel"> 
+              {%- capture sizes -%}
+                {%- render 'sizes-attribute', min: 'page', sm: 'page', md: 'calc(50vw - 32px)', lg: 'calc(50vw - 48px)', xl: '600px' -%}
+              {%- endcapture -%}
+              {% render 'image',
+                image: image,
+                widths: '600, 800, 1000, 1200, 1400',
+                mobile_widths: '670, 800',
+                src_width: 600,
+                sizes: sizes,
+              %}
+              {% if section.settings.image2 %}
+                {%  assign image2 = section.settings.image2 %}
+                {% render 'image',
+                image: image2,
+                widths: '600, 800, 1000, 1200, 1400',
+                mobile_widths: '670, 800',
+                src_width: 600,
+                sizes: sizes,
+              %}
+              {% endif %}
+            </div> 
           </div>
         {% elsif section.settings.media_type == 'video' %}
           <div class="media h-full w-full absolute top-0 left-0 video-played-hidden">
@@ -192,13 +203,23 @@
     },
     {
       "type": "header",
-      "content": "Image"
+      "content": "Images",
+      "info":"Add Two or more images to view as carousel"
     },
     {
       "type": "image_picker",
       "id": "image",
-      "label": "Image",
-      "info": "For best results, use an image with a minimum width of 1200px."
+      "label": "First Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image2",
+      "label": "Second Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image3",
+      "label": "Third Image"
     },
     {
       "type": "header",

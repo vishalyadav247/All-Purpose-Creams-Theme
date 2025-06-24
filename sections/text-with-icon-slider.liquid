@@ -1,0 +1,141 @@
+<div class="text-with-icon section">
+  <div class="wrapper">
+    <div class="row carousel owl-carousel" style="background-color:{{ section.settings.bg-color }};">
+
+      <div class="first-col ">
+        <a href="{{ section.settings.firstlink }}">
+          <div class="col ">
+            <div class="image">
+              {{ section.settings.image1 }}
+            </div>
+            <div class="text">
+              <h4 class="title">{{ section.settings.text1 }}</h4>
+              <p>{{ section.settings.discription1 }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="second-col">
+        <a href="{{ section.settings.secondlink }}">
+          <div class="col">
+            <div class="image">
+              {{ section.settings.image2 }}
+            </div>
+            <div class="text">
+              <h4 class="title">{{ section.settings.text2 }}</h4>
+              <p>{{ section.settings.discription2 }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="third-col">
+        <a href="{{ section.settings.thirdlink }}">
+          <div class="col">
+            <div class="image">
+              {{ section.settings.image3 }}
+            </div>
+            <div class="text">
+              <h4 class="title">{{ section.settings.text3 }}</h4>
+              <p>{{ section.settings.discription3 }}</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Text And Icon Slider",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Content"
+      },
+      {
+        "type": "header",
+        "content": "First Column"
+      },
+      {
+        "id": "image1",
+        "type": "html",
+        "label": "Svg Icon Code"
+      },
+      {
+        "id": "text1",
+        "type": "text",
+        "label": "Title",
+        "default": "Title 1"
+      }, {
+        "id": "discription1",
+        "type": "text",
+        "label": "Description",
+        "default": "Description 1"
+      }, {
+        "id": "firstlink",
+        "type": "url",
+        "label": "Link"
+      }, {
+        "type": "header",
+        "content": "Second Column"
+      }, {
+        "id": "image2",
+        "type": "html",
+        "label": "Svg Icon Code "
+      }, {
+        "id": "text2",
+        "type": "text",
+        "label": "Title",
+        "default": "Title 2"
+      }, {
+        "id": "discription2",
+        "type": "text",
+        "label": "Description",
+        "default": "Description 2"
+      }, {
+        "id": "secondlink",
+        "type": "url",
+        "label": "Link"
+      }, {
+        "type": "header",
+        "content": "Third Column"
+      }, {
+        "id": "image3",
+        "type": "html",
+        "label": "Svg Icon Code"
+      }, {
+        "id": "text3",
+        "type": "text",
+        "label": "Title",
+        "default": "Title 3"
+      }, {
+        "id": "discription3",
+        "type": "text",
+        "label": "Description",
+        "default": "Description 3"
+      }, {
+        "id": "thirdlink",
+        "type": "url",
+        "label": "Link"
+      }, {
+        "type": "header",
+        "content": "Settings"
+      }, {
+        "type": "color",
+        "id": "bg-color",
+        "label": "Background Color"
+      }
+    ],
+
+    "presets": [
+      {
+        "name": "Text And Icon Slider",
+        "category": "section"
+      }
+    ]
+  }
+{% endschema %}

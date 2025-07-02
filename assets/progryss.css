@@ -589,12 +589,14 @@ h3 {
 }
 .banner{
   .banner__text{
+    text-align: center;
     h1{
       font-size: 28px;
     }
   }
   @media(min-width:766px){
      .banner__text{
+       text-align: left;
     h1{
       font-size: 36px;
     }

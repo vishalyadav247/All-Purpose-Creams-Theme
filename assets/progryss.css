@@ -594,8 +594,10 @@ h3 {
     }
   }
   .card:last-child {
-    .Treats-Text{
-      padding:5px; background-color:#0087524D;text-transform: uppercase;
+    .Treats-Text {
+      padding: 10px 0;
+      background-color: #0087524d;
+      text-transform: uppercase;
     }
     .Short-Excerpt {
       color: #8a8a8a;

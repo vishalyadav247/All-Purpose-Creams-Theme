@@ -1,0 +1,37 @@
+{%- liquid
+  if focal_point
+    assign img_crop = focal_point | split: '-' | last
+  endif
+  assign hero_height_2x = section.settings.hero_height_mobile | times: 2
+  assign class = 'img-fit'
+  if focal_point and focal_point != 'object-center'
+    assign class = class | append: ' ' | append: focal_point
+  endif
+-%}
+
+<div class="banner__image absolute top-0 left-0 w-full h-full lg:hidden">
+  <picture>
+    {%- if img.width < 750 or img.height < hero_height_2x -%}
+      {%- assign img_ratio_mobile = 375.0 | divided_by: section.settings.hero_height_mobile -%}
+      {%- assign img_width = img.width -%}
+      {%- assign img_height = img.width | divided_by: img_ratio_mobile | round -%}
+      <source srcset="{{ img | image_url: width: img_width, height: img_height, crop: img_crop }}"
+              media="(max-width: 749px)"
+              width="{{ img_width }}"
+              height="{{ img_height }}">
+    {%- else -%}
+      <source srcset="{{ img | image_url: width: 750, height: hero_height_2x, crop: img_crop }} 750w
+                       {%- if img.width >= 856 %}, {{ img | image_url: width: 856, height: hero_height_2x, crop: img_crop }} 856w{% endif -%}"
+              media="(max-width: 749px)"
+              width="428"
+              height="{{ section.settings.hero_height_mobile }}">
+    {%- endif -%}
+
+    {% render 'image',
+      image: img,
+      widths: '428, 600, 750',
+      src_width: 600,
+      class: class
+    %}
+  </picture>
+</div>

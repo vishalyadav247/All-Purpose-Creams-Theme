@@ -29,7 +29,7 @@
     <span class="rating__count">({{ rating_count }})</span>
   {% elsif rating_count != blank -%}
     <span class="rating__count">
-      {{ 'products.product.reviews_count' | t: count: rating_count }}
-    </span> <span> Reviews</span>
+      {{ 'products.product.reviews_count' | t: count: rating_count }} Reviews
+    </span>
   {%- endif %}
 </div>

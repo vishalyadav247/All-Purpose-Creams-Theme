@@ -615,6 +615,12 @@ h3 {
         font-size: var(--body_font_size3);
         line-height: normal;
       }
+      .price{
+        font-size: var(--body_font_size2);
+      }
+      .card__rating{
+        font-size: var(--body_font_size2);
+      }
     }
     .Treats-Text {
       padding: 8px 0;

@@ -612,7 +612,8 @@ h3 {
   .card:last-child {
     .card__info{
       .card__title{
-        font-size: var(--body_font_size2)
+        font-size: var(--body_font_size3);
+        line-height: normal;
       }
     }
     .Treats-Text {

@@ -598,3 +598,10 @@ h3 {
     }
   }
 }
+.product-list{
+  .card{
+    .card__media{
+      border: 1px solid #E1E1E1;
+    }
+  }
+}

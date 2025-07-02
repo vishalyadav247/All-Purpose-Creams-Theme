@@ -610,6 +610,11 @@ h3 {
     }
   }
   .card:last-child {
+    .card__info{
+      .card__title{
+        font-size: var(--body_font_size2)
+      }
+    }
     .Treats-Text {
       padding: 8px 0;
       background-color: #0087524d;

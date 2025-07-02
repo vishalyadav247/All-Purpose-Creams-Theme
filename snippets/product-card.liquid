@@ -132,11 +132,10 @@
       {%- render 'product-label', product: product, limit: 2 -%}
     </div>
 
-    <div class="Treats-Text md:flex flex-auto flex-col relative">
+    <div class=" md:flex flex-auto flex-col relative">
    {% if product.metafields.custom.treats_text %}
         <div
-          class="flex justify-center text-lg flex-wrap text-center"
-          style="padding:5px; background-color:#0087524D;text-transform: uppercase;"
+          class="Treats-Text flex justify-center text-lg flex-wrap text-center"
         >
           <strong>Treat: </strong>{{ product.metafields.custom.treats_text }}
         </div>

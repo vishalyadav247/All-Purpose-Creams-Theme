@@ -621,7 +621,7 @@ h3 {
       .card__rating{
         font-size: var(--body_font_size2);
         .rating__stars{
-          font-size: var(--body_font_size3);
+          font-size: 26px;
         }
       }
     }

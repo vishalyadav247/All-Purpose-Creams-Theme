@@ -12,20 +12,52 @@
     "hero": {
       "type": "hero-banner-coll",
       "settings": {
+        "hero_height_desktop": 360,
+        "hero_height_mobile": 240,
+        "bg_style": "image",
+        "boundary_effect": "bottom",
+        "show_contrast_logo": true,
+        "hero_bg_color": "#eeeeee",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#333333",
+        "image_align": "object-center",
+        "hero_tint_color": "#000000",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_description": true,
         "show_breadcrumbs": true
       }
     },
     "main": {
       "type": "main-collection",
-      "settings": {}
+      "settings": {
+        "products_per_page": 24,
+        "card_size": "medium",
+        "show_prod_totals": true,
+        "enable_filtering": false,
+        "show_filter_counts": true,
+        "filters_open": "some",
+        "max_filter_options": 7,
+        "enable_sorting": true,
+        "sort_show_featured": false,
+        "sort_show_best": true,
+        "sort_show_alpha": true,
+        "sort_show_price": true,
+        "sort_show_date": true
+      }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
         "heading": "Trending",
+        "collection": "",
         "layout": "carousel",
         "card_size": "small",
-        "products_to_show": 12
+        "products_to_show": 12,
+        "show_view_all": false,
+        "full_width": true,
+        "color_scheme": "2",
+        "boundary_effect": ""
       }
     },
     "rich_text": {
@@ -35,13 +67,15 @@
           "type": "heading",
           "settings": {
             "heading": "Collection description",
-            "heading_size": "h2"
+            "heading_size": "h2",
+            "heading_h1": false
           }
         },
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Describe your collection, share information about your brand and products.</p>"
+            "text": "<p>Describe your collection, share information about your brand and products.</p>",
+            "text_size": 100
           }
         }
       },
@@ -50,7 +84,11 @@
         "text"
       ],
       "settings": {
-        "color_scheme": "none"
+        "text_alignment": "center",
+        "full_width_content": false,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
       }
     }
   },

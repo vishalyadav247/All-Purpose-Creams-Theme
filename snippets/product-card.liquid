@@ -132,7 +132,7 @@
       {%- render 'product-label', product: product, limit: 2 -%}
     </div>
 
-    <div class="md:flex flex-auto flex-col relative">
+    <div class="Treats-Text md:flex flex-auto flex-col relative">
    {% if product.metafields.custom.treats_text %}
         <div
           class="flex justify-center text-lg flex-wrap text-center"
@@ -252,7 +252,7 @@
             {{- product.title | escape -}}
           </a>
         </p>
-   <p>{{ product.metafields.custom.short_excerpt }}</p>
+   <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p>
         {%- render 'price', product: product -%}
 
         {%- if product.metafields.reviews.rating.value != blank and settings.card_show_rating -%}

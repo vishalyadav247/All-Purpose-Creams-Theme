@@ -604,4 +604,8 @@ h3 {
       border: 1px solid #E1E1E1;
     }
   }
+  .card::last-child{
+    .Short-Excerpt{
+   color: #8A8A8A;}
+  }
 }

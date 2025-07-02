@@ -34,7 +34,7 @@
       "type": "main-collection",
       "settings": {
         "products_per_page": 24,
-        "card_size": "medium",
+        "card_size": "large",
         "show_prod_totals": true,
         "enable_filtering": false,
         "show_filter_counts": true,

@@ -1,4 +1,6 @@
 {%- liquid
+  assign mobile_img = collection.metafields.custom.mobile_banner_coll.value
+  assign focal_point = mobile_img.presentation.focal_point
   if focal_point
     assign img_crop = focal_point | split: '-' | last
   endif
@@ -9,29 +11,31 @@
   endif
 -%}
 
-<div class="banner__image absolute top-0 left-0 w-full h-full lg:hidden">
-  <picture>
-    {%- if img.width < 750 or img.height < hero_height_2x -%}
-      {%- assign img_ratio_mobile = 375.0 | divided_by: section.settings.hero_height_mobile -%}
-      {%- assign img_width = img.width -%}
-      {%- assign img_height = img.width | divided_by: img_ratio_mobile | round -%}
-      <source srcset="{{ img | image_url: width: img_width, height: img_height, crop: img_crop }}"
-              media="(max-width: 749px)"
-              width="{{ img_width }}"
-              height="{{ img_height }}">
-    {%- else -%}
-      <source srcset="{{ img | image_url: width: 750, height: hero_height_2x, crop: img_crop }} 750w
-                       {%- if img.width >= 856 %}, {{ img | image_url: width: 856, height: hero_height_2x, crop: img_crop }} 856w{% endif -%}"
-              media="(max-width: 749px)"
-              width="428"
-              height="{{ section.settings.hero_height_mobile }}">
-    {%- endif -%}
+{%- if mobile_img != blank -%}
+  <div class="banner__image absolute top-0 left-0 w-full h-full lg:hidden">
+    <picture>
+      {%- if mobile_img.width < 750 or mobile_img.height < hero_height_2x -%}
+        {%- assign img_ratio_mobile = 375.0 | divided_by: section.settings.hero_height_mobile -%}
+        {%- assign img_width = mobile_img.width -%}
+        {%- assign img_height = mobile_img.width | divided_by: img_ratio_mobile | round -%}
+        <source srcset="{{ mobile_img | image_url: width: img_width, height: img_height, crop: img_crop }}"
+                media="(max-width: 749px)"
+                width="{{ img_width }}"
+                height="{{ img_height }}">
+      {%- else -%}
+        <source srcset="{{ mobile_img | image_url: width: 750, height: hero_height_2x, crop: img_crop }} 750w
+                         {%- if mobile_img.width >= 856 %}, {{ mobile_img | image_url: width: 856, height: hero_height_2x, crop: img_crop }} 856w{% endif -%}"
+                media="(max-width: 749px)"
+                width="428"
+                height="{{ section.settings.hero_height_mobile }}">
+      {%- endif -%}
 
-    {% render 'image',
-      image: img,
-      widths: '428, 600, 750',
-      src_width: 600,
-      class: class
-    %}
-  </picture>
-</div>
+      {% render 'image',
+        image: mobile_img,
+        widths: '428, 600, 750',
+        src_width: 600,
+        class: class
+      %}
+    </picture>
+  </div>
+{%- endif -%}

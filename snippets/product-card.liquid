@@ -133,6 +133,14 @@
     </div>
 
     <div class="md:flex flex-auto relative">
+   {% if product.metafields.custom.treats_text %}
+        <div
+          class="flex justify-center text-lg flex-wrap text-center"
+          style="padding:5px; background-color:#0087524D;text-transform: uppercase;"
+        >
+          <strong>Treat: </strong>{{ product.metafields.custom.treats_text }}
+        </div>
+      {% endif %}
       <div class="card__info w-full align-ltr-{{ settings.prod_card_text_alignment }}">
         {%- if settings.card_colors_style != 'none' -%}
           {%- for option in product.options_with_values -%}
@@ -244,7 +252,7 @@
             {{- product.title | escape -}}
           </a>
         </p>
-
+   <p>{{ product.metafields.custom.short_excerpt }}</p>
         {%- render 'price', product: product -%}
 
         {%- if product.metafields.reviews.rating.value != blank and settings.card_show_rating -%}

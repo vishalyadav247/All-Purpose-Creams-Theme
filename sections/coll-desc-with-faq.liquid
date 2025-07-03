@@ -39,6 +39,8 @@
 {{ faq_list }}
 
 </section>
+<p>Debug: {{ faq_list | inspect }}</p>
+
 {% assign faq_ids = "" | split: "" %}
 {% for faq in faq_list.value %}
   {% assign faq_ids = faq_ids | push: faq.id %}

@@ -82,9 +82,11 @@ faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
     // Close all
     faqContainer.querySelectorAll('.faq-answer').forEach((el) => {
       el.style.maxHeight = null;
-        answer.style.marginTop = "0px"; 
     });
     faqContainer.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
+faqContainer.querySelectorAll('.faq-answer').forEach((el) => {
+  el.style.marginTop = "0px";
+});
 
     // Open current
     if (!isOpen) {

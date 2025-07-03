@@ -10,9 +10,9 @@
     </div>
   {% endif %}
 
-  {% assign faq_list = collection.metafields.custom.faqs %}
+{% assign faq_list = collection.metafields.custom.faqs %}
 
-{% if faq_list != blank %}
+{% if faq_list != blank and faq_list.references != blank %}
   <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
     <h3 class="text-xl font-semibold mb-6 text-center">
       {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
@@ -20,19 +20,22 @@
     <div class="accordion space-y-4">
       {% for faq_item in faq_list.references %}
         {% assign faq = faq_item.value %}
-        <details class="border-b pb-3">
-          <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-            {{ faq.question }}
-            <span class="text-gray-500">▼</span>
-          </summary>
-          <div class="mt-2 text-gray-600">
-            {{ faq.answer }}
-          </div>
-        </details>
+        {% if faq != blank %}
+          <details class="border-b pb-3">
+            <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
+              {{ faq.question }}
+              <span class="text-gray-500">▼</span>
+            </summary>
+            <div class="mt-2 text-gray-600">
+              {{ faq.answer }}
+            </div>
+          </details>
+        {% endif %}
       {% endfor %}
     </div>
   </div>
 {% endif %}
+
 
 </section>
 

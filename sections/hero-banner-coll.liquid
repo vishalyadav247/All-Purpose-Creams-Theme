@@ -71,11 +71,12 @@
     {% render 'hero-banner-image', img: img, focal_point: focal_point %}
   </div>
 
-  {% if mobile_img %}
-    <div class="banner-mobile-image">
-      {% render 'custom-mob-banner-coll', img: mobile_img, focal_point: focal_point %}
-    </div>
-  {% endif %}
+ {%- assign mobile_img = collection.metafields.custom.mobile_banner_coll.value -%}
+{% if mobile_img %}
+  <div class="banner-mobile-image">
+    {% render 'custom-mob-banner-coll', img: mobile_img %}
+  </div>
+{% endif %}
 
   <span class="banner__overlay absolute top-0 left-0 w-full h-full"></span>
 {%- endif -%}

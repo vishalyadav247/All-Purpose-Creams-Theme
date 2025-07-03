@@ -39,13 +39,15 @@
 {{ faq_list }}
 
 </section>
+{% assign faq_ids = "" | split: "" %}
+{% for faq in faq_list.value %}
+  {% assign faq_ids = faq_ids | push: faq.id %}
+{% endfor %}
 <script>
-  window.faqs = {{ faq_list | json }};
-</script>
-<script>
-  window.faq_list = {{ faq_list | json }};
+  window.faq_list = {{ faq_ids | json }};
   console.log(window.faq_list);
 </script>
+
 
 {% schema %}
 {

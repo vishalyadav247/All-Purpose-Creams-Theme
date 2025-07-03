@@ -9,44 +9,6 @@
       </div>
     </div>
   {% endif %}
-
-{% assign faq_list = collection.metafields.custom.faqs %}
-  <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
-    <h3 class="text-xl font-semibold mb-6 text-center">
-      {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
-    </h3>
-    <div class="accordion space-y-4">
-      {% for faq_item in faq_list.refrences %}
-        {% assign faq = faq_item.value %}
-        <details class="border-b pb-3">
-          <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-            {{ faq.question }}
-            <span class="text-gray-500">▼</span>
-          </summary>
-          <div class="mt-2 text-gray-600">
-            {{ faq.answer }}
-          </div>
-        </details>
-      {% endfor %}
-    </div>
-  </div>
-{% assign faq_list = collection.metafields.custom.faqs %}
-
-{% if faq_list and faq_list.references.size > 0 %}
-  <ul>
-    {% for faq_item in faq_list.references %}
-      {% assign faq = faq_item.value %}
-      <li>
-        <strong>Q:</strong> {{ faq.question }}<br>
-        <strong>A:</strong> {{ faq.answer }}
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No FAQs found for this collection.</p>
-{% endif %}
-
-</section>
 {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
 {% if faq_list %}
@@ -56,6 +18,7 @@
     </h3>
     <div id="faq-list" class="space-y-4"></div>
   </div>
+</section>
 
   <script>
     const faqData = {{ faq_list | json }};

@@ -83,11 +83,12 @@ faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
       el.style.maxHeight = null;
     });
     faqContainer.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
-
+faqContainer.querySelectorAll('.faq-question').forEach(el => el.classList.remove('underline'));
     // Open current
     if (!isOpen) {
       answer.style.maxHeight = answer.scrollHeight + "px";
       icon.style.transform = 'rotate(180deg)';
+        this.classList.add('underline'); 
     }
   });
 });

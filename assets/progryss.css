@@ -623,6 +623,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
       .card__title{
         font-size: var(--body_font_size2);
         line-height: normal;
+        font-family: Montserrat;
       }
       .price{
         font-size: var(--body_font_size2);

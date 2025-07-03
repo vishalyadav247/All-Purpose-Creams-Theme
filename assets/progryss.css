@@ -628,7 +628,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
         font-size: var(--body_font_size2);
       }
       .card__rating{
-        font-size: var(--body_font_size2);
+        font-size: var(--body_font_size1);
         .rating__stars{
           font-size: 26px;
         }

@@ -8,7 +8,21 @@
   Usage:
   {% render 'product-card', product: product %}
 {%- endcomment -%}
+<style>
+  .top-rated-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: #ffce00;
+  color: #000;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  z-index: 10;
+}
 
+</style>
 {%- liquid
   assign current_variant = product.selected_or_first_available_variant
   assign product_images = product.media | where: 'media_type', 'image'
@@ -72,7 +86,10 @@
 
 {%- if product and product != empty -%}
   <product-card class="card card--product relative grow flex w-full{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
-  
+   {% assign rating = product.metafields.reviews.rating.value | default: 0 %}
+{% if rating >= 5 %}
+  <div class="top-rated-badge">Top Rated</div>
+{% endif %}
 
   <div class="card__media{% if show_hover_image %} has-hover-image{% endif %} relative">
       <a href="{{ product_url }}" class="media block relative js-prod-link" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;" tabindex="-1">

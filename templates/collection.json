@@ -54,11 +54,32 @@
         "faq_heading": "All Purpose Creams Frequently Asked Questions",
         "color_scheme": "3"
       }
+    },
+    "testimonial_grid_kzCdUH": {
+      "type": "testimonial-grid",
+      "blocks": {
+        "testimonial_QEyg9c": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "",
+            "name": "",
+            "rating": 1
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_QEyg9c"
+      ],
+      "name": "Testimonial Grid",
+      "settings": {
+        "main-heading": "See why our customers love all purpose creams"
+      }
     }
   },
   "order": [
     "hero",
     "main",
-    "coll_desc_with_faq_Hjbf7z"
+    "coll_desc_with_faq_Hjbf7z",
+    "testimonial_grid_kzCdUH"
   ]
 }

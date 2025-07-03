@@ -603,6 +603,13 @@ h3 {
   }
   }
 }
+.results-header{
+  .results-header__sortby{
+    #sort-by{
+      color: #000;
+    }
+  }
+}
 .product-list {
   .card {
     .card__media {

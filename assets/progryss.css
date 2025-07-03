@@ -638,7 +638,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
       padding: 8px 0;
       background-color: #0087524d;
       text-transform: uppercase;
-      font-weight: var(--font-semibold);
+      font-weight:600;
     }
     .Short-Excerpt {
       color: #8a8a8a;

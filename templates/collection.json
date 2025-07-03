@@ -61,14 +61,41 @@
         "testimonial_QEyg9c": {
           "type": "testimonial",
           "settings": {
-            "testimonial": "",
-            "name": "",
+            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
+            "name": "Erum S.",
+            "rating": 1
+          }
+        },
+        "testimonial_TUQrgw": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</p>",
+            "name": "Tatiana T.",
+            "rating": 1
+          }
+        },
+        "testimonial_RdBezX": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>I have already noticed my dark spots fading after 3 weeks of consistent use.</p>",
+            "name": "Erica B.",
+            "rating": 1
+          }
+        },
+        "testimonial_Jc6fCP": {
+          "type": "testimonial",
+          "settings": {
+            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
+            "name": "Erum S.",
             "rating": 1
           }
         }
       },
       "block_order": [
-        "testimonial_QEyg9c"
+        "testimonial_QEyg9c",
+        "testimonial_TUQrgw",
+        "testimonial_RdBezX",
+        "testimonial_Jc6fCP"
       ],
       "name": "Testimonial Grid",
       "settings": {

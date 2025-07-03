@@ -621,7 +621,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
   .card:last-child {
     .card__info{
       .card__title{
-        font-size: var(--body_font_size3);
+        font-size: var(--body_font_size2);
         line-height: normal;
       }
       .price{

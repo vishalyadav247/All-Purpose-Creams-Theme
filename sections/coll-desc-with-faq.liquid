@@ -10,14 +10,23 @@
     </div>
   {% endif %}
 
-<div id="faq-accordion" class="accordion space-y-4">
-  <p class="text-center text-gray-600">Loading FAQs...</p>
-</div>
+  <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
+    <h3 class="text-xl font-semibold mb-6 text-center">
+      {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
+    </h3>
+    <div id="faq-accordion" class="accordion space-y-4">
+      <p class="text-center text-gray-600">Loading FAQs...</p>
+    </div>
+  </div>
 </section>
 
 {% comment %}
-  pass GIDs for JS fallback
+  Pass GIDs from metafield to JavaScript:
 {% endcomment %}
+<script>
+  window.faq_list = {{ collection.metafields.custom.faqs | json }};
+</script>
+
 <script>
 async function loadFaqs(gids) {
   if (!gids || gids.length === 0) return;
@@ -76,7 +85,7 @@ function renderFaqs(faqItems) {
   container.innerHTML = html;
 }
 
-if (window.faq_list) {
+if (window.faq_list && window.faq_list.length > 0) {
   loadFaqs(window.faq_list);
 }
 </script>

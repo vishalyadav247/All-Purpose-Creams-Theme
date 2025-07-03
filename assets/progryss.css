@@ -675,12 +675,6 @@ h3 {
     }
     .collection-description {
       font-size: var(--body_font_size2);
-      p {
-        margin: 0px;
-        span{
-              margin: 0 0 1em;
-        }
-      }
     }
   }
   .faq-block {

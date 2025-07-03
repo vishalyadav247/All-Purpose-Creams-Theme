@@ -1,70 +1,91 @@
-<section class="faq-description-section">
-  {% if collection.description != blank %}
-    <div class="description-block text-white bg-blue-200 px-6 py-10 text-center">
-      {% if section.settings.heading != blank %}
-        <h2 class="text-2xl font-bold mb-4">{{ section.settings.heading }}</h2>
-      {% endif %}
-      <div class="collection-description text-base leading-relaxed max-w-3xl mx-auto">
-        {{ collection.description }}
+{%- liquid
+  assign color_scheme = section.settings.color_scheme
+  assign bg_color = false
+
+  if color_scheme == '1'
+    assign bg_color = settings.color_scheme_1_bg
+    assign bg_gradient = settings.color_scheme_1_gradient
+  elsif color_scheme == '2'
+    assign bg_color = settings.color_scheme_2_bg
+    assign bg_gradient = settings.color_scheme_2_gradient
+  elsif color_scheme == '3'
+    assign bg_color = settings.color_scheme_3_bg
+    assign bg_gradient = settings.color_scheme_3_gradient
+  endif
+
+  if bg_gradient != blank
+    assign bg_color = true
+  elsif bg_color == blank or bg_color == 'rgba(0,0,0,0)' or bg_color == settings.bg_color
+    assign bg_color = false
+  endif
+-%}
+
+<section class="faq-description-section section{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+  <div class="{% if section.settings.full_width or bg_color %}container {% endif %}reading-width">
+    {%- if collection.description != blank -%}
+      <div class="description-block text-white bg-blue-200 px-6 py-10 text-center">
+        {% if section.settings.heading != blank %}
+          <h2 class="text-2xl font-bold mb-4">{{ section.settings.heading }}</h2>
+        {% endif %}
+        <div class="collection-description text-base leading-relaxed max-w-3xl mx-auto">
+          {{ collection.description }}
+        </div>
       </div>
-    </div>
-  {%- assign faq_list = collection.metafields.custom.faqs.value -%}
+    {%- endif -%}
 
-{% if faq_list %}
-  <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
-    <h3 class="text-xl font-semibold mb-6 text-center">
-      {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
-    </h3>
-    <div id="faq-list" class="space-y-4"></div>
+    {%- assign faq_list = collection.metafields.custom.faqs.value -%}
+
+    {% if faq_list %}
+      <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
+        <h3 class="text-xl font-semibold mb-6 text-center">
+          {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
+        </h3>
+        <div id="faq-list" class="space-y-4"></div>
+      </div>
+    {% endif %}
   </div>
-  {% endif %}
-
 </section>
 
-  <script>
-    const faqData = {{ faq_list | json }};
+<script>
+  const faqData = {{ faq_list | json }};
+  const faqContainer = document.getElementById('faq-list');
 
-    const faqContainer = document.getElementById('faq-list');
+  if (Array.isArray(faqData) && faqData.length > 0) {
+    let html = '';
+    faqData.forEach((faq) => {
+      html += `
+        <div class="faq-item border-b pb-3">
+          <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
+            <span>${faq.question}</span>
+            <span class="icon text-gray-500 transition-transform duration-300">▼</span>
+          </button>
+          <div class="faq-answer mt-2 text-gray-600 hidden">
+            ${faq.answer}
+          </div>
+        </div>`;
+    });
+    faqContainer.innerHTML = html;
 
-    if (Array.isArray(faqData) && faqData.length > 0) {
-      let html = '';
-      faqData.forEach((faq, index) => {
-        html += `
-          <div class="faq-item border-b pb-3">
-            <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
-              <span>${faq.question}</span>
-              <span class="icon text-gray-500 transition-transform duration-300">▼</span>
-            </button>
-            <div class="faq-answer mt-2 text-gray-600 hidden">
-              ${faq.answer}
-            </div>
-          </div>`;
+    faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', function () {
+        const answer = this.nextElementSibling;
+        const icon = this.querySelector('.icon');
+
+        const isOpen = answer.classList.contains('hidden');
+
+        document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
+
+        if (!isOpen) {
+          answer.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+        }
       });
-      faqContainer.innerHTML = html;
-
-      // Add JS interaction
-      faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
-        btn.addEventListener('click', function () {
-          const answer = this.nextElementSibling;
-          const icon = this.querySelector('.icon');
-
-          // Toggle open/close
-          if (answer.classList.contains('hidden')) {
-            document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
-            answer.classList.remove('hidden');
-            icon.style.transform = 'rotate(180deg)';
-          } else {
-            answer.classList.add('hidden');
-            icon.style.transform = 'rotate(0deg)';
-          }
-        });
-      });
-    } else {
-      faqContainer.innerHTML = "<p>No FAQs available.</p>";
-    }
-  </script>
-{% endif %}
+    });
+  } else {
+    faqContainer.innerHTML = "<p>No FAQs available.</p>";
+  }
+</script>
 
 {% schema %}
 {
@@ -81,6 +102,30 @@
       "id": "faq_heading",
       "label": "FAQ Heading",
       "default": "Frequently Asked Questions"
+    },
+     {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "1",
+          "label": "Scheme 1"
+        },
+        {
+          "value": "2",
+          "label": "Scheme 2"
+        },
+        {
+          "value": "3",
+          "label": "Scheme 3"
+        }
+      ],
+      "default": "none"
     }
   ],
   "presets": [

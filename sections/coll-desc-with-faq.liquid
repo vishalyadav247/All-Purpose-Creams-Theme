@@ -10,43 +10,14 @@
     </div>
   {% endif %}
 
-  {% assign faq_list = collection.metafields.custom.faqs %}
-
-  <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
-    <h3 class="text-xl font-semibold mb-6 text-center">
-      {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
-    </h3>
-
-    <div id="faq-accordion" class="accordion space-y-4">
-      {% if faq_list != blank and faq_list.references != blank %}
-        {% for faq_item in faq_list.references %}
-          {% assign faq = faq_item.value %}
-          {% if faq != blank %}
-            <details class="border-b pb-3">
-              <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-                {{ faq.question.value }}
-                <span class="text-gray-500">▼</span>
-              </summary>
-              <div class="mt-2 text-gray-600">
-                {{ faq.answer.value }}
-              </div>
-            </details>
-          {% endif %}
-        {% endfor %}
-      {% else %}
-        <p class="text-center text-gray-600">Loading FAQs...</p>
-      {% endif %}
-    </div>
-  </div>
+<div id="faq-accordion" class="accordion space-y-4">
+  <p class="text-center text-gray-600">Loading FAQs...</p>
+</div>
 </section>
 
 {% comment %}
   pass GIDs for JS fallback
 {% endcomment %}
-<script>
-  window.faq_list = {{ faq_list | json }};
-</script>
-
 <script>
 async function loadFaqs(gids) {
   if (!gids || gids.length === 0) return;
@@ -56,7 +27,6 @@ async function loadFaqs(gids) {
       nodes(ids: $ids) {
         ... on Metaobject {
           id
-          handle
           fields {
             key
             value
@@ -66,7 +36,7 @@ async function loadFaqs(gids) {
     }
   `;
 
-  const response = await fetch("/api/2024-04/graphql.json", {
+  const response = await fetch("https://YOUR-SHOP.myshopify.com/api/2024-04/graphql.json", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -106,8 +76,7 @@ function renderFaqs(faqItems) {
   container.innerHTML = html;
 }
 
-// fallback JS fetch if references are missing
-if (window.faq_list && window.faq_list.references?.length === 0) {
+if (window.faq_list) {
   loadFaqs(window.faq_list);
 }
 </script>

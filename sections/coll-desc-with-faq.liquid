@@ -17,7 +17,7 @@
     </h3>
     <div class="accordion space-y-4">
       {% for faq_item in faq_list.references %}
-        {% assign faq = faq_item.value %}
+        {% assign faq = faq_item %}
         <details class="border-b pb-3">
           <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
             {{ faq.question }}

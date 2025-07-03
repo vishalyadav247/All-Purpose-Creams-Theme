@@ -35,7 +35,11 @@
   </div>
 {% endif %}
 <pre>{{ faq | json }}</pre>
-<pre>{{ collection.metafields | json }}</pre>
+<pre>
+faq_list type:
+{{ collection.metafields.custom.faqs.type }}
+</pre>
+>
 </section>
 
 {% schema %}

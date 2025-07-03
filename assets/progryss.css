@@ -653,6 +653,9 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     opacity: 1;
   }
   }
+@media(min-width:767px){
+  
+}
 @media(max-width:767px){
   .breadcrumbs{
     display: block;
@@ -663,6 +666,11 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     color:#fff;
   }
   .description-block{
+    @media(min-width:767px){
+  h3{
+    padding-top: 60px;
+  }
+}
     .collection-description{
       font-size: var(--body_font_size2);
       p{

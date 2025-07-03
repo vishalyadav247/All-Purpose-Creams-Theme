@@ -658,3 +658,14 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     display: block;
   }
 }
+.faq-description-section{
+  .description-block{
+    
+  }
+  .faq-block{
+    .faq-item {
+          background: #fff;
+    padding: 20px 40px;
+    }
+  }
+}

@@ -1,16 +1,22 @@
 {%- liquid
-  assign focal_point = img.presentation.focal_point
-  if focal_point
-    assign img_crop = focal_point | split: '-' | last
-  endif
-  assign hero_height_2x = section.settings.hero_height_mobile | times: 2
-  assign class = 'img-fit'
-  if focal_point and focal_point != 'object-center'
-    assign class = class | append: ' ' | append: focal_point
-  endif
+  assign img = collection.metafields.custom.mobile_banner_coll.value
 -%}
 
 {%- if img != blank -%}
+  {%- liquid
+    assign focal_point = img.presentation.focal_point
+    assign img_crop = ''
+    if focal_point
+      assign img_crop = focal_point | split: '-' | last
+    endif
+
+    assign hero_height_2x = section.settings.hero_height_mobile | times: 2
+    assign class = 'img-fit'
+    if focal_point and focal_point != 'object-center'
+      assign class = class | append: ' ' | append: focal_point
+    endif
+  -%}
+
   <div class="banner__image absolute top-0 left-0 w-full h-full lg:hidden">
     <picture>
       {%- if img.width < 750 or img.height < hero_height_2x -%}

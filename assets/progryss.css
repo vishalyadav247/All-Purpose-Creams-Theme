@@ -679,7 +679,7 @@ h3 {
   }
   .faq-block {
     @media (min-width: 767px) {
-      padding:50px 60px;
+      padding:50px 60px !important;
       
       
       max-width: 95%;

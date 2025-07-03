@@ -51,7 +51,8 @@
       "name": "Collection desc with FAQ",
       "settings": {
         "heading": "Best Selling Treatments And Serums",
-        "faq_heading": "Frequently Asked Questions"
+        "faq_heading": "Frequently Asked Questions",
+        "color_scheme": "3"
       }
     }
   },

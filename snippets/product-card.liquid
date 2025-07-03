@@ -87,7 +87,7 @@
 {%- if product and product != empty -%}
   <product-card class="card card--product relative grow flex w-full{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
    {% assign rating = product.metafields.reviews.rating.value | default: 0 %}
-{% if rating >= 5 %}
+{% if rating >= 4 %}
   <div class="top-rated-badge">Top Rated</div>
 {% endif %}
 

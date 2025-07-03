@@ -625,7 +625,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
         line-height: normal;
       }
       .price{
-        font-size: var(--body_font_size2);
+        font-size: var(--body_font_size1);
       }
       .card__rating{
         font-size: var(--body_font_size1);

@@ -23,11 +23,11 @@
         {% if faq != blank %}
           <details class="border-b pb-3">
             <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-              {{ faq.question }}
+              {{ faq.question.value }}
               <span class="text-gray-500">▼</span>
             </summary>
             <div class="mt-2 text-gray-600">
-              {{ faq.answer }}
+              {{ faq.answer.value }}
             </div>
           </details>
         {% endif %}
@@ -35,6 +35,7 @@
     </div>
   </div>
 {% endif %}
+
 </section>
 {% schema %}
 {

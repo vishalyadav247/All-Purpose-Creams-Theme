@@ -45,10 +45,19 @@
         "sort_show_price": true,
         "sort_show_date": true
       }
+    },
+    "coll_desc_with_faq_Hjbf7z": {
+      "type": "coll-desc-with-faq",
+      "name": "Collection desc with FAQ",
+      "settings": {
+        "heading": "Best Selling Treatments And Serums",
+        "faq_heading": "Frequently Asked Questions"
+      }
     }
   },
   "order": [
     "hero",
-    "main"
+    "main",
+    "coll_desc_with_faq_Hjbf7z"
   ]
 }

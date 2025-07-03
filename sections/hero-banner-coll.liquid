@@ -30,7 +30,6 @@
     if section.settings.image != blank
       assign has_image = true
       assign img = section.settings.image
-      assign mobile_img = section.settings.image_mobile
     elsif collection.featured_image
       assign has_image = true
       assign img = collection.featured_image
@@ -233,7 +232,6 @@
       "label": "Custom image",
       "info": "For best results, use an image with 16:9 aspect ratio and width of 3200px."
     },
-
     {
       "type": "header",
       "content": "Image overlay"

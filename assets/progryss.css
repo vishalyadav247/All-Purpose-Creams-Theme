@@ -665,6 +665,9 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
   .description-block{
     .collection-description{
       font-size: var(--body_font_size2);
+      p{
+        margin: 0px;
+      }
     }
   }
   .faq-block{

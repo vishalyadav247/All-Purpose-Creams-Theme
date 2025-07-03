@@ -10,85 +10,34 @@
     </div>
   {% endif %}
 
+{% assign faq_list = collection.metafields.custom.faqs %}
+
+{% if faq_list != blank and faq_list.references != blank %}
   <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
     <h3 class="text-xl font-semibold mb-6 text-center">
       {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
     </h3>
-    <div id="faq-accordion" class="accordion space-y-4">
-      <p class="text-center text-gray-600">Loading FAQs...</p>
+    <div class="accordion space-y-4">
+      {% for faq_item in faq_list.references %}
+        {% assign faq = faq_item.value %}
+        {% if faq != blank %}
+          <details class="border-b pb-3">
+            <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
+              {{ faq.question }}
+              <span class="text-gray-500">▼</span>
+            </summary>
+            <div class="mt-2 text-gray-600">
+              {{ faq.answer }}
+            </div>
+          </details>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
+{% endif %}
+
+
 </section>
-
-{% comment %}
-  Pass GIDs from metafield to JavaScript:
-{% endcomment %}
-<script>
-  window.faq_list = {{ collection.metafields.custom.faqs | json }};
-</script>
-
-<script>
-async function loadFaqs(gids) {
-  if (!gids || gids.length === 0) return;
-
-  const query = `
-    query ($ids: [ID!]!) {
-      nodes(ids: $ids) {
-        ... on Metaobject {
-          id
-          fields {
-            key
-            value
-          }
-        }
-      }
-    }
-  `;
-
-  const response = await fetch("https://YOUR-SHOP.myshopify.com/api/2024-04/graphql.json", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Shopify-Storefront-Access-Token": "YOUR-STOREFRONT-ACCESS-TOKEN"
-    },
-    body: JSON.stringify({
-      query,
-      variables: { ids: gids }
-    })
-  });
-
-  const json = await response.json();
-  console.log("Fetched FAQ metaobjects: ", json.data.nodes);
-  renderFaqs(json.data.nodes);
-}
-
-function renderFaqs(faqItems) {
-  const container = document.getElementById("faq-accordion");
-  if (!container) return;
-
-  let html = "";
-  faqItems.forEach((faq, idx) => {
-    const question = faq.fields.find(f => f.key === 'question')?.value || '';
-    const answer = faq.fields.find(f => f.key === 'answer')?.value || '';
-    html += `
-      <details class="border-b pb-3">
-        <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-          ${question}
-          <span class="text-gray-500">▼</span>
-        </summary>
-        <div class="mt-2 text-gray-600">
-          ${answer}
-        </div>
-      </details>
-    `;
-  });
-  container.innerHTML = html;
-}
-
-if (window.faq_list && window.faq_list.length > 0) {
-  loadFaqs(window.faq_list);
-}
-</script>
 
 {% schema %}
 {

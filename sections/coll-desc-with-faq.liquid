@@ -35,7 +35,7 @@
   </div>
 {% endif %}
 <pre>{{ faq | json }}</pre>
-{% assign faq_list = collection.metafields.custom.faqs %}
+{% assign faq_list = product.collections.first.metafields.custom.faqs%}
 <pre>
 faq_list references:
 {% for ref in faq_list.references %}

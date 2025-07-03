@@ -35,23 +35,39 @@
   </div>
 {% endif %}
 </section>
-{% assign faqs = product.metafields.custom.faq_list.value %}
-{% assign faq_data = "" | split: "" %}
-{% for faq_gid in faqs %}
-  {% assign faq_item = faq_gid | shopify_metaobject %}
-  {% capture faq_json %}
-    {
-      "id": "{{ faq_item.id }}",
-      "question": "{{ faq_item.fields.question.value | escape }}",
-      "answer": "{{ faq_item.fields.answer.value | escape }}"
-    }
-  {% endcapture %}
-  {% assign faq_data = faq_data | push: faq_json %}
-{% endfor %}
 <script>
-  window.faq_list = {{ faq_list | json }};
-</script>
+  async function loadFaqs(gids) {
+  const query = `
+    query ($ids: [ID!]!) {
+      nodes(ids: $ids) {
+        ... on Metaobject {
+          id
+          handle
+          fields {
+            key
+            value
+          }
+        }
+      }
+    }
+  `;
+  const response = await fetch('/api/2024-04/graphql.json', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Shopify-Storefront-Access-Token': 'YOUR-STOREFRONT-ACCESS-TOKEN'
+    },
+    body: JSON.stringify({
+      query,
+      variables: { ids: gids }
+    })
+  });
+  const result = await response.json();
+  console.log("Fetched FAQ metaobjects: ", result.data.nodes);
+  renderFaqs(result.data.nodes);
+}
 
+</script>
 {% schema %}
 {
   "name": "Collection desc and FAQ",

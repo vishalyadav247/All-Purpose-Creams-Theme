@@ -648,6 +648,13 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     }
   }
 }
+@media(min-width:768px){
+    .breadcrumbs{
+  .icon{
+    opacity: 1;
+  }
+  }
+}
 @media(max-width:767px){
   .breadcrumbs{
     display: block;

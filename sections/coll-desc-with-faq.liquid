@@ -16,7 +16,7 @@
       {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
     </h3>
     <div class="accordion space-y-4">
-      {% for faq_item in faq_list.references %}
+      {% for faq_item in faq_list.list? %}
         {% assign faq = faq_item %}
         <details class="border-b pb-3">
           <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">

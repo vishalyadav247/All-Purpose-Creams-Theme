@@ -659,6 +659,9 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
   }
 }
 .faq-description-section{
+  h3{
+    color:#fff;
+  }
   .description-block{
     
   }

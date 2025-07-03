@@ -55,11 +55,11 @@
       let html = '';
       faqData.forEach((faq) => {
         html += `
-          <div class="faq-item border-b pb-3 flex">
+          <div class="faq-item border-b pb-3 flex flex-col">
             <button class="faq-question flex justify-between items-center w-full text-start font-semibold text-lg">
               <span>${faq.question}</span>
            <span class="icon transform transition-transform inline-block" style="transform-origin: center;
-  transition: transform 0.2s ease-in-out;">
+  transition: transform 0.2s ease-in-out;"> 
   <svg xmlns="http://www.w3.org/2000/svg" width="27" height="14" viewBox="0 0 27 14" fill="none">
     <path d="M13.3001 14L0.0499115 0.5L26.5503 0.5L13.3001 14Z" fill="#B1B1B1"/>
   </svg>
@@ -97,7 +97,6 @@ faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
     }
   });
 </script>
-
 
 {% schema %}
 {

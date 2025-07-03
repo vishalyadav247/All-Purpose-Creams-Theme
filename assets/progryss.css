@@ -669,8 +669,14 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
   }
   .faq-block{
     .faq-item {
-          background: #fff;
+    background: #fff;
     padding: 20px 40px;
+    }
+    @media(max-width:767px){
+        .faq-item {
+    background: #fff;
+    padding: 20px 20px;
+    }
     }
   }
 }

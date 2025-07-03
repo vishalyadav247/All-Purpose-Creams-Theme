@@ -1,41 +1,37 @@
-{% if collection.description != blank or collection.metafields.custom.faqs != blank %}
-  <section class="faq-description-section">
-    
-    {% if collection.description != blank %}
-      <div class="description-block text-white bg-blue-200 px-6 py-10 text-center">
-        {% if section.settings.heading != blank %}
-          <h2 class="text-2xl font-bold mb-4">{{ section.settings.heading }}</h2>
-        {% endif %}
-        <div class="collection-description text-base leading-relaxed max-w-3xl mx-auto">
-          {{ collection.description }}
-        </div>
+<section class="faq-description-section">
+  {% if collection.description != blank %}
+    <div class="description-block text-white bg-blue-200 px-6 py-10 text-center">
+      {% if section.settings.heading != blank %}
+        <h2 class="text-2xl font-bold mb-4">{{ section.settings.heading }}</h2>
+      {% endif %}
+      <div class="collection-description text-base leading-relaxed max-w-3xl mx-auto">
+        {{ collection.description }}
       </div>
-    {% endif %}
+    </div>
+  {% endif %}
 
-   {% assign faq_list = collection.metafields.custom.faqs %}
-
-{% if faq_list != blank %}
-  <div class="accordion space-y-4">
-    {% for faq_item in faq_list.references %}
-      <details class="border-b pb-3">
-        <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
-          {{ faq_item.question.value }}
-          <span class="text-gray-500">▼</span>
-        </summary>
-        <div class="mt-2 text-gray-600">
-          {{ faq_item.answer.value }}
-        </div>
-      </details>
-    {% endfor %}
-  </div>
-{% else %}
-  <p class="text-red-500">No FAQs found for this collection.</p>
-{% endif %}
-
-    
-  </section>
-{% endif %}
-
+  {% assign faq_list = collection.metafields.custom.faqs %}
+  {% if faq_list != blank %}
+    <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
+      <h3 class="text-xl font-semibold mb-6 text-center">
+        {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
+      </h3>
+      <div class="accordion space-y-4">
+        {% for faq_item in faq_list.references %}
+          <details class="border-b pb-3">
+            <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
+              {{ faq_item.question.value }}
+              <span class="text-gray-500">▼</span>
+            </summary>
+            <div class="mt-2 text-gray-600">
+              {{ faq_item.answer.value }}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</section>
 
 {% schema %}
 {

@@ -49,8 +49,7 @@
   {% assign faq_data = faq_data | push: faq_json %}
 {% endfor %}
 <script>
-  window.faq_list = [{{ faq_data | join: "," }}];
-  console.log(window.faq_list);
+  window.faq_list = {{ faq_list | json }};
 </script>
 
 {% schema %}

@@ -21,9 +21,9 @@
 -%}
 
 <section class="faq-description-section section">
-  <div class="{% if section.settings.full_width or bg_color %}container {% endif %} {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+  <div class="{% if section.settings.full_width or bg_color %}container {% endif %} ">
     {%- if collection.description != blank -%}
-      <div class="description-block text-white bg-blue-200 px-6 py-10 container">
+      <div class="description-block text-white bg-blue-200 px-6 py-10 container {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
         {% if section.settings.heading != blank %}
           <h2 class="text-2xl font-bold mb-4 text-current">{{ section.settings.heading }}</h2>
         {% endif %}
@@ -36,7 +36,7 @@
     {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
     {% if faq_list %}
-      <div class="faq-block bg-white py-10 container">
+      <div class="faq-block bg-white py-10 container {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
         <h3 class="text-xl font-semibold mb-6 text-current">
           {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
         </h3>

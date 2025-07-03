@@ -66,6 +66,29 @@
   console.log("Fetched FAQ metaobjects: ", result.data.nodes);
   renderFaqs(result.data.nodes);
 }
+function renderFaqs(faqItems) {
+  const container = document.getElementById('faq-accordion');
+  let html = "";
+  faqItems.forEach((faq, idx) => {
+    const question = faq.fields.find(f => f.key === 'question')?.value || '';
+    const answer = faq.fields.find(f => f.key === 'answer')?.value || '';
+    html += `
+      <div class="faq-item">
+        <button class="faq-question" data-index="${idx}">${question}</button>
+        <div class="faq-answer" style="display:none;">${answer}</div>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+
+  // add toggle behavior
+  container.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const answer = this.nextElementSibling;
+      answer.style.display = answer.style.display === 'none' ? 'block' : 'none';
+    });
+  });
+}
 
 </script>
 {% schema %}

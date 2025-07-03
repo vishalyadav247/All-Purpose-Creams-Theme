@@ -1,6 +1,54 @@
+{% if collection.description != blank %}
+  <section class="faq-description-section">
+    <div class="description-block text-white bg-blue-200 px-6 py-10 text-center">
+      {% if section.settings.heading != blank %}
+        <h2 class="text-2xl font-bold mb-4">{{ section.settings.heading }}</h2>
+      {% endif %}
+      <div class="collection-description text-base leading-relaxed max-w-3xl mx-auto">
+        {{ collection.description }}
+      </div>
+    </div>
+
+    {% assign faqs = collection.metafields.custom.faq %}
+    {% if faqs != blank %}
+      <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
+        <h3 class="text-xl font-semibold mb-6 text-center">
+          {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
+        </h3>
+        <div class="accordion">
+          {% for faq in faqs %}
+            <details class="mb-4 border-b pb-2">
+              <summary class="cursor-pointer font-medium flex justify-between items-center">
+                {{ faq.question }}
+                <span>▼</span>
+              </summary>
+              <div class="mt-2 text-gray-700">
+                {{ faq.answer }}
+              </div>
+            </details>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </section>
+{% endif %}
+
 {% schema %}
-  {
-    "name": "Section name",
-    "settings": []
-  }
+{
+  "name": "Collection desc and FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Main Heading",
+      "default": "Best Selling Treatments And Serums"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "FAQ Heading",
+      "default": "Frequently Asked Questions"
+    }
+  ]
+}
 {% endschema %}

@@ -47,45 +47,50 @@
 </section>
 
 <script>
-  const faqData = {{ faq_list | json }};
-  const faqContainer = document.getElementById('faq-list');
+  document.addEventListener('DOMContentLoaded', function () {
+    const faqData = {{ faq_list | json }};
+    const faqContainer = document.getElementById('faq-list');
 
-  if (Array.isArray(faqData) && faqData.length > 0) {
-    let html = '';
-    faqData.forEach((faq) => {
-      html += `
-        <div class="faq-item border-b pb-3">
-          <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
-            <span>${faq.question}</span>
-            <span class="icon text-gray-500 transition-transform duration-300">▼</span>
-          </button>
-          <div class="faq-answer mt-2 text-gray-600 hidden">
-            ${faq.answer}
-          </div>
-        </div>`;
-    });
-    faqContainer.innerHTML = html;
-
-    faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
-      btn.addEventListener('click', function () {
-        const answer = this.nextElementSibling;
-        const icon = this.querySelector('.icon');
-
-        const isOpen = answer.classList.contains('hidden');
-
-        document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
-        document.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
-
-        if (!isOpen) {
-          answer.classList.remove('hidden');
-          icon.style.transform = 'rotate(180deg)';
-        }
+    if (Array.isArray(faqData) && faqData.length > 0) {
+      let html = '';
+      faqData.forEach((faq) => {
+        html += `
+          <div class="faq-item border-b pb-3">
+            <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
+              <span>${faq.question}</span>
+              <span class="icon text-gray-500 transition-transform duration-300">▼</span>
+            </button>
+            <div class="faq-answer mt-2 text-gray-600 hidden">
+              ${faq.answer}
+            </div>
+          </div>`;
       });
-    });
-  } else {
-    faqContainer.innerHTML = "<p>No FAQs available.</p>";
-  }
+      faqContainer.innerHTML = html;
+
+      faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
+        btn.addEventListener('click', function () {
+          const answer = this.nextElementSibling;
+          const icon = this.querySelector('.icon');
+
+          const isOpen = !answer.classList.contains('hidden');
+
+          // Close all
+          faqContainer.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
+          faqContainer.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
+
+          // Open clicked
+          if (!isOpen) {
+            answer.classList.remove('hidden');
+            icon.style.transform = 'rotate(180deg)';
+          }
+        });
+      });
+    } else {
+      faqContainer.innerHTML = "<p>No FAQs available.</p>";
+    }
+  });
 </script>
+
 
 {% schema %}
 {

@@ -72,7 +72,11 @@
 
 {%- if product and product != empty -%}
   <product-card class="card card--product relative grow flex w-full{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
-    <div class="card__media{% if show_hover_image %} has-hover-image{% endif %} relative">
+   {% if product.handle == 'sunflower-honey' %}
+  <div class="top-rated-badge">Top Rated</div>
+{% endif %}
+
+  <div class="card__media{% if show_hover_image %} has-hover-image{% endif %} relative">
       <a href="{{ product_url }}" class="media block relative js-prod-link" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;" tabindex="-1">
         {%- if product.featured_media -%}
           {%- liquid
@@ -260,7 +264,7 @@
               rating_value: product.metafields.reviews.rating.value,
               rating_count: product.metafields.reviews.rating_count,
               rating_count_format: 'short' 
-            %} <span> reviews</span>
+            %} 
           </div>
         {%- endif -%}
 

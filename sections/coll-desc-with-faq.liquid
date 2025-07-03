@@ -57,7 +57,7 @@
         html += `
           <div class="faq-item border-b pb-3 flex flex-col">
             <button class="faq-question flex justify-between items-center w-full text-start font-semibold text-lg">
-            <span>Q.</span>  <span>${faq.question}</span>
+             <span>Q. ${faq.question}</span>
            <span class="icon transform transition-transform inline-block" style="transform-origin: center;
   transition: transform 0.2s ease-in-out;"> 
   <svg xmlns="http://www.w3.org/2000/svg" width="27" height="14" viewBox="0 0 27 14" fill="none">
@@ -67,7 +67,7 @@
 
             </button>
             <div class="faq-answer text-gray-600 ">
-               <span>Ans.</span>  ${faq.answer}
+                Ans. ${faq.answer}
             </div>
           </div>`;
       });

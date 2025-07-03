@@ -45,103 +45,10 @@
         "sort_show_price": true,
         "sort_show_date": true
       }
-    },
-    "rich_text_bcF8f7": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_eN3gPk": {
-          "type": "heading",
-          "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h2",
-            "heading_h1": false
-          }
-        },
-        "text_ykaEcJ": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Use this text to share information about your store with your customers. Describe a product, share announcements, or welcome customers to your store.</p>",
-            "text_size": 100
-          }
-        }
-      },
-      "block_order": [
-        "heading_eN3gPk",
-        "text_ykaEcJ"
-      ],
-      "name": "Rich text",
-      "settings": {
-        "text_alignment": "center",
-        "full_width_content": false,
-        "full_width": true,
-        "color_scheme": "3",
-        "boundary_effect": ""
-      }
-    },
-    "faq_JpxHKc": {
-      "type": "faq",
-      "blocks": {
-        "category_K8q899": {
-          "type": "category",
-          "settings": {
-            "text": "Some category"
-          }
-        },
-        "question_aWCgdY": {
-          "type": "question",
-          "settings": {
-            "heading": "Frequently asked question",
-            "text": "<p>Provide an answer to the question here, with as much detail as possible to help your customers.</p>"
-          }
-        },
-        "question_6NxmDy": {
-          "type": "question",
-          "settings": {
-            "heading": "Frequently asked question",
-            "text": "<p>Provide an answer to the question here, with as much detail as possible to help your customers.</p>"
-          }
-        },
-        "category_9rwmec": {
-          "type": "category",
-          "settings": {
-            "text": "Some category"
-          }
-        },
-        "question_tLdYhm": {
-          "type": "question",
-          "settings": {
-            "heading": "Frequently asked question",
-            "text": "<p>Provide an answer to the question here, with as much detail as possible to help your customers.</p>"
-          }
-        },
-        "question_N36nT6": {
-          "type": "question",
-          "settings": {
-            "heading": "Frequently asked question",
-            "text": "<p>Provide an answer to the question here, with as much detail as possible to help your customers.</p>"
-          }
-        }
-      },
-      "block_order": [
-        "category_K8q899",
-        "question_aWCgdY",
-        "question_6NxmDy",
-        "category_9rwmec",
-        "question_tLdYhm",
-        "question_N36nT6"
-      ],
-      "name": "FAQ",
-      "settings": {
-        "heading": "Frequently Asked Questions",
-        "full_width": true,
-        "color_scheme": "3"
-      }
     }
   },
   "order": [
     "hero",
-    "main",
-    "rich_text_bcF8f7",
-    "faq_JpxHKc"
+    "main"
   ]
 }

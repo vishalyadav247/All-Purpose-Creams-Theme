@@ -648,3 +648,8 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     }
   }
 }
+@media(max-width:767px){
+  .breadcrumbs{
+    display: block;
+  }
+}

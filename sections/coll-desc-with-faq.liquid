@@ -34,22 +34,24 @@
     </div>
   </div>
 {% endif %}
-{{ faq_list | json }}
-
-{{ faq_list }}
-
 </section>
-<p>Debug: {{ faq_list | inspect }}</p>
-
-{% assign faq_ids = "" | split: "" %}
-{% for faq in faq_list.value %}
-  {% assign faq_ids = faq_ids | push: faq.id %}
+{% assign faqs = product.metafields.custom.faq_list.value %}
+{% assign faq_data = "" | split: "" %}
+{% for faq_gid in faqs %}
+  {% assign faq_item = faq_gid | shopify_metaobject %}
+  {% capture faq_json %}
+    {
+      "id": "{{ faq_item.id }}",
+      "question": "{{ faq_item.fields.question.value | escape }}",
+      "answer": "{{ faq_item.fields.answer.value | escape }}"
+    }
+  {% endcapture %}
+  {% assign faq_data = faq_data | push: faq_json %}
 {% endfor %}
 <script>
-  window.faq_list = {{ faq_ids | json }};
+  window.faq_list = [{{ faq_data | join: "," }}];
   console.log(window.faq_list);
 </script>
-
 
 {% schema %}
 {

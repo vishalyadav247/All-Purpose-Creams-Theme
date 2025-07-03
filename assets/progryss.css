@@ -619,6 +619,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
     }
   }
   .card:last-child {
+    background: #F6F6F6;
     .card__info{
       .card__title{
         font-size: var(--body_font_size2);

@@ -589,7 +589,6 @@ h3 {
 }
 .banner{
   .banner__text{
-    text-align: center;
     h1{
       font-size: 28px;
     }

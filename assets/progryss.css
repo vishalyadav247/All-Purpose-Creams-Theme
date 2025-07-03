@@ -674,7 +674,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
       .faq-answer {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.3s ease;
+  transition: max-height 0.2s ease;
 }
 
     }

@@ -14,9 +14,10 @@
   <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
     <h3 class="text-xl font-semibold mb-6 text-center">
       {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
+      {{ faq_list }}
     </h3>
     <div class="accordion space-y-4">
-      {% for faq_item in faq_list.list? %}
+      {% for faq_item in faq_list.refrences %}
         {% assign faq = faq_item.value %}
         <details class="border-b pb-3">
           <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">

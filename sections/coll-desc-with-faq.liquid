@@ -12,31 +12,26 @@
       </div>
     {% endif %}
 
-    {% assign faqs = collection.metafields.custom.faqs %}
+   {% assign faq_list = collection.metafields.custom.faqs %}
 
-    {% if faqs != blank %}
-      <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
-        {% if section.settings.faq_heading != blank %}
-          <h3 class="text-xl font-semibold mb-6 text-center">
-            {{ section.settings.faq_heading }}
-          </h3>
-        {% endif %}
-        
-        <div class="accordion">
-          {% for faq in faqs %}
-            <details class="mb-4 border-b pb-2">
-              <summary class="cursor-pointer font-medium flex justify-between items-center">
-                {{ faq.question }}
-                <span>▼</span>
-              </summary>
-              <div class="mt-2 text-gray-700">
-                {{ faq.answer }}
-              </div>
-            </details>
-          {% endfor %}
+{% if faq_list != blank %}
+  <div class="accordion space-y-4">
+    {% for faq_item in faq_list.references %}
+      <details class="border-b pb-3">
+        <summary class="cursor-pointer font-semibold text-lg flex justify-between items-center">
+          {{ faq_item.question.value }}
+          <span class="text-gray-500">▼</span>
+        </summary>
+        <div class="mt-2 text-gray-600">
+          {{ faq_item.answer.value }}
         </div>
-      </div>
-    {% endif %}
+      </details>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="text-red-500">No FAQs found for this collection.</p>
+{% endif %}
+
     
   </section>
 {% endif %}

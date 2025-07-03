@@ -23,7 +23,7 @@
 <section class="faq-description-section section">
   <div class="{% if section.settings.full_width or bg_color %}container {% endif %} {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
     {%- if collection.description != blank -%}
-      <div class="description-block text-white bg-blue-200 px-6 py-10">
+      <div class="description-block text-white bg-blue-200 px-6 py-10 container">
         {% if section.settings.heading != blank %}
           <h2 class="text-2xl font-bold mb-4 text-current">{{ section.settings.heading }}</h2>
         {% endif %}
@@ -36,7 +36,7 @@
     {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
     {% if faq_list %}
-      <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
+      <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto container">
         <h3 class="text-xl font-semibold mb-6 text-current">
           {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
         </h3>
@@ -46,50 +46,46 @@
   </div>
 </section>
 
+<script>
+  const faqData = {{ faq_list | json }};
+  const faqContainer = document.getElementById('faq-list');
 
-  <script>
-    const faqData = {{ faq_list | json }};
+  if (Array.isArray(faqData) && faqData.length > 0) {
+    let html = '';
+    faqData.forEach((faq) => {
+      html += `
+        <div class="faq-item border-b pb-3">
+          <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
+            <span>${faq.question}</span>
+            <span class="icon text-gray-500 transition-transform duration-300">▼</span>
+          </button>
+          <div class="faq-answer mt-2 text-gray-600 hidden">
+            ${faq.answer}
+          </div>
+        </div>`;
+    });
+    faqContainer.innerHTML = html;
 
-    const faqContainer = document.getElementById('faq-list');
+    faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
+      btn.addEventListener('click', function () {
+        const answer = this.nextElementSibling;
+        const icon = this.querySelector('.icon');
 
-    if (Array.isArray(faqData) && faqData.length > 0) {
-      let html = '';
-      faqData.forEach((faq, index) => {
-        html += 
-          <div class="faq-item border-b pb-3">
-            <button class="faq-question flex justify-between items-center w-full text-left font-semibold text-lg">
-              <span>${faq.question}</span>
-              <span class="icon text-gray-500 transition-transform duration-300">▼</span>
-            </button>
-            <div class="faq-answer mt-2 text-gray-600 hidden">
-              ${faq.answer}
-            </div>
-          </div>;
+        const isOpen = answer.classList.contains('hidden');
+
+        document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
+
+        if (!isOpen) {
+          answer.classList.remove('hidden');
+          icon.style.transform = 'rotate(180deg)';
+        }
       });
-      faqContainer.innerHTML = html;
-
-      // Add JS interaction
-      faqContainer.querySelectorAll('.faq-question').forEach((btn) => {
-        btn.addEventListener('click', function () {
-          const answer = this.nextElementSibling;
-          const icon = this.querySelector('.icon');
-
-          // Toggle open/close
-          if (answer.classList.contains('hidden')) {
-            document.querySelectorAll('.faq-answer').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.icon').forEach(el => el.style.transform = 'rotate(0deg)');
-            answer.classList.remove('hidden');
-            icon.style.transform = 'rotate(180deg)';
-          } else {
-            answer.classList.add('hidden');
-            icon.style.transform = 'rotate(0deg)';
-          }
-        });
-      });
-    } else {
-      faqContainer.innerHTML = "<p>No FAQs available.</p>";
-    }
-  </script>
+    });
+  } else {
+    faqContainer.innerHTML = "<p>No FAQs available.</p>";
+  }
+</script>
 
 {% schema %}
 {

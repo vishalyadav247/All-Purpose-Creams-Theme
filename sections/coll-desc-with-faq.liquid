@@ -34,16 +34,6 @@
     </div>
   </div>
 {% endif %}
-<pre>{{ faq | json }}</pre>
-{% assign faq_list = product.collections.first.metafields.custom.faqs%}
-<pre>
-faq_list references:
-{% for ref in faq_list.references %}
-  {{ ref.value | json }}
-{% endfor %}
-</pre>
-
-
 </section>
 <pre>
 faq_list.references.size: {{ faq_list.references.size }}

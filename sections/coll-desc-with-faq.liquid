@@ -8,8 +8,7 @@
         {{ collection.description }}
       </div>
     </div>
-  {% endif %}
-{%- assign faq_list = collection.metafields.custom.faqs.value -%}
+  {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
 {% if faq_list %}
   <div class="faq-block bg-white py-10 px-4 max-w-3xl mx-auto">
@@ -18,6 +17,8 @@
     </h3>
     <div id="faq-list" class="space-y-4"></div>
   </div>
+  {% endif %}
+
 </section>
 
   <script>

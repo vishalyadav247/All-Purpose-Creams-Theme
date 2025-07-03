@@ -35,10 +35,14 @@
   </div>
 {% endif %}
 <pre>{{ faq | json }}</pre>
+{% assign faq_list = collection.metafields.custom.faqs %}
 <pre>
-faq_list type:
-{{ collection.metafields.custom.faqs.value }}
+faq_list references:
+{% for ref in faq_list.references %}
+  {{ ref.value | json }}
+{% endfor %}
 </pre>
+
 </section>
 
 {% schema %}

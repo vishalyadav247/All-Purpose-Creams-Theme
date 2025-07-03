@@ -36,7 +36,7 @@
     {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
     {% if faq_list %}
-      <div class="faq-block bg-white py-10 container {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+      <div class="faq-block section--padded bg-white py-10 container {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
         <h3 class="text-2xl font-bold mb-4 text-current">
           {{ section.settings.faq_heading | default: 'Frequently Asked Questions' }}
         </h3>

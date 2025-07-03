@@ -40,6 +40,8 @@
     
   </section>
 {% endif %}
+<p>Faq count: {{ collection.metafields.custom.faqs.size }}</p>
+<pre>{{ collection.metafields.custom.faqs | json }}</pre>
 
 {% schema %}
 {

@@ -690,6 +690,7 @@ h3 {
         overflow: hidden;
         max-height: 0;
         transition: max-height 0.2s ease;
+        font-size: var(--body_font_size1);
       }
     }
     @media (max-width: 767px) {

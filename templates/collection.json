@@ -24,7 +24,7 @@
         "hero_tint_color": "#000000",
         "hero_tint_opacity": 0,
         "hero_tint_text_color": "#ffffff",
-        "show_description": true,
+        "show_description": false,
         "show_breadcrumbs": true
       }
     },

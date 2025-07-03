@@ -10,7 +10,7 @@
 {%- endcomment -%}
 <style>
   .top-rated-badge {
-  position: absolute;
+  /* position: absolute; */
   top: 8px;
   left: 8px;
   background: #ffce00;
@@ -83,13 +83,13 @@
     endif
   endif
 -%}
-
-{%- if product and product != empty -%}
-  <product-card class="card card--product relative grow flex w-full{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
    {% assign rating = product.metafields.reviews.rating.value | default: 0 %}
 {% if rating >= 4 %}
   <div class="top-rated-badge">Top Rated</div>
 {% endif %}
+{%- if product and product != empty -%}
+  <product-card class="card card--product relative grow flex w-full{% if animate %} fade-in{% endif %}"{% if animate %} data-cc-animate data-cc-animate-delay="{{ animate | times: 0.15 }}s"{% endif %}>
+
 
   <div class="card__media{% if show_hover_image %} has-hover-image{% endif %} relative">
       <a href="{{ product_url }}" class="media block relative js-prod-link" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;" tabindex="-1">

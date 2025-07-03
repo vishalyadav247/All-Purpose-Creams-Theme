@@ -668,7 +668,7 @@ box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
   .description-block{
     @media(min-width:767px){
   h3{
-    padding-top: 60px;
+    padding-top: 50px;
   }
 }
     .collection-description{

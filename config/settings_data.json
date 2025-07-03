@@ -70,7 +70,7 @@
     "button_text_uppercase": true,
     "max_page_width": 1440,
     "section_gap": "30",
-    "grid_column_gap": "16",
+    "grid_column_gap": "24",
     "content_border_radius": 0,
     "card_border_radius": 0,
     "disclosure_toggle": "plus",

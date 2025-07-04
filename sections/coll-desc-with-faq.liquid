@@ -31,9 +31,7 @@
           {{ collection.description }}
         </div>
       </div>
-    {%- endif -%}
-
-    {%- assign faq_list = collection.metafields.custom.faqs.value -%}
+      {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
     {% if faq_list %}
       <div class="faq-block section--padded bg-white container">
@@ -43,6 +41,8 @@
         <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
       </div>
     {% endif %}
+    {%- endif -%}
+
   </div>
 </section>
 

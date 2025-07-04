@@ -279,8 +279,11 @@ h3 {
     @media screen and (max-width: 1024px) {
       grid-template-columns: repeat(2, 1fr);
       gap: 15px 8px;
+    }
 
-      h4 {
+    @media screen and (max-width: 767px) {
+      gap: 8px 16px;
+        h4 {
         padding: 0;
         text-align: center;
 
@@ -288,10 +291,6 @@ h3 {
           display: none;
         }
       }
-    }
-
-    @media screen and (max-width: 767px) {
-      gap: 8px 16px;
     }
   }
 }

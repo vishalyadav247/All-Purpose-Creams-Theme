@@ -288,7 +288,7 @@ h3 {
         text-align: center;
 
         &:after {
-          display: none;
+          /* display: none; */
         }
       }
     }

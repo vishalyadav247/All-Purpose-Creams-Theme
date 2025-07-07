@@ -133,6 +133,7 @@
     "enable_search": false,
     "animation_speed": "medium",
     "favicon": "{{ shop.brand.square_logo }}",
+    "show_currency_code": false,
     "free_shipping_bg_color": "#83858c",
     "free_shipping_color": "#d2ff28",
     "content_for_index": []

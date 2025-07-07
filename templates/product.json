@@ -132,10 +132,10 @@
       "settings": {
         "enable_sticky_columns": true,
         "media_size": "medium",
-        "media_layout": "stacked",
+        "media_layout": "slider",
         "media_thumbs": "never",
         "media_ratio": "1",
-        "enable_border": false,
+        "enable_border": true,
         "enable_zoom": true,
         "enable_video_looping": false,
         "description_location": "details",

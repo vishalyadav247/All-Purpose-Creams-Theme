@@ -651,7 +651,13 @@ h3 {
     opacity: 1;
   }
 }
-
+.Uses-Text{
+     padding: 8px 0;
+      background-color: #0087524d;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-family: Montserrat;
+}
 @media (max-width: 767px) {
   .breadcrumbs {
     display: block;

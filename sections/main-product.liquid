@@ -220,6 +220,7 @@
                 <span class="product-barcode__value">{{ current_variant.barcode }}</span>
               </div>
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+            {% when 'Excerpt'%}
               <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p>
             {% when 'uses' %}
               {% if product.metafields.custom.uses_text %}
@@ -1633,6 +1634,10 @@
           "default": true
         }
       ]
+    },
+     {
+      "type": "Excerpt",
+      "name":"Excerpt",
     },
     {
       "type": "uses",

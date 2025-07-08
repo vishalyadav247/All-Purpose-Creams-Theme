@@ -4,7 +4,7 @@
       {% assign users = product.metafields.custom.user_result_list.value %}
       <div>The {{ product.title }} is constantly giving our customers amazing results. See for yourself.</div>
       {% for user in users %}
-        <div class=" rounded text-center bg-gray-100">
+        <div class="">
           {% if user.user_image %}
             <img
               src="{{ user.user_image | image_url: width: 300 }}"
@@ -12,7 +12,7 @@
               class="mx-auto mb-4 rounded-full w-24 h-24 object-cover"
             >
           {% endif %}
-          <p class="text-lg font-semibold">{{ user.user_name }} <span>- Verified Buyer</span></p>
+          <p class="text-lg">{{ user.user_name }} <span>- Verified Buyer</span></p>
         </div>
       {% endfor %}
     </div>

@@ -1,20 +1,24 @@
-<section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}></section>
-{% assign ingredients = product.metafields.custom.ingredient_list %}
+<section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
 
-{% if ingredients != blank %}
-  <div class="ingredients-section">
-    <h1 class="product-title h2">Specific choose Ingridients,Tailored For Your Skin</h1>
+  {% assign ingredients = product.metafields.custom.ingredient_list.value %}
 
-    <div class="ingredient-slider owl-carousel">
-      {% for ingredient in ingredients %}
-        <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
-          <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
-          <p class="text-sm">{{ ingredient.description }}</p>
-        </div>
-      {% endfor %}
+  {% if ingredients != blank %}
+    <div class="ingredients-section">
+      <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>
+
+      <div class="ingredient-slider owl-carousel">
+        {% for ingredient in ingredients %}
+          <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
+            <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
+            <p class="text-sm">{{ ingredient.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
     </div>
-  </div>
-{% endif %}
+  {% endif %}
+
+</section>
+
 <!-- Include Owl Carousel JS + CSS in your theme -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
@@ -40,9 +44,10 @@
   "tag": "section",
   "class": "section",
   "settings": [],
-   "presets": [
+  "presets": [
     {
-      "name": "Ingredients Section",}
-      ]
+      "name": "Ingredients Section"
+    }
+  ]
 }
 {% endschema %}

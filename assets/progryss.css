@@ -657,7 +657,6 @@ h3 {
       text-transform: uppercase;
       font-weight: 600;
       font-family: Montserrat;
-      margin-top: -1rem;
 }
 @media (max-width: 767px) {
   .breadcrumbs {

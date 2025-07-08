@@ -347,6 +347,21 @@ if (!customElements.get('variant-picker')) {
       return JSON.parse(dataEl.textContent);
     }
   }
+// 
+    const inStockMessage = document.querySelector('.in-stock-message');
 
+    document.addEventListener("on:variant:change", function (e) {
+      const variant = e.detail.variant;
+
+      if (!variant || !inStockMessage) return;
+
+      const qty = variant.inventory_quantity ?? 0;
+
+      if (variant.available && qty > 0) {
+        inStockMessage.style.display = 'block';
+      } else {
+        inStockMessage.style.display = 'none';
+      }
+    });
   customElements.define('variant-picker', VariantPicker);
 }

@@ -243,6 +243,10 @@
                     block: block,
                     update_url: true
                   %}
+                {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+  <p class="in-stock-message">✅ In stock – Ready to ship</p>
+{% endif %}
+
                 {%- comment -%}    {% if product.selected_or_first_available_variant.available %}
                    <span></span> <p>In Stock Ready To Ship</p>
                   {% endif %}{%- endcomment -%}

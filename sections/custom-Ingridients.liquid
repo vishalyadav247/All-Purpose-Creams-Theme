@@ -43,22 +43,23 @@
     var $prevBtn = $('.prev-btn');
     var $nextBtn = $('.next-btn');
 
-    owl.owlCarousel({
-      items: 2,
-      margin: 10,
-      dots: false,
-      nav: false,
-      responsive: {
-        768: {
-          items: 3
-          margin: 15
-        }
-          1280: {
-          items: 4
-        }
-      },
-      onInitialized: updateNavButtons // Call this right after init
-    });
+   owl.owlCarousel({
+  items: 2,
+  margin: 10,
+  dots: false,
+  nav: false,
+  responsive: {
+    768: {
+      items: 3,
+      margin: 15
+    },
+    1280: {
+      items: 4
+    }
+  },
+  onInitialized: updateNavButtons // ✅ Call after init
+});
+
 
     $nextBtn.click(function() {
       owl.trigger('next.owl.carousel');

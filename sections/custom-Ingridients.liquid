@@ -1,9 +1,12 @@
 <style>
-    .slider-nav__btn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
+  .slider-nav__btn:disabled,
+.prev-btn:disabled,
+.next-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 </style>
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
@@ -45,34 +48,38 @@
 <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
 
 <script>
-    $(document).ready(function(){
-      var owl = $('.ingredient-slider');
-      owl.owlCarousel({
-        items: 2,
-        margin: 20,
-        dots: false,
-        nav: false,
-        responsive: {
-          768: {
-            items: 4
-          }
-        }
-      });
+   $(document).ready(function(){
+  var owl = $('.ingredient-slider');
+  owl.owlCarousel({
+    items: 2,
+    margin: 20,
+    dots: false,
+    nav: false,
+    responsive: {
+      768: {
+        items: 4
+      }
+    }
+  });
 
-      $('.next-btn').click(function() {
-        owl.trigger('next.owl.carousel');
-      });
+  $('.next-btn').click(function() {
+    owl.trigger('next.owl.carousel');
+  });
 
-      $('.prev-btn').click(function() {
-        owl.trigger('prev.owl.carousel');
-      });
-      function updateNavButtonStates(slider, prevBtn, nextBtn) {
-    const scrollLeft = slider.scrollLeft;
-    const maxScroll = slider.scrollWidth - slider.clientWidth;
+  $('.prev-btn').click(function() {
+    owl.trigger('prev.owl.carousel');
+  });
 
-    prevBtn.disabled = scrollLeft <= 0;
-    nextBtn.disabled = scrollLeft >= maxScroll - 1;
-  }
+  // This updates the disabled state of nav buttons
+  owl.on('changed.owl.carousel refreshed.owl.carousel', function(event) {
+    const current = event.item.index;
+    const total = event.item.count;
+    const visible = event.page.size;
+
+    $('.prev-btn').prop('disabled', current === 0);
+    $('.next-btn').prop('disabled', current + visible >= total);
+  });
+});
 
     });
 </script>

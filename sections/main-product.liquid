@@ -515,21 +515,14 @@
       }
     }
 
-    // ✅ Detect and handle real variant changes only
+    // ✅ Update stock message when variant is changed
     document.addEventListener("variant:change", function (event) {
       const variant = event.detail.variant;
-      if (!variant) return;
-
-      // Defensive check: only hide if definitely not in stock
-      const qty = variant.inventory_quantity ?? 0;
-      if (variant.available && qty > 0) {
-        updateStockMessage(variant);
-      } else {
-        updateStockMessage({ available: false, inventory_quantity: 0 });
-      }
+      updateStockMessage(variant); // Always pass real variant
     });
   });
 </script>
+
 
 
 {% schema %}

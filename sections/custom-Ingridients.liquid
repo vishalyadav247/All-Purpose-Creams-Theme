@@ -3,6 +3,13 @@
 .next-btn[disabled] {
   cursor: not-allowed;
 }
+  .ingredient-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
 </style>
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
@@ -22,7 +29,7 @@
         </div>
       </div>
 
-      <div class="ingredient-slider owl-carousel">
+      <div class="ingredient-slider owl-carousel flex items-stretch">
         {% for ingredient in ingredients %}
           <div class="ingredient-box p-6 rounded text-center h-full" style="background-color: {{ bg_color }}; min-height: 180px;">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>

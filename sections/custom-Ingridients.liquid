@@ -88,11 +88,25 @@
         $nextBtn.prop('disabled', false).css('opacity', 1);
       }
     }
+function setEqualHeight() {
+  var maxHeight = 0;
+  $('.ingredient-box').css('height', 'auto'); // Reset first
+
+  $('.ingredient-box').each(function() {
+    var boxHeight = $(this).outerHeight();
+    if (boxHeight > maxHeight) {
+      maxHeight = boxHeight;
+    }
+  });
+
+  $('.ingredient-box').css('height', maxHeight + 'px');
+}
 
     // Also bind update on change & resize
     owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
+        setEqualHeight();
     });
   });
 </script>

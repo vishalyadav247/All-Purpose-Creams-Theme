@@ -1,6 +1,6 @@
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
-
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
+  {% assign bg_color = section.settings.color_scheme_3_bg %}
 
   {% if ingredients != blank %}
     <div class="ingredients-section">
@@ -8,7 +8,7 @@
 
       <div class="ingredient-slider owl-carousel">
         {% for ingredient in ingredients %}
-          <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
+          <div class="ingredient-box p-6 rounded text-center" style="background-color: {{ bg_color }}">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-sm">{{ ingredient.description }}</p>
           </div>
@@ -16,8 +16,8 @@
       </div>
     </div>
   {% endif %}
-
 </section>
+
 
 <!-- Include Owl Carousel JS + CSS in your theme -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
@@ -43,7 +43,20 @@
   "name": "Ingredients Section",
   "tag": "section",
   "class": "section",
-  "settings": [],
+"settings": [
+  {
+    "type": "color",
+    "id": "color_scheme_3_bg",
+    "label": "Scheme 3 Background",
+    "default": "#c3dbef"
+  },
+  {
+    "type": "color_background",
+    "id": "color_scheme_3_gradient",
+    "label": "Scheme 3 Gradient",
+    "default": "linear-gradient(0deg, rgba(255,255,255,0), rgba(255,255,255,0))"
+  }
+],
   "presets": [
     {
       "name": "Ingredients Section"

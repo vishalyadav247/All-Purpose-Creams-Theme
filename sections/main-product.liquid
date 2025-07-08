@@ -31,7 +31,12 @@
 <script src="{{ 'append-modals.js' | asset_url }}" defer="defer"></script>
 
 {%- if first_3d_model -%}
-  <link rel="stylesheet" href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css" media="print" onload="this.media='all'">
+  <link
+    rel="stylesheet"
+    href="https://cdn.shopify.com/shopifycloud/model-viewer-ui/assets/v1.0/model-viewer-ui.css"
+    media="print"
+    onload="this.media='all'"
+  >
   <link rel="stylesheet" href="{{ 'model-viewer.css' | asset_url }}" media="print" onload="this.media='all'">
   <script src="{{ 'product-model.js' | asset_url }}" defer></script>
   <script type="application/json" id="product-json-{{ product.id }}">
@@ -46,11 +51,7 @@
     <div class="product-media product-media--{{ section.settings.media_layout }}{% if section.settings.enable_border %} product-media--bordered{% endif %}">
       <div class="media-gallery{% if section.settings.enable_sticky_columns %} sticky-content{% endif %}">
         {%- if product.media.size > 0 -%}
-          {% render 'media-gallery',
-            product: product,
-            media_ratio: media_ratio,
-            first_3d_model: first_3d_model
-          %}
+          {% render 'media-gallery', product: product, media_ratio: media_ratio, first_3d_model: first_3d_model %}
         {%- else -%}
           <div class="media relative">
             {{ 'image' | placeholder_svg_tag: 'media__placeholder' }}
@@ -58,30 +59,25 @@
         {%- endif -%}
       </div>
     </div>
- {% if product.metafields.custom.treats_text %}
-
-             <div
-          class="Treats-Text flex justify-center flex-wrap text-center"
-        >
-          <strong>Uses: </strong>{{ product.metafields.custom.treats_text }}
-        </div> 
-      {% endif %}
-
     <div class="product-info z-1" data-cc-animate>
-      <div {% if section.settings.enable_sticky_columns %}class="sticky-content"{% endif %}>
+      <div
+        {% if section.settings.enable_sticky_columns %}
+          class="sticky-content"
+        {% endif %}
+      >
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when '@app' -%}
               <div class="product-info__block" {{ block.shopify_attributes }}>
                 {% render block %}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'title' -%}
               <div class="product-info__block product-info__block--title" {{ block.shopify_attributes }}>
                 <h1 class="product-title h2">{{ product.title | escape }}</h1>
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'price' -%}
               <div class="product-info__block product-info__block--price" {{ block.shopify_attributes }}>
@@ -120,7 +116,7 @@
                   {{ form | payment_terms }}
                 {%- endform -%}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'vendor-text' -%}
               {%- if product.vendor != blank -%}
@@ -138,11 +134,12 @@
                     endif
                   -%}
                   <p class="rte">
-                    {% if block.settings.show_label %}{{ 'products.product.vendor' | t }}{% endif %} {{ product.vendor | link_to: vendor_url }}
+                    {% if block.settings.show_label %}{{ 'products.product.vendor' | t }}{% endif %}
+                    {{ product.vendor | link_to: vendor_url }}
                   </p>
                 </div>
               {%- endif -%}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'rating' -%}
               {%- if product.metafields.reviews.rating.value != blank -%}
@@ -154,13 +151,18 @@
                   %}
                 </div>
               {%- endif -%}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'description' -%}
               {%- if section.settings.description_location == 'details' and product.description != blank -%}
                 {%- if block.settings.show_as_collapsible_content -%}
                   <details-disclosure class="product-info__block product-disclosure" {{ block.shopify_attributes }}>
-                    <details class="disclosure disclosure--row"{% if block.settings.open %} open{% endif %}>
+                    <details
+                      class="disclosure disclosure--row"
+                      {% if block.settings.open %}
+                        open
+                      {% endif %}
+                    >
                       <summary>
                         <div class="flex justify-between items-center">
                           <span class="disclosure__title flex flex-auto items-center">
@@ -191,22 +193,42 @@
                   </div>
                 {%- endif -%}
               {%- endif -%}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'sku-text' -%}
-              <div class="product-info__block product-info__block--tight product-sku" {% if current_variant.sku == blank %}hidden{% endif %} {{ block.shopify_attributes }}>
+              <div
+                class="product-info__block product-info__block--tight product-sku"
+                {% if current_variant.sku == blank %}
+                  hidden
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
                 <span class="label label--inline">{{ 'products.product.sku' | t }}</span>
                 <span class="product-sku__value">{{ current_variant.sku }}</span>
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'barcode-text' -%}
-              <div class="product-info__block product-info__block--tight product-barcode" {% if current_variant.barcode == blank %}hidden{% endif %} {{ block.shopify_attributes }}>
+              <div
+                class="product-info__block product-info__block--tight product-barcode"
+                {% if current_variant.barcode == blank %}
+                  hidden
+                {% endif %}
+                {{ block.shopify_attributes }}
+              >
                 <span class="label label--inline">{{ 'products.product.barcode' | t }}</span>
                 <span class="product-barcode__value">{{ current_variant.barcode }}</span>
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
-          
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+            {% when 'uses' %}
+              {% if product.metafields.custom.treats_text %}
+                <div
+                  class="Treats-Text flex justify-center flex-wrap text-center"
+                >
+                  <strong>Uses: </strong>{{ product.metafields.custom.treats_text }}
+                </div>
+              {% endif %}
+
             {%- when 'variant-picker' -%}
               {%- unless product.has_only_default_variant -%}
                 <div class="product-info__block product-options" {{ block.shopify_attributes }}>
@@ -219,14 +241,11 @@
                   %}
                 </div>
               {%- endunless -%}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'custom-option' -%}
-              {% render 'custom-option',
-                product_form_id: product_form_id,
-                block: block
-              %}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {% render 'custom-option', product_form_id: product_form_id, block: block %}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'buy-buttons' -%}
               <div class="product-info__block product-info__block--buy-buttons" {{ block.shopify_attributes }}>
@@ -234,10 +253,7 @@
                   {%- render 'product-inventory', product: product, current_variant: current_variant, block: block -%}
 
                   <div class="alert mb-8 bg-error-bg text-error-text js-form-error" role="alert" hidden></div>
-                  {%- form 'product', product,
-                    class: 'js-product-form',
-                    id: product_form_id
-                  -%}
+                  {%- form 'product', product, class: 'js-product-form', id: product_form_id -%}
                     {%- liquid
                       assign gift_card_recipient_feature_active = false
                       if block.settings.show_gift_card_recipient and product.gift_card?
@@ -261,10 +277,7 @@
                     <div class="product-add flex flex-wrap items-end">
                       {%- if block.settings.show_qty_selector -%}
                         <div class="flex-none me-4">
-                          {% render 'quantity-input',
-                            layout_style: 'combined',
-                            hide_label: true
-                          %}
+                          {% render 'quantity-input', layout_style: 'combined', hide_label: true %}
                         </div>
                       {%- else -%}
                         <input type="hidden" name="quantity" value="1">
@@ -278,7 +291,15 @@
                         {%- endif -%}
                       {%- endcapture -%}
 
-                      <button data-add-to-cart-text="{{ add_to_cart_text | escape }}" type="submit" class="btn {% if enable_dynamic_checkout %}btn--secondary{% else %}btn--primary{% endif %} flex-1 self-start" name="add"{% if current_variant.available == false %} disabled{% endif %}>
+                      <button
+                        data-add-to-cart-text="{{ add_to_cart_text | escape }}"
+                        type="submit"
+                        class="btn {% if enable_dynamic_checkout %}btn--secondary{% else %}btn--primary{% endif %} flex-1 self-start"
+                        name="add"
+                        {% if current_variant.available == false %}
+                          disabled
+                        {% endif %}
+                      >
                         {%- if current_variant.available -%}
                           {{- add_to_cart_text -}}
                         {%- else -%}
@@ -303,11 +324,16 @@
                   {% render 'pickup-availability', current_variant: current_variant %}
                 {%- endif -%}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'collapsible-content' -%}
               <details-disclosure class="product-info__block product-disclosure" {{ block.shopify_attributes }}>
-                <details class="disclosure disclosure--row"{% if block.settings.open %} open{% endif %}>
+                <details
+                  class="disclosure disclosure--row"
+                  {% if block.settings.open %}
+                    open
+                  {% endif %}
+                >
                   <summary>
                     <div class="flex justify-between items-center">
                       <span class="disclosure__title flex flex-auto items-center">
@@ -334,13 +360,13 @@
                   </div>
                 </details>
               </details-disclosure>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'share' -%}
               <div class="product-info__block" {{ block.shopify_attributes }}>
                 {% render 'social-share', share_title: product.title, share_url: product.url, share_image: product %}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'richtext' -%}
               {%- if block.settings.text != blank -%}
@@ -364,15 +390,23 @@
                     assign icon_size = 24
                   endif
                 -%}
-                <div class="product-info__block{% if block.settings.reduce_margin %} product-info__block--tight{% endif %}" {{ block.shopify_attributes }}>
-                  <div class="flex{% if block.settings.enable_box %} text-box p-4 pe-6{% endif %}"
-                    {%- if block.settings.enable_box %} style="--box-color: {{ block.settings.box_color }}; --box-text-color: {{ text_col }}"{% endif %}>
+                <div
+                  class="product-info__block{% if block.settings.reduce_margin %} product-info__block--tight{% endif %}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div
+                    class="flex{% if block.settings.enable_box %} text-box p-4 pe-6{% endif %}"
+                    {%- if block.settings.enable_box %}
+                      style="--box-color: {{ block.settings.box_color }}; --box-text-color: {{ text_col }}"
+                    {% endif %}
+                  >
                     {%- if block.settings.icon != 'none' or block.settings.custom_icon != blank -%}
                       <span class="me-4" style="width: {{ icon_size }}px">
                         {%- if block.settings.custom_icon != blank -%}
                           {%- render 'image',
                             image: block.settings.custom_icon,
-                            src_width: icon_size, srcset_2x: true
+                            src_width: icon_size,
+                            srcset_2x: true
                           -%}
                         {%- elsif block.settings.icon != 'none' -%}
                           {% render 'icon', icon: block.settings.icon, width: icon_size, height: icon_size %}
@@ -383,7 +417,7 @@
                   </div>
                 </div>
               {%- endif -%}
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'image' -%}
               <div class="product-info__block flex {{ block.settings.image_align }}" {{ block.shopify_attributes }}>
@@ -392,11 +426,11 @@
                     {%- if block.settings.url != blank -%}
                       <a href="{{ block.settings.url }}">
                     {%- endif -%}
-                      {% render 'image',
-                        image: block.settings.image,
-                        src_width: block.settings.image_width,
-                        srcset_2x: true
-                      %}
+                    {% render 'image',
+                      image: block.settings.image,
+                      src_width: block.settings.image_width,
+                      srcset_2x: true
+                    %}
                     {%- if block.settings.url != blank -%}
                       </a>
                     {%- endif -%}
@@ -405,7 +439,7 @@
                   {%- endif -%}
                 </div>
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'complementary' -%}
               <div class="product-info__block" {{ block.shopify_attributes }}>
@@ -426,13 +460,13 @@
                   grid_classes: grid_classes
                 -%}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'custom-liquid' -%}
               <div class="product-info__block" {{ block.shopify_attributes }}>
                 {{ block.settings.custom_liquid }}
               </div>
-            {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
+              {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
 
             {%- when 'divider' -%}
               <hr>
@@ -1598,6 +1632,10 @@
           "default": true
         }
       ]
+    },
+    {
+      "type": "uses",
+      "name":"Uses text",
     }
   ]
 }

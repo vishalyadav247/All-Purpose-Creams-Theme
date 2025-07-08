@@ -4,10 +4,11 @@
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {% assign users = product.metafields.custom.user_result_list.value %}
-      {% for user in users %}
           <div>
       The {{ product.title }} is constantly giving our customers amazing results. See for yourself.
     </div>
+      {% for user in users %}
+      
         <div class="p-6 rounded text-center bg-gray-100">
           {% if user.user_image %}
             <img

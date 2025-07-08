@@ -330,7 +330,16 @@
                         </div>
                       {%- endif -%}
                     </div>
-                    <p>test</p>
+                      <p class="product-info__block">
+                      <img
+                        src="{{ 'icon-instock.svg' | asset_url }}"
+                        alt="In stock icon"
+                        width="20"
+                        height="20"
+                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                      >
+                      In stock – Ready to ship
+                    </p>
                     {%- if block.settings.show_backorder_text -%}
                       {% render 'backorder', product: product, variant: current_variant %}
                     {%- endif -%}

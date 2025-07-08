@@ -1,10 +1,10 @@
 <carousel-slider class="ingredients-section">
   <div class="slider" id="ingredient-slider" role="region" tabindex="0">
-    <ul class="slider__grid flex gap-4 overflow-x-auto scroll-smooth snap-x">
+    <ul class="slider__grid">
       {% assign ingredients = product.metafields.custom.ingredient_list.value %}
       {% if ingredients != blank %}
         {% for ingredient in ingredients %}
-          <li class="slider__item snap-start shrink-0 w-64 bg-blue-200 p-6 rounded text-center">
+          <li class="slider__item">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-sm">{{ ingredient.description }}</p>
           </li>
@@ -13,11 +13,31 @@
     </ul>
   </div>
 
-  <div class="slider-nav flex justify-between mt-4" aria-controls="ingredient-slider">
+  <div class="slider-nav" aria-controls="ingredient-slider">
     <button class="slider-nav__btn" name="prev" aria-label="Previous slide">‹</button>
     <button class="slider-nav__btn" name="next" aria-label="Next slide">›</button>
   </div>
 </carousel-slider>
+
+<style>
+  .slider__grid {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+  }
+  .slider__item {
+    width: 250px;
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    background-color: #bfdbfe;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    text-align: center;
+  }
+</style>
+
 
 {% schema %}
 {

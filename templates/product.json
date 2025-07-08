@@ -34,6 +34,10 @@
             "reduce_margin": false
           }
         },
+        "uses_9pzKtm": {
+          "type": "uses",
+          "settings": {}
+        },
         "variant-picker": {
           "type": "variant-picker",
           "settings": {
@@ -122,6 +126,7 @@
         "title",
         "price",
         "richtext_XzJUWR",
+        "uses_9pzKtm",
         "variant-picker",
         "bold_subscriptions_bsub_widget_block_4qcXax",
         "buy-buttons",

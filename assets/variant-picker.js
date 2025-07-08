@@ -347,7 +347,7 @@ if (!customElements.get('variant-picker')) {
       return JSON.parse(dataEl.textContent);
     }
   }
-// 
+// instock text visisbility js
     const inStockMessage = document.querySelector('.in-stock-message');
 
     document.addEventListener("on:variant:change", function (e) {

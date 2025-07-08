@@ -243,8 +243,8 @@
                     block: block,
                     update_url: true
                   %}
-                <div id="in-stock-message" style="display: none;">
-  <p class="in-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
+            <div id="in-stock-message" style="display: none;">
+  <p class="in-stock-message" style="margin:0; font-weight:600;">
     <img
       src="{{ 'icon-instock.svg' | asset_url }}"
       alt="In stock icon"
@@ -255,6 +255,8 @@
     In stock – Ready to ship
   </p>
 </div>
+
+
 
                   {%- comment -%}
                     {% if product.selected_or_first_available_variant.available %}
@@ -521,6 +523,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
 </script>
 
 {% schema %}

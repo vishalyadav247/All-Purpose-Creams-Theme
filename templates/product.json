@@ -34,6 +34,10 @@
             "reduce_margin": false
           }
         },
+        "excerpt_tJQbLY": {
+          "type": "Excerpt",
+          "settings": {}
+        },
         "uses_9pzKtm": {
           "type": "uses",
           "settings": {}
@@ -126,6 +130,7 @@
         "title",
         "price",
         "richtext_XzJUWR",
+        "excerpt_tJQbLY",
         "uses_9pzKtm",
         "variant-picker",
         "bold_subscriptions_bsub_widget_block_4qcXax",

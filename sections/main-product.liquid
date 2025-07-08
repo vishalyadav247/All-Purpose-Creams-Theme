@@ -220,9 +220,10 @@
                 <span class="product-barcode__value">{{ current_variant.barcode }}</span>
               </div>
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
-            {% when 'Excerpt'%}
-             {% if product.metafields.custom.short_excerpt %}
-              <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p> {% endif %}
+            {% when 'Excerpt' %}
+              {% if product.metafields.custom.short_excerpt %}
+                <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p>
+              {% endif %}
             {% when 'uses' %}
               {% if product.metafields.custom.uses_text %}
                 <div
@@ -241,7 +242,10 @@
                     media_ratio: media_ratio,
                     block: block,
                     update_url: true
-                  %} <p>test</p>
+                  %}
+                  {% if product.selected_or_first_available_variant.available %}
+                    <p>test</p>
+                  {% endif %}
                 </div>
               {%- endunless -%}
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}

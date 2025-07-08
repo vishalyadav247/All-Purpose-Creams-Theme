@@ -261,24 +261,6 @@
                     block: block,
                     update_url: true
                   %}
-              {% assign current_variant = product.selected_or_first_available_variant %}
-
-<div id="in-stock-message"
-     style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}none{% endif %}; margin-top:10px;">
-  <p class="in-stock-message" style="font-weight:600; margin:0;">
-    <img
-      src="{{ 'icon-instock.svg' | asset_url }}"
-      alt="In stock icon"
-      width="25"
-      height="25"
-      style="display:inline-block; vertical-align:middle; margin-right:6px;"
-    >
-    In stock – Ready to ship
-  </p>
-</div>
-
-
-
                   {%- comment -%}
                     {% if product.selected_or_first_available_variant.available %}
                      <span></span> <p>In Stock Ready To Ship</p>
@@ -530,23 +512,41 @@
 
 {% render 'structured-data-product', product: product, current_variant: current_variant %}
 <script>
-  document.addEventListener("change", function (e) {
-  const variantIdInput = document.querySelector('[name="id"]');
-  const variantId = variantIdInput ? variantIdInput.value : null;
-  const inStockBox = document.getElementById("in-stock-message");
+  function updateInStockMessage(variant) {
+    const box = document.getElementById("in-stock-message");
+    if (!box || !variant) return;
 
-  if (!variantId || !inStockBox) return;
-
-  // Use Shopify's product data if available
-  const variant = window.product?.variants?.find(v => v.id == variantId);
-  if (variant && variant.available && variant.inventory_quantity > 0) {
-    inStockBox.style.display = "block";
-  } else {
-    inStockBox.style.display = "none";
+    if (variant.available && variant.inventory_quantity > 0) {
+      box.style.display = "block";
+    } else {
+      box.style.display = "none";
+    }
   }
-});
 
+  // Attach on first load
+  document.addEventListener("DOMContentLoaded", function () {
+    // First attach listener
+    document.addEventListener("variant:change", function (event) {
+      const variant = event.detail.variant;
+      updateInStockMessage(variant);
+    });
+
+    // Observe for form replacement (Shopify swaps HTML via AJAX)
+    const productForm = document.querySelector('product-form');
+    if (productForm) {
+      const observer = new MutationObserver(function () {
+        document.dispatchEvent(new CustomEvent('variant:change', {
+          detail: {
+            variant: ShopifyAnalytics.meta.product.variants.find(v => v.id == document.querySelector('[name="id"]')?.value)
+          }
+        }));
+      });
+
+      observer.observe(productForm, { childList: true, subtree: true });
+    }
+  });
 </script>
+
 
 
 {% schema %}

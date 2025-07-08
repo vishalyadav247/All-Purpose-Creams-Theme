@@ -500,41 +500,36 @@
 
 {% render 'structured-data-product', product: product, current_variant: current_variant %}
 <script>
-  function updateInStockMessage(variant) {
-    const box = document.getElementById("in-stock-message");
-    if (!box || !variant) return;
-
-    if (variant.available && variant.inventory_quantity > 0) {
-      box.style.display = "block";
-    } else {
-      box.style.display = "none";
-    }
-  }
-
-  // Attach on first load
   document.addEventListener("DOMContentLoaded", function () {
-    // First attach listener
+    const inStockBox = document.getElementById("in-stock-message");
+
+    function updateStockMessage(variant) {
+      if (!variant || !inStockBox) return;
+
+      const qty = variant.inventory_quantity ?? 0;
+
+      if (variant.available && qty > 0) {
+        inStockBox.style.display = "block";
+      } else {
+        inStockBox.style.display = "none";
+      }
+    }
+
+    // ✅ Detect and handle real variant changes only
     document.addEventListener("variant:change", function (event) {
       const variant = event.detail.variant;
-      updateInStockMessage(variant);
+      if (!variant) return;
+
+      // Defensive check: only hide if definitely not in stock
+      const qty = variant.inventory_quantity ?? 0;
+      if (variant.available && qty > 0) {
+        updateStockMessage(variant);
+      } else {
+        updateStockMessage({ available: false, inventory_quantity: 0 });
+      }
     });
-
-    // Observe for form replacement (Shopify swaps HTML via AJAX)
-    const productForm = document.querySelector('product-form');
-    if (productForm) {
-      const observer = new MutationObserver(function () {
-        document.dispatchEvent(new CustomEvent('variant:change', {
-          detail: {
-            variant: ShopifyAnalytics.meta.product.variants.find(v => v.id == document.querySelector('[name="id"]')?.value)
-          }
-        }));
-      });
-
-      observer.observe(productForm, { childList: true, subtree: true });
-    }
   });
 </script>
-
 
 
 {% schema %}

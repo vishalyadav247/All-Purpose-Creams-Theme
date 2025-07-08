@@ -56,6 +56,14 @@
     $('.prev-btn').click(function() {
       owl.trigger('prev.owl.carousel');
     });
+    function updateNavButtonStates(slider, prevBtn, nextBtn) {
+  const scrollLeft = slider.scrollLeft;
+  const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+  prevBtn.disabled = scrollLeft <= 0;
+  nextBtn.disabled = scrollLeft >= maxScroll - 1;
+}
+
   });
 </script>
 {% schema %}

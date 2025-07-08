@@ -502,26 +502,49 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
+  function updateInStockMessage(variant) {
     const inStockBox = document.getElementById("in-stock-message");
+    if (!variant || !inStockBox) return;
 
-    function updateStockMessage(variant) {
-      if (!variant || !inStockBox) return;
+    const qty = variant.inventory_quantity ?? 0;
 
-      const qty = variant.inventory_quantity ?? 0;
+    if (variant.available && qty > 0) {
+      inStockBox.style.display = "block";
+    } else {
+      inStockBox.style.display = "none";
+    }
+  }
 
-      if (variant.available && qty > 0) {
-        inStockBox.style.display = "block";
-      } else {
-        inStockBox.style.display = "none";
-      }
+  function getCurrentVariant() {
+    const variantId = document.querySelector('form[action*="/cart/add"] [name="id"]')?.value;
+    const variants = window?.ShopifyAnalytics?.meta?.product?.variants;
+    return variants?.find(v => v.id == variantId);
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Initial fix for theme JS replacing form
+    const productForm = document.querySelector('form[action*="/cart/add"]');
+
+    if (productForm) {
+      const observer = new MutationObserver(() => {
+        const variant = getCurrentVariant();
+        if (variant) updateInStockMessage(variant);
+      });
+
+      observer.observe(productForm, { childList: true, subtree: true });
     }
 
-    // ✅ Update stock message when variant is changed
+    // Real variant switch
     document.addEventListener("variant:change", function (event) {
       const variant = event.detail.variant;
-      updateStockMessage(variant); // Always pass real variant
+      updateInStockMessage(variant);
     });
+
+    // Fallback on load in case Shopify didn't fire variant:change
+    setTimeout(() => {
+      const variant = getCurrentVariant();
+      if (variant) updateInStockMessage(variant);
+    }, 300); // Slight delay to allow DOM to settle
   });
 </script>
 

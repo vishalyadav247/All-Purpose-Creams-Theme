@@ -23,17 +23,6 @@
             "show_rating": true
           }
         },
-        "richtext_XzJUWR": {
-          "type": "richtext",
-          "settings": {
-            "text": "<ul><li>Our proprietary formula is a bright white cream with no oxidation or brown color</li><li>One of our top sellers since 2017</li><li>Updated formula in 2024 with smaller crystals for smoother application</li></ul>",
-            "icon": "none",
-            "icon_size": "small",
-            "enable_box": false,
-            "box_color": "#e0f4d5",
-            "reduce_margin": false
-          }
-        },
         "excerpt_tJQbLY": {
           "type": "Excerpt",
           "settings": {}
@@ -129,7 +118,6 @@
       "block_order": [
         "title",
         "price",
-        "richtext_XzJUWR",
         "excerpt_tJQbLY",
         "uses_9pzKtm",
         "variant-picker",

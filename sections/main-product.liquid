@@ -493,7 +493,7 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
 <div id="in-stock-message-wrapper">
   <div id="in-stock-message"
-       style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}none{% endif %}; margin-top:10px;">
+       style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}{% endif %}; margin-top:10px;">
     <p style="font-weight:600; margin:0;">
       <img src="{{ 'icon-instock.svg' | asset_url }}" width="25" height="25" style="margin-right:6px; display:inline-block; vertical-align:middle;">
       In stock – Ready to ship

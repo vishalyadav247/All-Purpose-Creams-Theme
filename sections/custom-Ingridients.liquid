@@ -8,7 +8,7 @@
 
    <div class="ingredient-slider owl-carousel flex items-stretch">
   {% for ingredient in ingredients %}
-    <div class="ingredient-box p-6 rounded text-center flex flex-col justify-between" style="background-color: {{ bg_color }};">
+    <div class="ingredient-box rounded text-center flex flex-col justify-between" style="background-color: {{ bg_color }};">
       <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
       <p class="text-sm">{{ ingredient.description }}</p>
     </div>

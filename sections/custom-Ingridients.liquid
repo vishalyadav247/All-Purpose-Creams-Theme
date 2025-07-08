@@ -1,3 +1,10 @@
+<style>
+    .slider-nav__btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+</style>
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
   {% assign bg_color = section.settings.card_bg_color %}
@@ -13,14 +20,17 @@
           </button>
           <button class="next-btn" aria-label="Next">
             <!-- Your Right Arrow SVG -->
-       {% render 'icon-arrow-right' %}
+            {% render 'icon-arrow-right' %}
           </button>
         </div>
       </div>
 
       <div class="ingredient-slider owl-carousel">
         {% for ingredient in ingredients %}
-          <div class="ingredient-box p-6 rounded text-center h-full" style="background-color: {{ bg_color }}; min-height: 180px;">
+          <div
+            class="ingredient-box p-6 rounded text-center h-full"
+            style="background-color: {{ bg_color }}; min-height: 180px;"
+          >
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-sm">{{ ingredient.description }}</p>
           </div>
@@ -35,36 +45,36 @@
 <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
 
 <script>
-  $(document).ready(function(){
-    var owl = $('.ingredient-slider');
-    owl.owlCarousel({
-      items: 2,
-      margin: 20,
-      dots: false,
-      nav: false,
-      responsive: {
-        768: {
-          items: 4
+    $(document).ready(function(){
+      var owl = $('.ingredient-slider');
+      owl.owlCarousel({
+        items: 2,
+        margin: 20,
+        dots: false,
+        nav: false,
+        responsive: {
+          768: {
+            items: 4
+          }
         }
-      }
+      });
+
+      $('.next-btn').click(function() {
+        owl.trigger('next.owl.carousel');
+      });
+
+      $('.prev-btn').click(function() {
+        owl.trigger('prev.owl.carousel');
+      });
+      function updateNavButtonStates(slider, prevBtn, nextBtn) {
+    const scrollLeft = slider.scrollLeft;
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+    prevBtn.disabled = scrollLeft <= 0;
+    nextBtn.disabled = scrollLeft >= maxScroll - 1;
+  }
+
     });
-
-    $('.next-btn').click(function() {
-      owl.trigger('next.owl.carousel');
-    });
-
-    $('.prev-btn').click(function() {
-      owl.trigger('prev.owl.carousel');
-    });
-    function updateNavButtonStates(slider, prevBtn, nextBtn) {
-  const scrollLeft = slider.scrollLeft;
-  const maxScroll = slider.scrollWidth - slider.clientWidth;
-
-  prevBtn.disabled = scrollLeft <= 0;
-  nextBtn.disabled = scrollLeft >= maxScroll - 1;
-}
-
-  });
 </script>
 {% schema %}
 {

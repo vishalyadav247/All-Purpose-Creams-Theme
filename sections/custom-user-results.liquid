@@ -2,7 +2,10 @@
   <div class="product-info__block space-y-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {% assign users = product.metafields.custom.user_result_list.value %}
-      <div class="flex flex-col justify-center">     <h1 class="product-title h2">Real Results</h1>The {{ product.title }} is constantly giving our customers amazing results. See for yourself.</div>
+      <div class="flex flex-col justify-center">
+        <h1 class="product-title h2">Real Results</h1>
+        The {{ product.title }} is constantly giving our customers amazing results. See for yourself.
+      </div>
       {% for user in users %}
         <div class="">
           {% if user.user_image %}
@@ -10,9 +13,13 @@
               src="{{ user.user_image | image_url: width: 300 }}"
               alt="{{ user.user_name | escape }}"
               class="mx-auto mb-4 rounded-full w-24 h-24 object-cover"
+              style="width:100%"
             >
           {% endif %}
-          <p class="text-xl">{{ user.user_name }} <span class="text-lg" style="color:#008752">- Verified Buyer</span></p>
+          <p class="text-xl">
+            {{ user.user_name }}
+            <span class="text-lg" style="color:#008752">- Verified Buyer</span>
+          </p>
         </div>
       {% endfor %}
     </div>

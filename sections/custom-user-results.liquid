@@ -1,15 +1,27 @@
 <section class="container">
-  <div class="product-info__block">
-      {% assign ingredients = product.metafields.custom.ingredient_list.value %}
-  {% assign bg_color = section.settings.card_bg_color %}
+  <div class="product-info__block space-y-6">
     <div>
-      The {{ product.title }} is constantly giving our customers amazing results. See for yourslef.
+      The {{ product.title }} is constantly giving our customers amazing results. See for yourself.
     </div>
-    <div>
-      
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {% assign users = product.metafields.custom.user_result_list.value %}
+      {% for user in users %}
+        <div class="ingredient-box p-6 rounded text-center h-full bg-gray-100">
+          {% if user.user_image %}
+            <img
+              src="{{ user.user_image | image_url: width: 300 }}"
+              alt="{{ user.user_name | escape }}"
+              class="mx-auto mb-4 rounded-full w-24 h-24 object-cover"
+            >
+          {% endif %}
+          <p class="text-lg font-semibold">{{ user.user_name }}</p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 </section>
+
 
 {% schema %}
   {

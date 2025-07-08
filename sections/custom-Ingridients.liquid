@@ -1,9 +1,13 @@
-<div class="product-info__block product-info__block--title" {{ block.shopify_attributes }}>
+<section class="product-info__block product-info__block--title" {{ block.shopify_attributes }}>
   <h1 class="product-title h2">{{ product.title | escape }}</h1>
-</div>
+</section>
+
 {% schema %}
 {
-  "name": "Ingridients Section",
-  "settings": [],
+  "name": "Ingredients Section",
+  "tag": "section",
+  "class": "section",
+  "settings": []
 }
 {% endschema %}
+

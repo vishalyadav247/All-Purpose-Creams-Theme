@@ -663,6 +663,9 @@ h3 {
   color: #fff !important;
 }
 @media (max-width: 767px) {
+  .product-options{
+    gap:0px !important;
+  }
   .breadcrumbs {
     display: block;
   }

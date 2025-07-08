@@ -4,7 +4,8 @@
   cursor: not-allowed;
 }
 </style>
-<section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
+<section class="section container">
+<div class="product-info__block product-info__block--title " {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
   {% assign bg_color = section.settings.card_bg_color %}
 
@@ -32,7 +33,7 @@
       </div>
     </div>
   {% endif %}
-</section>
+</div></section>
 <!-- Include Owl Carousel CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>

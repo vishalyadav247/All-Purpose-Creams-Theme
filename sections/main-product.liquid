@@ -199,12 +199,14 @@
               </div>
             {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
            {% if product.metafields.custom.treats_text %}
-        <div
+
+             <div
           class="Treats-Text flex justify-center flex-wrap text-center"
         >
           <strong>Treat: </strong>{{ product.metafields.custom.treats_text }}
-        </div> <p>arun</p>
+        </div> 
       {% endif %}
+            <p>arun</p>
             {%- when 'variant-picker' -%}
               {%- unless product.has_only_default_variant -%}
                 <div class="product-info__block product-options" {{ block.shopify_attributes }}>

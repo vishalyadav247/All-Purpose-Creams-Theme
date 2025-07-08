@@ -243,15 +243,23 @@
                     block: block,
                     update_url: true
                   %}
-          {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
-  <p class="in-stock-message" style="margin-bottom:0px;">
-    <img src="{{ 'icon-instock.svg' | asset_url }}" alt="In stock icon" width="40" height="40" style="display:inline-block; vertical-align:middle; margin-right:6px;">
-    In stock – Ready to ship
-  </p>
-{% endif %}
-                {%- comment -%}    {% if product.selected_or_first_available_variant.available %}
-                   <span></span> <p>In Stock Ready To Ship</p>
-                  {% endif %}{%- endcomment -%}
+                  {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+                    <p class="in-stock-message" style="margin-bottom:0px;">
+                      <img
+                        src="{{ 'icon-instock.svg' | asset_url }}"
+                        alt="In stock icon"
+                        width="30"
+                        height="30"
+                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                      >
+                      In stock – Ready to ship
+                    </p>
+                  {% endif %}
+                  {%- comment -%}
+                    {% if product.selected_or_first_available_variant.available %}
+                     <span></span> <p>In Stock Ready To Ship</p>
+                    {% endif %}
+                  {%- endcomment -%}
                 </div>
               {%- endunless -%}
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}

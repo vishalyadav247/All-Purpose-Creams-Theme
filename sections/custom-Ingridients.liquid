@@ -1,3 +1,9 @@
+<style>
+  .prev-btn[disabled],
+.next-btn[disabled] {
+  cursor: not-allowed;
+}
+</style>
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
   {% assign bg_color = section.settings.card_bg_color %}

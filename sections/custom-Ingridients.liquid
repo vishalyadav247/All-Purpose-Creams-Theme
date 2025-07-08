@@ -1,45 +1,42 @@
-<carousel-slider class="ingredients-section">
-  <div class="slider" id="ingredient-slider" role="region" tabindex="0">
-    <ul class="slider__grid">
-      {% assign ingredients = product.metafields.custom.ingredient_list.value %}
-      {% if ingredients != blank %}
+<section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
+
+  {% assign ingredients = product.metafields.custom.ingredient_list.value %}
+
+  {% if ingredients != blank %}
+    <div class="ingredients-section">
+      <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>
+
+      <div class="ingredient-slider owl-carousel">
         {% for ingredient in ingredients %}
-          <li class="slider__item">
+          <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-sm">{{ ingredient.description }}</p>
-          </li>
+          </div>
         {% endfor %}
-      {% endif %}
-    </ul>
-  </div>
+      </div>
+    </div>
+  {% endif %}
 
-  <div class="slider-nav" aria-controls="ingredient-slider">
-    <button class="slider-nav__btn" name="prev" aria-label="Previous slide">‹</button>
-    <button class="slider-nav__btn" name="next" aria-label="Next slide">›</button>
-  </div>
-</carousel-slider>
+</section>
 
-<style>
-  .slider__grid {
-    display: flex;
-    gap: 1rem;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 1rem;
-  }
-  .slider__item {
-    width: 250px;
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-    background-color: #bfdbfe;
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    text-align: center;
-  }
-</style>
-<script>customElements.define('carousel-slider', CarouselSlider);</script>
+<!-- Include Owl Carousel JS + CSS in your theme -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
 
-
+<script>
+  $(document).ready(function(){
+    $('.ingredient-slider').owlCarousel({
+      items: 2,
+      margin: 15,
+      nav: true,
+      dots: false,
+      responsive: {
+        768: { items: 4 }
+      }
+    });
+  });
+</script>
 
 {% schema %}
 {

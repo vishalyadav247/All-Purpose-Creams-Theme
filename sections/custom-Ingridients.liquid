@@ -1,5 +1,22 @@
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   <h1 class="product-title h2">Specific choose Ingridients,Tailored For Your Skin</h1>
+  {% assign ingredients = product.metafields.custom.ingredients.value %}
+
+{% if ingredients != blank %}
+  <div class="ingredients-section">
+    <h2 class="text-3xl font-bold mb-6">Specifically Chosen Ingredients, Tailored For Your Skin</h2>
+    
+    <div class="ingredient-slider owl-carousel">
+      {% for ingredient in ingredients %}
+        <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
+          <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
+          <p class="text-sm">{{ ingredient.description }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
 </section>
 
 {% schema %}

@@ -24,7 +24,7 @@
 
       <div class="ingredient-slider owl-carousel">
         {% for ingredient in ingredients %}
-          <div class="ingredient-box p-6 rounded text-center h-full" style="background-color: {{ bg_color }};">
+          <div class="ingredient-box p-6 rounded text-center h-full" style="background-color: {{ bg_color }}; min-height: 180px;">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-md">{{ ingredient.description }}</p>
           </div>
@@ -57,7 +57,7 @@
       items: 4
     }
   },
-  onInitialized: updateNavButtons // ✅ Call after init
+  onInitialized: updateNavButtons 
 });
 
 
@@ -88,25 +88,11 @@
         $nextBtn.prop('disabled', false).css('opacity', 1);
       }
     }
-function setEqualHeight() {
-  var maxHeight = 0;
-  $('.ingredient-box').css('height', 'auto'); // Reset first
-
-  $('.ingredient-box').each(function() {
-    var boxHeight = $(this).outerHeight();
-    if (boxHeight > maxHeight) {
-      maxHeight = boxHeight;
-    }
-  });
-
-  $('.ingredient-box').css('height', maxHeight + 'px');
-}
 
     // Also bind update on change & resize
     owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
-        setEqualHeight();
     });
   });
 </script>

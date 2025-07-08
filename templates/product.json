@@ -141,6 +141,13 @@
         "media_grouping_option": "Color,Colour,Couleur,Farbe"
       }
     },
+    "custom_ingridients_UJjXYQ": {
+      "type": "custom-Ingridients",
+      "name": "Ingredients Section",
+      "settings": {
+        "card_bg_color": "#c3dbef"
+      }
+    },
     "17501617857e568869": {
       "type": "apps",
       "blocks": {
@@ -174,13 +181,6 @@
         "full_width": false
       }
     },
-    "custom_ingridients_UJjXYQ": {
-      "type": "custom-Ingridients",
-      "name": "Ingredients Section",
-      "settings": {
-        "card_bg_color": "#c3dbef"
-      }
-    },
     "related-products": {
       "type": "related-products",
       "disabled": true,
@@ -190,11 +190,17 @@
         "card_size": "small",
         "products_to_show": 4
       }
+    },
+    "custom_user_results_inGARf": {
+      "type": "custom-user-results",
+      "name": "User Real Result",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "custom_ingridients_UJjXYQ",
+    "custom_user_results_inGARf",
     "17501617857e568869",
     "related-products"
   ]

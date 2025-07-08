@@ -250,7 +250,8 @@
             {{- product.title | escape -}}
           </a>
         </p>
-   <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p>
+         {% if product.metafields.custom.short_excerpt %}
+   <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p> {% endif %}
         {%- render 'price', product: product -%}
 
         {%- if product.metafields.reviews.rating.value != blank and settings.card_show_rating -%}

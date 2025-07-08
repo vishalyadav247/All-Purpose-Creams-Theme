@@ -221,7 +221,8 @@
               </div>
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
             {% when 'Excerpt'%}
-              <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p>
+             {% if product.metafields.custom.short_excerpt %}
+              <p class="Short-Excerpt">{{ product.metafields.custom.short_excerpt }}</p> {% endif %}
             {% when 'uses' %}
               {% if product.metafields.custom.uses_text %}
                 <div

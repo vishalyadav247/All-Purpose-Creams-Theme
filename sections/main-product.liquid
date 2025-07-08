@@ -243,16 +243,10 @@
                     block: block,
                     update_url: true
                   %}
-                {% assign current_variant = product.selected_or_first_available_variant %}
-{% assign show_stock_message = false %}
+              {% assign current_variant = product.selected_or_first_available_variant %}
 
-{% if current_variant.available %}
-  {% if current_variant.inventory_quantity > 0 %}
-    {% assign show_stock_message = true %}
-  {% endif %}
-{% endif %}
 <div id="in-stock-message"
-     style="display: {% if show_stock_message %}block{% else %}none{% endif %}; margin-top:10px;">
+     style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}none{% endif %}; margin-top:10px;">
   <p class="in-stock-message" style="font-weight:600; margin:0;">
     <img
       src="{{ 'icon-instock.svg' | asset_url }}"
@@ -264,6 +258,7 @@
     In stock – Ready to ship
   </p>
 </div>
+
 
 
                   {%- comment -%}

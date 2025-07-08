@@ -183,11 +183,17 @@
         "card_size": "small",
         "products_to_show": 4
       }
+    },
+    "custom_ingridients_UJjXYQ": {
+      "type": "custom-Ingridients",
+      "name": "Ingredients Section",
+      "settings": {}
     }
   },
   "order": [
     "main",
     "17501617857e568869",
-    "related-products"
+    "related-products",
+    "custom_ingridients_UJjXYQ"
   ]
 }

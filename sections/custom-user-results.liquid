@@ -1,10 +1,10 @@
 <section class="container">
   <div class="product-info__block space-y-6">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {% assign users = product.metafields.custom.user_result_list.value %}
       <div>The {{ product.title }} is constantly giving our customers amazing results. See for yourself.</div>
       {% for user in users %}
-        <div class="p-6 rounded text-center bg-gray-100">
+        <div class=" rounded text-center bg-gray-100">
           {% if user.user_image %}
             <img
               src="{{ user.user_image | image_url: width: 300 }}"

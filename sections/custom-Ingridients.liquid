@@ -71,18 +71,6 @@
     $prevBtn.click(function() {
       owl.trigger('prev.owl.carousel');
     });
-
-    function updateButtons(event) {
-      const currentIndex = event.item.index;
-      const total = event.item.count;
-
-      const itemsPerPage = event.page.size;
-      const totalPages = Math.ceil(total / itemsPerPage);
-      const currentPage = event.page.index;
-
-      $prevBtn.prop('disabled', currentPage === 0);
-      $nextBtn.prop('disabled', currentPage >= totalPages - 1);
-    }
   });
 </script>
 

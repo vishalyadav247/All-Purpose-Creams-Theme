@@ -31,10 +31,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
-
 <script>
   $(document).ready(function(){
     var owl = $('.ingredient-slider');
+    var $prevBtn = $('.prev-btn');
+    var $nextBtn = $('.next-btn');
+
     owl.owlCarousel({
       items: 2,
       margin: 20,
@@ -47,15 +49,41 @@
       }
     });
 
-    $('.next-btn').click(function() {
+    $nextBtn.click(function() {
       owl.trigger('next.owl.carousel');
     });
 
-    $('.prev-btn').click(function() {
+    $prevBtn.click(function() {
       owl.trigger('prev.owl.carousel');
+    });
+
+    function updateNavButtons(event) {
+      var currentIndex = event.item.index;
+      var totalItems = event.item.count;
+      var itemsShown = event.page.size;
+
+      // Disable prev button if first slide
+      if (currentIndex === 0) {
+        $prevBtn.prop('disabled', true).css('opacity', 0.5);
+      } else {
+        $prevBtn.prop('disabled', false).css('opacity', 1);
+      }
+
+      // Disable next button if at end
+      if (currentIndex + itemsShown >= totalItems) {
+        $nextBtn.prop('disabled', true).css('opacity', 0.5);
+      } else {
+        $nextBtn.prop('disabled', false).css('opacity', 1);
+      }
+    }
+
+    owl.on('initialized.owl.carousel changed.owl.carousel resized.owl.carousel', function(event) {
+      if (!event.namespace) return;
+      updateNavButtons(event);
     });
   });
 </script>
+
 {% schema %}
 {
   "name": "Ingredients Section",

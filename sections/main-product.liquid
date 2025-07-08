@@ -221,11 +221,11 @@
               </div>
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
             {% when 'uses' %}
-              {% if product.metafields.custom.treats_text %}
+              {% if product.metafields.custom.uses_text %}
                 <div
-                  class="Treats-Text flex justify-center flex-wrap text-center"
+                  class="Uses-Text flex justify-center flex-wrap text-center"
                 >
-                  <strong>Uses: </strong>{{ product.metafields.custom.treats_text }}
+                  <strong>Uses: </strong>{{ product.metafields.custom.uses_text }}
                 </div>
               {% endif %}
 

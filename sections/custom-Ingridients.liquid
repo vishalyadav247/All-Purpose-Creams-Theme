@@ -43,7 +43,7 @@
     var $prevBtn = $('.prev-btn');
     var $nextBtn = $('.next-btn');
 
- owl.owlCarousel({
+   owl.owlCarousel({
   items: 2,
   margin: 10,
   dots: false,
@@ -57,12 +57,8 @@
       items: 4
     }
   },
-  onInitialized: function(event) {
-    updateNavButtons(event);
-    setEqualHeight(); // ✅ run here
-  }
+  onInitialized: updateNavButtons // ✅ Call after init
 });
-
 
 
     $nextBtn.click(function() {
@@ -110,6 +106,7 @@ function setEqualHeight() {
     owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
+        setEqualHeight();
     });
   });
 </script>

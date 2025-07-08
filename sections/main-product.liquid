@@ -244,7 +244,18 @@
                     block: block,
                     update_url: true
                   %}
-                
+                  {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
+                    <p class="in-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
+                      <img
+                        src="{{ 'icon-instock.svg' | asset_url }}"
+                        alt="In stock icon"
+                        width="25"
+                        height="25"
+                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                      >
+                      In stock – Ready to ship
+                    </p>
+                  {% endif %}
                 </div>
               {%- endunless -%}
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
@@ -490,66 +501,6 @@
 </append-modals>
 
 {% render 'structured-data-product', product: product, current_variant: current_variant %}
-{% assign current_variant = product.selected_or_first_available_variant %}
-<div id="in-stock-message-wrapper">
-  <div id="in-stock-message"
-       style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}{% endif %}; margin-top:10px;">
-    <p style="font-weight:600; margin:0;">
-      <img src="{{ 'icon-instock.svg' | asset_url }}" width="25" height="25" style="margin-right:6px; display:inline-block; vertical-align:middle;">
-      In stock – Ready to ship
-    </p>
-  </div>
-</div>
-
-<script>
-  function updateInStockMessage(variant) {
-    const inStockBox = document.getElementById("in-stock-message");
-    if (!variant || !inStockBox) return;
-
-    const qty = variant.inventory_quantity ?? 0;
-
-    if (variant.available && qty > 0) {
-      inStockBox.style.display = "block";
-    } else {
-      inStockBox.style.display = "none";
-    }
-  }
-
-  function getCurrentVariant() {
-    const variantId = document.querySelector('form[action*="/cart/add"] [name="id"]')?.value;
-    const variants = window?.ShopifyAnalytics?.meta?.product?.variants;
-    return variants?.find(v => v.id == variantId);
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    // Initial fix for theme JS replacing form
-    const productForm = document.querySelector('form[action*="/cart/add"]');
-
-    if (productForm) {
-      const observer = new MutationObserver(() => {
-        const variant = getCurrentVariant();
-        if (variant) updateInStockMessage(variant);
-      });
-
-      observer.observe(productForm, { childList: true, subtree: true });
-    }
-
-    // Real variant switch
-    document.addEventListener("variant:change", function (event) {
-      const variant = event.detail.variant;
-      updateInStockMessage(variant);
-    });
-
-    // Fallback on load in case Shopify didn't fire variant:change
-    setTimeout(() => {
-      const variant = getCurrentVariant();
-      if (variant) updateInStockMessage(variant);
-    }, 300); // Slight delay to allow DOM to settle
-  });
-</script>
-
-
-
 {% schema %}
 {
   "name": "Product details",

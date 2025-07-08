@@ -59,13 +59,7 @@
         {%- endif -%}
       </div>
     </div>
-    <div class="product-info z-1" data-cc-animate>
-      <div
-        {% if section.settings.enable_sticky_columns %}
-          class="sticky-content"
-        {% endif %}
-      >
-        {% assign current_variant = product.selected_or_first_available_variant %}
+       {% assign current_variant = product.selected_or_first_available_variant %}
 
 <div id="in-stock-message"
      data-inventory="{{ current_variant.inventory_quantity }}"
@@ -83,6 +77,12 @@
   </p>
 </div>
 
+    <div class="product-info z-1" data-cc-animate>
+      <div
+        {% if section.settings.enable_sticky_columns %}
+          class="sticky-content"
+        {% endif %}
+      >
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when '@app' -%}

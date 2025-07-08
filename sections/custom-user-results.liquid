@@ -7,7 +7,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
       {% assign users = product.metafields.custom.user_result_list.value %}
       {% for user in users %}
-        <div class="ingredient-box p-6 rounded text-center h-full bg-gray-100">
+        <div class="p-6 rounded text-center bg-gray-100">
           {% if user.user_image %}
             <img
               src="{{ user.user_image | image_url: width: 300 }}"

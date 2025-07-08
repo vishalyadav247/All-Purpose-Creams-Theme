@@ -65,23 +65,15 @@
           class="sticky-content"
         {% endif %}
       >
-           {% assign current_variant = product.selected_or_first_available_variant %}
-
+         {% assign current_variant = product.selected_or_first_available_variant %}
 <div id="in-stock-message"
-     data-inventory="{{ current_variant.inventory_quantity }}"
-     data-available="{{ current_variant.available }}"
-     style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}none{% endif %}; margin-top:10px;">
-  <p class="in-stock-message" style="font-weight:600; margin:0;">
-    <img
-      src="{{ 'icon-instock.svg' | asset_url }}"
-      alt="In stock icon"
-      width="25"
-      height="25"
-      style="display:inline-block; vertical-align:middle; margin-right:6px;"
-    >
+     style="display: {% if current_variant.available and current_variant.inventory_quantity > 0 %}block{% else %}none{% endif %};">
+  <p>
+    <img src="{{ 'icon-instock.svg' | asset_url }}" width="25" height="25" style="margin-right:6px;">
     In stock – Ready to ship
   </p>
 </div>
+
 
         {%- for block in section.blocks -%}
           {%- case block.type -%}

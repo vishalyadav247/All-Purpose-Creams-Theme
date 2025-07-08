@@ -1,63 +1,76 @@
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   {% assign ingredients = product.metafields.custom.ingredient_list.value %}
-  {% assign bg_color = section.settings.color_scheme_3_bg %}
+  {% assign bg_color = section.settings.card_bg_color %}
 
   {% if ingredients != blank %}
-    <div class="ingredients-section">
-      <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>
+    <div class="ingredients-section relative">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>
+        <div class="ingredient-nav flex gap-2">
+          <button class="prev-btn" aria-label="Previous">
+            <!-- Your Left Arrow SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+          </button>
+          <button class="next-btn" aria-label="Next">
+            <!-- Your Right Arrow SVG -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+          </button>
+        </div>
+      </div>
 
-   <div class="ingredient-slider owl-carousel flex items-stretch">
-  {% for ingredient in ingredients %}
-    <div class="ingredient-box rounded text-center flex flex-col justify-between" style="background-color: {{ bg_color }};">
-      <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
-      <p class="text-sm">{{ ingredient.description }}</p>
-    </div>
-  {% endfor %}
-</div>
-
+      <div class="ingredient-slider owl-carousel">
+        {% for ingredient in ingredients %}
+          <div class="ingredient-box p-6 rounded text-center h-full" style="background-color: {{ bg_color }}; min-height: 200px;">
+            <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
+            <p class="text-sm">{{ ingredient.description }}</p>
+          </div>
+        {% endfor %}
+      </div>
     </div>
   {% endif %}
 </section>
-
-
-<!-- Include Owl Carousel JS + CSS in your theme -->
+<!-- Include Owl Carousel CSS & JS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
 
 <script>
   $(document).ready(function(){
-    $('.ingredient-slider').owlCarousel({
+    var owl = $('.ingredient-slider');
+    owl.owlCarousel({
       items: 2,
-      margin: 15,
-      nav: true,
+      margin: 20,
       dots: false,
+      nav: false,
       responsive: {
-        768: { items: 4 }
+        768: {
+          items: 4
+        }
       }
+    });
+
+    $('.next-btn').click(function() {
+      owl.trigger('next.owl.carousel');
+    });
+
+    $('.prev-btn').click(function() {
+      owl.trigger('prev.owl.carousel');
     });
   });
 </script>
-
 {% schema %}
 {
   "name": "Ingredients Section",
   "tag": "section",
   "class": "section",
-"settings": [
-  {
-    "type": "color",
-    "id": "color_scheme_3_bg",
-    "label": "Scheme 3 Background",
-    "default": "#c3dbef"
-  },
-  {
-    "type": "color_background",
-    "id": "color_scheme_3_gradient",
-    "label": "Scheme 3 Gradient",
-    "default": "linear-gradient(0deg, rgba(255,255,255,0), rgba(255,255,255,0))"
-  }
-],
+  "settings": [
+    {
+      "type": "color",
+      "id": "card_bg_color",
+      "label": "Card Background Color",
+      "default": "#c3dbef"
+    }
+  ],
   "presets": [
     {
       "name": "Ingredients Section"

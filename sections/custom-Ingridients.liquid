@@ -9,11 +9,11 @@
         <div class="ingredient-nav flex gap-2">
           <button class="prev-btn" aria-label="Previous">
             <!-- Your Left Arrow SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000"><path d="M15.41 7.41 14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            {% render 'icon-arrow-left' %}
           </button>
           <button class="next-btn" aria-label="Next">
             <!-- Your Right Arrow SVG -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#000"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+       {% render 'icon-arrow-right' %}
           </button>
         </div>
       </div>

@@ -1,42 +1,23 @@
-<section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
-
-  {% assign ingredients = product.metafields.custom.ingredient_list.value %}
-
-  {% if ingredients != blank %}
-    <div class="ingredients-section">
-      <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>
-
-      <div class="ingredient-slider owl-carousel">
+<carousel-slider class="ingredients-section">
+  <div class="slider" id="ingredient-slider" role="region" tabindex="0">
+    <ul class="slider__grid flex gap-4 overflow-x-auto scroll-smooth snap-x">
+      {% assign ingredients = product.metafields.custom.ingredient_list.value %}
+      {% if ingredients != blank %}
         {% for ingredient in ingredients %}
-          <div class="ingredient-box bg-blue-200 p-6 rounded text-center">
+          <li class="slider__item snap-start shrink-0 w-64 bg-blue-200 p-6 rounded text-center">
             <h3 class="text-xl font-bold mb-2">{{ ingredient.title }}</h3>
             <p class="text-sm">{{ ingredient.description }}</p>
-          </div>
+          </li>
         {% endfor %}
-      </div>
-    </div>
-  {% endif %}
+      {% endif %}
+    </ul>
+  </div>
 
-</section>
-
-<!-- Include Owl Carousel JS + CSS in your theme -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/assets/owl.carousel.min.css">
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
-
-<script>
-  $(document).ready(function(){
-    $('.ingredient-slider').owlCarousel({
-      items: 2,
-      margin: 15,
-      nav: true,
-      dots: false,
-      responsive: {
-        768: { items: 4 }
-      }
-    });
-  });
-</script>
+  <div class="slider-nav flex justify-between mt-4" aria-controls="ingredient-slider">
+    <button class="slider-nav__btn" name="prev" aria-label="Previous slide">‹</button>
+    <button class="slider-nav__btn" name="next" aria-label="Next slide">›</button>
+  </div>
+</carousel-slider>
 
 {% schema %}
 {

@@ -243,18 +243,29 @@
                     block: block,
                     update_url: true
                   %}
-                  {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
-                    <p class="in-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
-                      <img
-                        src="{{ 'icon-instock.svg' | asset_url }}"
-                        alt="In stock icon"
-                        width="25"
-                        height="25"
-                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
-                      >
-                      In stock – Ready to ship
-                    </p>
-                  {% endif %}
+                {% assign current_variant = product.selected_or_first_available_variant %}
+{% assign show_stock_message = false %}
+
+{% if current_variant.available %}
+  {% if current_variant.inventory_quantity > 0 %}
+    {% assign show_stock_message = true %}
+  {% endif %}
+{% endif %}
+<div id="in-stock-message"
+     style="display: {% if show_stock_message %}block{% else %}none{% endif %}; margin-top:10px;">
+  <p class="in-stock-message" style="font-weight:600; margin:0;">
+    <img
+      src="{{ 'icon-instock.svg' | asset_url }}"
+      alt="In stock icon"
+      width="25"
+      height="25"
+      style="display:inline-block; vertical-align:middle; margin-right:6px;"
+    >
+    In stock – Ready to ship
+  </p>
+</div>
+
+
                   {%- comment -%}
                     {% if product.selected_or_first_available_variant.available %}
                      <span></span> <p>In Stock Ready To Ship</p>
@@ -505,6 +516,22 @@
 </append-modals>
 
 {% render 'structured-data-product', product: product, current_variant: current_variant %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const inStockBox = document.getElementById("in-stock-message");
+
+    document.addEventListener("variant:change", function (event) {
+      const variant = event.detail.variant;
+      if (!variant || !inStockBox) return;
+
+      if (variant.available && variant.inventory_quantity > 0) {
+        inStockBox.style.display = "block";
+      } else {
+        inStockBox.style.display = "none";
+      }
+    });
+  });
+</script>
 
 {% schema %}
 {

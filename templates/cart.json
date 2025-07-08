@@ -24,7 +24,7 @@
         "hero_tint_color": "#000000",
         "hero_tint_opacity": 20,
         "hero_tint_text_color": "#ffffff",
-        "show_breadcrumbs": false
+        "show_breadcrumbs": true
       }
     },
     "main": {
@@ -49,9 +49,70 @@
         "card_size": "medium",
         "products_to_show": 4
       }
+    },
+    "image_banner_tEqGMQ": {
+      "type": "image-banner",
+      "blocks": {
+        "subheading_3nrFmg": {
+          "type": "subheading",
+          "settings": {
+            "text": "Subheading"
+          }
+        },
+        "heading_NTYicP": {
+          "type": "heading",
+          "settings": {
+            "heading": "Talk about your brand",
+            "heading_size": "h2",
+            "heading_h1": false
+          }
+        },
+        "text_3fiXVf": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>",
+            "enlarge_text": false
+          }
+        },
+        "button_dwz6zd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Read more",
+            "button_link": "",
+            "button_style": "btn--secondary"
+          }
+        }
+      },
+      "block_order": [
+        "subheading_3nrFmg",
+        "heading_NTYicP",
+        "text_3fiXVf",
+        "button_dwz6zd"
+      ],
+      "name": "Image banner",
+      "settings": {
+        "height_mode": "fixed",
+        "fixed_height_desktop": 600,
+        "fixed_height_mobile": 350,
+        "full_width": true,
+        "overlay_position": "justify-center items-center",
+        "overlay_text_align": "center",
+        "mobile_center_text": false,
+        "mobile_stacked": false,
+        "text_border_width": 1,
+        "text_border_color": "#ffffff",
+        "text_border_radius": 0,
+        "text_bg_opacity": 90,
+        "color_scheme": "none",
+        "text_color_without_scheme": "#ffffff",
+        "tint_color": "#000000",
+        "tint_opacity": 20,
+        "boundary_effect": ""
+      }
     }
   },
   "order": [
+    "image_banner_tEqGMQ",
     "hero",
     "main",
     "recommendations"

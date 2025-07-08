@@ -198,7 +198,13 @@
                 <span class="product-barcode__value">{{ current_variant.barcode }}</span>
               </div>
             {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
-
+           {% if product.metafields.custom.treats_text %}
+        <div
+          class="Treats-Text flex justify-center flex-wrap text-center"
+        >
+          <strong>Treat: </strong>{{ product.metafields.custom.treats_text }}
+        </div>
+      {% endif %}
             {%- when 'variant-picker' -%}
               {%- unless product.has_only_default_variant -%}
                 <div class="product-info__block product-options" {{ block.shopify_attributes }}>

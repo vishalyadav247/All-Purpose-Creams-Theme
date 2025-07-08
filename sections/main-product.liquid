@@ -517,20 +517,22 @@
 
 {% render 'structured-data-product', product: product, current_variant: current_variant %}
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const inStockBox = document.getElementById("in-stock-message");
+  document.addEventListener("change", function (e) {
+  const variantIdInput = document.querySelector('[name="id"]');
+  const variantId = variantIdInput ? variantIdInput.value : null;
+  const inStockBox = document.getElementById("in-stock-message");
 
-    document.addEventListener("variant:change", function (event) {
-      const variant = event.detail.variant;
-      if (!variant || !inStockBox) return;
+  if (!variantId || !inStockBox) return;
 
-      if (variant.available && variant.inventory_quantity > 0) {
-        inStockBox.style.display = "block";
-      } else {
-        inStockBox.style.display = "none";
-      }
-    });
-  });
+  // Use Shopify's product data if available
+  const variant = window.product?.variants?.find(v => v.id == variantId);
+  if (variant && variant.available && variant.inventory_quantity > 0) {
+    inStockBox.style.display = "block";
+  } else {
+    inStockBox.style.display = "none";
+  }
+});
+
 </script>
 
 

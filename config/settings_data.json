@@ -134,6 +134,9 @@
     "animation_speed": "medium",
     "favicon": "{{ shop.brand.square_logo }}",
     "show_currency_code": false,
+    "cart_type": "page",
+    "after_add_to_cart": "nothing",
+    "cart_empty_shop_link": "shopify://collections/best-sellers",
     "free_shipping_bg_color": "#83858c",
     "free_shipping_color": "#d2ff28",
     "content_for_index": []

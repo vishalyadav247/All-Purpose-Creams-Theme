@@ -11,15 +11,44 @@
   "sections": {
     "hero": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "hero_height_desktop": 200,
+        "hero_height_mobile": 200,
+        "enable_bg": true,
+        "boundary_effect": "",
+        "show_contrast_logo": true,
+        "hero_bg_color": "#eeeeee",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#333333",
+        "image": "shopify://shop_images/APNLSA_720x_297f9e89-5425-4cd9-9eda-3faaee651aad.jpg",
+        "hero_tint_color": "#000000",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": false
+      }
     },
     "main": {
       "type": "main-cart",
-      "settings": {}
+      "settings": {
+        "show_backorder_text": true,
+        "show_order_note": true,
+        "show_tax_and_shipping": true,
+        "show_additional_checkout_buttons": true,
+        "cart_terms_page": "",
+        "show_continue_shopping": true,
+        "continue_shopping_url": "",
+        "show_shipping_calculator": false,
+        "shipping_calculator_default_country": "United States"
+      }
     },
     "recommendations": {
       "type": "cart-recommendations",
-      "settings": {}
+      "settings": {
+        "heading": "You may also like",
+        "layout": "carousel",
+        "card_size": "medium",
+        "products_to_show": 4
+      }
     }
   },
   "order": [

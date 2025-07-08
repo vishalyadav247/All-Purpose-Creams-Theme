@@ -13,7 +13,15 @@
   "sections": {
     "cart-drawer": {
       "type": "cart-drawer",
-      "settings": {}
+      "settings": {
+        "show_backorder_text": true,
+        "show_order_note": true,
+        "show_checkout_button": true,
+        "cart_terms_page": "",
+        "show_recommendations": true,
+        "recommendations_heading": "You may also like",
+        "recommendations_layout": "carousel"
+      }
     }
   },
   "order": [

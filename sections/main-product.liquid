@@ -244,7 +244,7 @@
                     update_url: true
                   %}
                   {% if product.selected_or_first_available_variant.available %}
-                    <p>test</p>
+                    <p>{{ product.selected_or_first_available_variant.available }}</p>
                   {% endif %}
                 </div>
               {%- endunless -%}

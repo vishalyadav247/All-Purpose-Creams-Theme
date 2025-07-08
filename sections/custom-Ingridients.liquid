@@ -52,7 +52,8 @@
         768: {
           items: 4
         }
-      }
+      },
+      onInitialized: updateNavButtons // Call this right after init
     });
 
     $nextBtn.click(function() {
@@ -83,12 +84,14 @@
       }
     }
 
-    owl.on('initialized.owl.carousel changed.owl.carousel resized.owl.carousel', function(event) {
+    // Also bind update on change & resize
+    owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
     });
   });
 </script>
+
 
 {% schema %}
 {

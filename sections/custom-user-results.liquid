@@ -2,7 +2,7 @@
   <div class="product-info__block space-y-6">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       {% assign users = product.metafields.custom.user_result_list.value %}
-      <div>     <h1 class="product-title h2">Specifically Chosen Ingredients, Tailored For Your Skin</h1>The {{ product.title }} is constantly giving our customers amazing results. See for yourself.</div>
+      <div>     <h1 class="product-title h2">Real Results</h1>The {{ product.title }} is constantly giving our customers amazing results. See for yourself.</div>
       {% for user in users %}
         <div class="">
           {% if user.user_image %}

@@ -1,6 +1,6 @@
 <section class="product-info__block product-info__block--title container" {{ block.shopify_attributes }}>
   <h1 class="product-title h2">Specific choose Ingridients,Tailored For Your Skin</h1>
-  {% assign ingredients = product.metafields.custom.ingredients.value %}
+  {% assign ingredients = product.metafields.custom.ingredient_list %}
 
 {% if ingredients != blank %}
   <div class="ingredients-section">

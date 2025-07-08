@@ -1,7 +1,12 @@
 <section class="container">
   <div class="product-info__block">
+      {% assign ingredients = product.metafields.custom.ingredient_list.value %}
+  {% assign bg_color = section.settings.card_bg_color %}
     <div>
       The {{ product.title }} is constantly giving our customers amazing results. See for yourslef.
+    </div>
+    <div>
+      
     </div>
   </div>
 </section>

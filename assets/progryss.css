@@ -658,6 +658,10 @@ h3 {
       font-weight: 600;
       font-family: Montserrat;
 }
+.opt-btn:checked+.opt-label--btn{
+  background: var(--green);
+  color: #fff;
+}
 @media (max-width: 767px) {
   .breadcrumbs {
     display: block;

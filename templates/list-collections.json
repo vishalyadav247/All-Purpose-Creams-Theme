@@ -11,11 +11,26 @@
   "sections": {
     "hero": {
       "type": "hero-banner",
-      "settings": {}
+      "settings": {
+        "hero_height_desktop": 360,
+        "hero_height_mobile": 240,
+        "enable_bg": false,
+        "boundary_effect": "bottom",
+        "show_contrast_logo": false,
+        "hero_bg_color": "#eeeeee",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#333333",
+        "hero_tint_color": "#000000",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": false
+      }
     },
     "main": {
       "type": "main-list-collections",
-      "settings": {}
+      "settings": {
+        "display_type": "all"
+      }
     }
   },
   "order": [

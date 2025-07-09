@@ -315,7 +315,7 @@
 {%- else -%}
   <div class="card w-full">
     
-    <div class="card__media">
+    <div class="card__media {% if section.settings.enable_border %} product-media--bordered{% endif %}">
       <div class="media relative" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
         {%- capture placeholder_name -%}product-{{ 'now' | date: '%N' | modulo: 6 | plus: 1 }}{%- endcapture -%}
         {{ placeholder_name | placeholder_svg_tag: 'media__placeholder img-fit' }}

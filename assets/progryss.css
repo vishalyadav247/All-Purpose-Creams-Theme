@@ -762,6 +762,9 @@ font-family: 'Montserrat';
   .result-text{
     grid-column: span 2;
   }
+  .stamped-carousel-subtitle {
+    float: left !important;
+  }
 }
 #stamped-reviews-widget{
   max-width: 100% !important;

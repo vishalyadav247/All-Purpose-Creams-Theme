@@ -622,6 +622,9 @@ h3 {
         font-size: var(--body_font_size2);
         line-height: normal;
         font-family: Montserrat;
+      }  
+      .Short-Excerpt {
+      color: #212121;
       }
       .price {
         font-size: var(--body_font_size2);
@@ -647,6 +650,7 @@ h3 {
         line-height: normal;
         font-family: Montserrat;
       }
+    
       .price {
         font-size: var(--body_font_size2);
       }

@@ -351,7 +351,7 @@ if (!customElements.get('variant-picker')) {
  const inStockMessage = document.querySelector('.in-stock-message');
 const outStockMessage = document.querySelector('.out-stock-message');
 
-document.addEventListener("variant:change", function (e) {
+document.addEventListener("on:variant:change", function (e) {
   const variant = e.detail.variant;
 
   if (!variant || !inStockMessage || !outStockMessage) return;

@@ -623,9 +623,7 @@ h3 {
         line-height: normal;
         font-family: Montserrat;
       }  
-      .Short-Excerpt {
-      color: #212121;
-      }
+   
       .price {
         font-size: var(--body_font_size2);
       }
@@ -636,6 +634,11 @@ h3 {
         }
       }
     }
+  }
+}
+.sticky-content{
+  .Short-Excerpt{
+    color: #212121;
   }
 }
 .slider__grid{

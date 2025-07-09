@@ -174,7 +174,7 @@
             "limit_words": 20,
             "min_rating": "4",
             "fill_empty": true,
-            "random": false,
+            "random": true,
             "with_photos": false
           }
         }

@@ -191,7 +191,7 @@
       "settings": {
         "heading": "You may also like",
         "layout": "grid",
-        "card_size": "small",
+        "card_size": "medium",
         "products_to_show": 4
       }
     }

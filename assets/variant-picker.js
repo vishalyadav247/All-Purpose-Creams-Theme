@@ -359,8 +359,10 @@ if (!customElements.get('variant-picker')) {
 
       if (variant.available && qty > 0) {
         inStockMessage.style.display = 'block';
+        outStockMessage.style.display = 'none';
       } else {
         outStockMessage.style.display = 'block';
+         inStockMessage.style.display = 'none';
       }
     });
   customElements.define('variant-picker', VariantPicker);

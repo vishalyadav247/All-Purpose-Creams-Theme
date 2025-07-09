@@ -60,13 +60,9 @@
     </a>
   </div>
   <div class="card__info relative align-ltr-{{ settings.coll_card_text_alignment }}">
-      {% if product.metafields.custom.treats_text %}
-        <div
-          class="Treats-Text flex justify-center flex-wrap text-center"
-        >
-          <strong>Treat: </strong>{{ product.metafields.custom.treats_text }}
-        </div>
-      {% endif %}
+     <p>
+       test
+     </p>
     <div class="card__title">
       {%- if collection != blank -%}
         <a href="{{ collection.url }}" class="card-link">{{ collection.title | escape }}</a>

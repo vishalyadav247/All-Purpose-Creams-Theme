@@ -253,6 +253,17 @@
                       >
                       In stock – Ready to ship
                     </p>
+                    {% else %}
+                      <p class="in-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
+                      <img
+                        src="{{ 'icon-instock.svg' | asset_url }}"
+                        alt="In stock icon"
+                        width="25"
+                        height="25"
+                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                      >
+                      Out of stock
+                    </p>
                   {% endif %}
                 </div>
               {%- endunless -%}

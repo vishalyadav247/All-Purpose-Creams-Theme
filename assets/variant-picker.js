@@ -348,22 +348,24 @@ if (!customElements.get('variant-picker')) {
     }
   }
 // instock text visisbility js
-    const inStockMessage = document.querySelector('.in-stock-message');
-    const outStockMessage=document.querySelector('.out-stock-message');
-    document.addEventListener("on:variant:change", function (e) {
-      const variant = e.detail.variant;
+ const inStockMessage = document.querySelector('.in-stock-message');
+const outStockMessage = document.querySelector('.out-stock-message');
 
-      if (!variant || !inStockMessage) return;
+document.addEventListener("variant:change", function (e) {
+  const variant = e.detail.variant;
 
-      const qty = variant.inventory_quantity ?? 0;
+  if (!variant || !inStockMessage || !outStockMessage) return;
 
-      if (variant.available && qty > 0) {
-        inStockMessage.style.display = 'block';
-        outStockMessage.style.display = 'none';
-      } else {
-        outStockMessage.style.display = 'block';
-         inStockMessage.style.display = 'none';
-      }
-    });
+  const qty = variant.inventory_quantity ?? 0;
+
+  if (variant.available && qty > 0) {
+    inStockMessage.style.display = 'block';
+    outStockMessage.style.display = 'none';
+  } else {
+    inStockMessage.style.display = 'none';
+    outStockMessage.style.display = 'block';
+  }
+});
+
   customElements.define('variant-picker', VariantPicker);
 }

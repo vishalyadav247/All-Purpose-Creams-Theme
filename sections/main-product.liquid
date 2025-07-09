@@ -63,7 +63,6 @@
           class="sticky-content"
         {% endif %}
       >
-
         {%- for block in section.blocks -%}
           {%- case block.type -%}
             {%- when '@app' -%}
@@ -234,7 +233,11 @@
 
             {%- when 'variant-picker' -%}
               {%- unless product.has_only_default_variant -%}
-                <div class="product-info__block product-options flex items-center flex-wrap" style="gap:10px;" {{ block.shopify_attributes }}>
+                <div
+                  class="product-info__block product-options flex items-center flex-wrap"
+                  style="gap:10px;"
+                  {{ block.shopify_attributes }}
+                >
                   {% render 'variant-picker',
                     product: product,
                     product_form_id: product_form_id,
@@ -242,8 +245,11 @@
                     block: block,
                     update_url: true
                   %}
-                  {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}
-                    <p class="in-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
+               
+                    <p
+                      class="in-stock-message"
+                      style="margin-bottom:0px; margin-top:10px; font-weight:600; {% if product.selected_or_first_available_variant.inventory_quantity <= 0 %}display:none;{% endif %}"
+                    >
                       <img
                         src="{{ 'icon-instock.svg' | asset_url }}"
                         alt="In stock icon"
@@ -253,18 +259,21 @@
                       >
                       In stock – Ready to ship
                     </p>
-                    {% else %}
-                      <p class="out-stock-message" style="margin-bottom:0px; margin-top:10px; font-weight:600">
+
+                    <p
+                      class="out-stock-message"
+                      style="margin-bottom:0px; margin-top:10px; font-weight:600; {% if product.selected_or_first_available_variant.inventory_quantity > 0 %}display:none;{% endif %}"
+                    >
                       <img
                         src="{{ 'cross.svg' | asset_url }}"
-                        alt="In stock icon"
+                        alt="Out of stock icon"
                         width="25"
                         height="25"
                         style="display:inline-block; vertical-align:middle; margin-right:6px;"
                       >
                       Out of stock
                     </p>
-                  {% endif %}
+                  
                 </div>
               {%- endunless -%}
               {%- comment -%} ==================== end of block ==================== {%- endcomment -%}
@@ -339,27 +348,31 @@
                         </div>
                       {%- endif -%}
                     </div>
-                     <div class="product-info__block flex flex-wrap justify-between text-center items-center" style="gap:10px">
-                    <p style="margin-bottom:0px">
-                      <img
-                        src="{{ 'right-click.svg' | asset_url }}"
-                        alt="In stock icon"
-                        width="20"
-                        height="20"
-                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
-                      >
-                      Free priority US shipping over $90
-                    </p>
+                    <div
+                      class="product-info__block flex flex-wrap justify-between text-center items-center"
+                      style="gap:10px"
+                    >
                       <p style="margin-bottom:0px">
-                      <img
-                      src="{{ 'right-click.svg' | asset_url }}"
-                        alt="In stock icon"
-                        width="20"
-                        height="20"
-                        style="display:inline-block; vertical-align:middle; margin-right:6px;"
-                      >
-                      HSA & FSA Supported
-                    </p></div> 
+                        <img
+                          src="{{ 'right-click.svg' | asset_url }}"
+                          alt="In stock icon"
+                          width="20"
+                          height="20"
+                          style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                        >
+                        Free priority US shipping over $90
+                      </p>
+                      <p style="margin-bottom:0px">
+                        <img
+                          src="{{ 'right-click.svg' | asset_url }}"
+                          alt="In stock icon"
+                          width="20"
+                          height="20"
+                          style="display:inline-block; vertical-align:middle; margin-right:6px;"
+                        >
+                        HSA & FSA Supported
+                      </p>
+                    </div>
                     {%- if block.settings.show_backorder_text -%}
                       {% render 'backorder', product: product, variant: current_variant %}
                     {%- endif -%}

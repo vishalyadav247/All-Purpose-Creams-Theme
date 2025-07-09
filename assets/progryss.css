@@ -635,6 +635,11 @@ h3 {
     }
   }
 }
+    .card__title {
+        font-size: var(--body_font_size2);
+        line-height: normal;
+        font-family: Montserrat;
+      }
   .Treats-Text {
       padding: 8px 0;
       background-color: #0087524d;

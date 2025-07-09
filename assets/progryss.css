@@ -618,11 +618,6 @@ h3 {
   .card:last-child {
     background: #f6f6f6;
     .card__info {
-      .card__title {
-        font-size: var(--body_font_size2);
-        line-height: normal;
-        font-family: Montserrat;
-      }
       .price {
         font-size: var(--body_font_size2);
       }

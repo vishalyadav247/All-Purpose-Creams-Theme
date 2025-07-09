@@ -761,4 +761,7 @@ h3 {
 }
 #stamped-reviews-widget{
   max-width: 100% !important;
+  .stamped-reviews-product-title{
+    display: none !important;
+  }
 }

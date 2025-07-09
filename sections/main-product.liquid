@@ -45,8 +45,6 @@
 {%- endif -%}
 
 <append-modals class="section section--page-width product js-product" data-section="{{ section.id }}">
-  {% render 'breadcrumbs', show_next_prev: true %}
-
   <div class="md:flex justify-center product-layout--{{ section.settings.media_size }}">
     <div class="product-media product-media--{{ section.settings.media_layout }}{% if section.settings.enable_border %} product-media--bordered{% endif %}">
       <div class="media-gallery{% if section.settings.enable_sticky_columns %} sticky-content{% endif %}">

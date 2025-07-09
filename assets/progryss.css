@@ -646,6 +646,17 @@ h3 {
     }
   }
 }
+  .Treats-Text {
+      padding: 8px 0;
+      background-color: #0087524d;
+      text-transform: uppercase;
+      font-weight: 600;
+      font-family: Montserrat;
+    }
+    .Short-Excerpt {
+      color: #8a8a8a;
+      font-size: var(--body_font_size1);
+}
 .breadcrumbs {
   .icon {
     opacity: 1;

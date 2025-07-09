@@ -39,7 +39,7 @@
 <div class="section section--page-width content-block">
   {%- if section.settings.display_type == 'all' -%}
     {%- paginate collections by 12 -%}
-      <ul class="grid grid-cols-{{ settings.coll_card_mob_per_row }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-theme gap-y-10" role="list">
+      <ul class="grid grid-cols-{{ settings.coll_card_mob_per_row }} sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-x-theme gap-y-10" role="list">
         {%- for collection in collections -%}
           {%- liquid
             if settings.coll_card_image_src == 'product'

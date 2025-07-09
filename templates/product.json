@@ -188,8 +188,10 @@
     },
     "related-products": {
       "type": "related-products",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
+        "enable_border": false,
         "layout": "grid",
         "card_size": "medium",
         "products_to_show": 4

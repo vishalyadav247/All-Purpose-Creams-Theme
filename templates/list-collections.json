@@ -28,17 +28,6 @@
     },
     "main": {
       "type": "main-list-collections",
-      "blocks": {
-        "collection_7R6ycE": {
-          "type": "collection",
-          "settings": {
-            "collection": "best-sellers"
-          }
-        }
-      },
-      "block_order": [
-        "collection_7R6ycE"
-      ],
       "settings": {
         "display_type": "all"
       }

@@ -175,7 +175,7 @@
             "min_rating": "4",
             "fill_empty": true,
             "random": true,
-            "with_photos": false
+            "with_photos": true
           }
         }
       },

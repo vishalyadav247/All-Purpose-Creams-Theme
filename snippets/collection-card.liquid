@@ -59,15 +59,7 @@
       {%- endif -%}
     </a>
   </div>
-     {% if collection.metafields.custom.treats_text %}
-        <div
-          class="Treats-Text flex justify-center flex-wrap text-center"
-        >
-          <strong>Treat: </strong>{{ collection.metafields.custom.treats_text }}
-        </div>
-      {% endif %}
   <div class="card__info relative align-ltr-{{ settings.coll_card_text_alignment }}">
-  
     <div class="card__title">
       {%- if collection != blank -%}
         <a href="{{ collection.url }}" class="card-link">{{ collection.title | escape }}</a>
@@ -75,8 +67,6 @@
         {{- 'onboarding.collection.title' | t -}}
       {%- endif -%}
     </div>
-        {% if collection.metafields.custom.short_excerpt %}
-   <p class="Short-Excerpt">{{ collection.metafields.custom.short_excerpt }}</p> {% endif %}
     {%- if settings.coll_card_show_count -%}
       <div class="text-sm">
         {%- if collection != blank -%}

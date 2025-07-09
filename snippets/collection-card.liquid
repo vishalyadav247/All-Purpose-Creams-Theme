@@ -75,6 +75,8 @@
         {{- 'onboarding.collection.title' | t -}}
       {%- endif -%}
     </div>
+        {% if collection.metafields.custom.short_excerpt %}
+   <p class="Short-Excerpt">{{ collection.metafields.custom.short_excerpt }}</p> {% endif %}
     {%- if settings.coll_card_show_count -%}
       <div class="text-sm">
         {%- if collection != blank -%}

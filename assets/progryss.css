@@ -618,6 +618,11 @@ h3 {
   .card:last-child {
     background: #f6f6f6;
     .card__info {
+      .card__title {
+        font-size: var(--body_font_size2);
+        line-height: normal;
+        font-family: Montserrat;
+      }
       .price {
         font-size: var(--body_font_size2);
       }
@@ -630,15 +635,6 @@ h3 {
     }
   }
 }
-   .card__media {
-      border: 1px solid #e1e1e1;
-      box-shadow: 0 0 2px rgba(225, 225, 225, 0.8);
-    }
-    .card__title {
-        font-size: var(--body_font_size2);
-        line-height: normal;
-        font-family: Montserrat;
-      }
   .Treats-Text {
       padding: 8px 0;
       background-color: #0087524d;

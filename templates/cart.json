@@ -105,7 +105,7 @@
       "type": "cart-recommendations",
       "settings": {
         "heading": "You may also like",
-        "enable_border": false,
+        "enable_border": true,
         "layout": "carousel",
         "card_size": "medium",
         "products_to_show": 4

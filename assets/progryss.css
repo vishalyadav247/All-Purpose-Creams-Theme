@@ -759,6 +759,9 @@ font-family: 'Montserrat';
   #stamped-reviews-widget{
   width: 100% !important;
 }
+  .result-text{
+    grid-column: span 2;
+  }
 }
 #stamped-reviews-widget{
   max-width: 100% !important;

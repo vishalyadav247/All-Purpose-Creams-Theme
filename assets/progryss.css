@@ -756,7 +756,7 @@ h3 {
 }
 @media screen and (max-width: 690px) {
   #stamped-reviews-widget{
-  max-width: 100% !important;
+  width: 100% !important;
 }
 }
 #stamped-reviews-widget{

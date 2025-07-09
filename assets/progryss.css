@@ -635,6 +635,22 @@ h3 {
     }
   }
 }
+  .card__info {
+      .card__title {
+        font-size: var(--body_font_size2);
+        line-height: normal;
+        font-family: Montserrat;
+      }
+      .price {
+        font-size: var(--body_font_size2);
+      }
+      .card__rating {
+        font-size: var(--body_font_size2);
+        .rating__stars {
+          font-size: 26px;
+        }
+      }
+    }
   .Treats-Text {
       padding: 8px 0;
       background-color: #0087524d;

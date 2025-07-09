@@ -349,7 +349,7 @@ if (!customElements.get('variant-picker')) {
   }
 // instock text visisbility js
     const inStockMessage = document.querySelector('.in-stock-message');
-
+    const outStockMessage=document.querySelector('.out-stock-message');
     document.addEventListener("on:variant:change", function (e) {
       const variant = e.detail.variant;
 
@@ -360,7 +360,7 @@ if (!customElements.get('variant-picker')) {
       if (variant.available && qty > 0) {
         inStockMessage.style.display = 'block';
       } else {
-        inStockMessage.style.display = 'none';
+        outStockMessage.style.display = 'block';
       }
     });
   customElements.define('variant-picker', VariantPicker);

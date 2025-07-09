@@ -314,6 +314,7 @@
   </product-card>
 {%- else -%}
   <div class="card w-full">
+    <p>test</p>
     <div class="card__media">
       <div class="media relative" style="padding-top: {{ 1 | divided_by: image_ratio | times: 100 }}%;">
         {%- capture placeholder_name -%}product-{{ 'now' | date: '%N' | modulo: 6 | plus: 1 }}{%- endcapture -%}

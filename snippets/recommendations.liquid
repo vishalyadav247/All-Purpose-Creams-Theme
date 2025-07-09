@@ -61,7 +61,7 @@
       {%- if carousel -%}
         <div class="{% if related_cards %}mb-2{% else %}carousel__header mb-6{% endif %} flex items-center justify-between">
           {%- if heading != blank -%}
-            <h2 class="flex-auto mb-0 {% if related_cards %}h5 h3 text-start{% else %}section__heading{% endif %}">
+            <h2 class="flex-auto mb-0 {% if related_cards %}h5 text-start{% else %}section__heading h3{% endif %}">
               {{- heading | escape -}}
             </h2>
           {%- endif -%}

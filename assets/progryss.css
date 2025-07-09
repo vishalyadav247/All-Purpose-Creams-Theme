@@ -754,3 +754,6 @@ h3 {
     }
   }
 }
+#stamped-reviews-widget{
+  max-width: 100% !important;
+}

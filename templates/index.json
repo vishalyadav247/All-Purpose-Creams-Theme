@@ -133,9 +133,9 @@
       "type": "media-with-text",
       "settings": {
         "media_type": "image",
-        "image": "shopify://shop_images/DSC05610Large.jpg",
-        "image2": "shopify://shop_images/APC-VC1.jpg",
-        "image3": "shopify://shop_images/2Two1.6woodpalletoneinbacklayingdown_c30ace8d-7110-43fa-95d8-27c7494d2dfe.jpg",
+        "image": "shopify://shop_images/homepage-product-shot-2.jpg",
+        "image2": "shopify://shop_images/homepage-product-shot-1.jpg",
+        "image3": "shopify://shop_images/homepage-product-shot-3.jpg",
         "video_external": "",
         "video_description": "",
         "video_autoplay": false,

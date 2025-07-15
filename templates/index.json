@@ -237,7 +237,7 @@
             "text": "<p>The more you buy, the more you save! Unlock special pricing, discounts, and exclusive rewards.</p>",
             "is-newsletter": false,
             "button_label": "join today",
-            "button_link": "#",
+            "button_link": "/?loyal",
             "button_style": "btn btn--primary",
             "column-bg": "#b3dbcb"
           }

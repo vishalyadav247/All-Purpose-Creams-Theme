@@ -23,7 +23,7 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Welcome customers to your store, make announcements, share information about your brand or describe your products.</p>",
+            "text": "<p>Great skincare doesn’t have to be complicated. We offer proven products, flexible subscriptions, and built-in savings to keep things easy.</p>",
             "enlarge_text": false
           }
         },
@@ -140,7 +140,7 @@
         "video_description": "",
         "video_autoplay": false,
         "heading": "Enhance your skincare with ease and savings",
-        "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lorem nulla, ullamcorper sed nisi at, facilisis aliquet est. Quisque convallis risus vitae tellus consectetur, ac luctus est consequat. Nullam at augue placerat, blandit leo ac, hendrerit diam. Curabitur arcu diam, lobortis ultricies arcu nec, eleifend posuere lorem. </p><p>Vivamus ut lobortis turpis, id suscipit elit. Pellentesque commodo felis quis metus sodales, id varius lacus luctus. Donec eu massa at arcu dignissim rutrum. Maecenas pretium nunc magna, vel luctus dui semper id. Aliquam fermentum risus vitae consequat pharetra. </p>",
+        "text": "<p>At All Purpose Creams, we believe effective skincare shouldn’t be complicated or overpriced. That’s why we’ve created a streamlined experience that delivers high-performance, clinically informed products straight to your door — without the hassle of prescriptions, inflated costs, or confusing routines. Whether you’re targeting hyperpigmentation, signs of aging, acne, or uneven texture, our formulas are expertly designed to work in synergy with your skin — and your schedule.</p><p>Our flexible subscription plans and bulk-buy discounts make it simple to maintain a consistent routine while maximizing your value. With automatic savings at checkout, loyalty rewards, and up to 90% off eligible products when you bundle, you get more of what works — for less. Plus, with our satisfaction guarantee and U.S. based support team, you can shop confidently knowing we’re here to help every step of the way.</p>",
         "button_text": "SHOP NOW",
         "button_link": "shopify://collections/best-sellers",
         "button_style": "btn btn--primary",
@@ -156,44 +156,68 @@
     "testimonial_grid_fC3hBc": {
       "type": "testimonial-grid",
       "blocks": {
-        "testimonial_JMjdrq": {
-          "type": "testimonial",
-          "settings": {
-            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
-            "name": "Erum S.",
-            "rating": 5
-          }
-        },
         "testimonial_9GCCac": {
           "type": "testimonial",
+          "name": "Tatiana T",
           "settings": {
-            "testimonial": "<p>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</p>",
-            "name": "Tatiana T.",
+            "testimonial": "<p><em>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</em></p>",
+            "name": "Tatiana T. - Verified Buyer",
             "rating": 5
           }
         },
         "testimonial_gDiLiT": {
           "type": "testimonial",
+          "name": "Erica B",
           "settings": {
-            "testimonial": "<p>I have already noticed my dark spots fading after 3 weeks of consistent use.</p>",
-            "name": "Erica B.",
-            "rating": 2
+            "testimonial": "<p>I have already noticed my dark spots fading after 3 weeks of consistent use. I have no regrets!</p>",
+            "name": "Erica B. - Verified Buyer",
+            "rating": 5
           }
         },
         "testimonial_YTPjGm": {
           "type": "testimonial",
+          "name": "Erum S",
           "settings": {
-            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
-            "name": "Erum S.",
+            "testimonial": "<p><em>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</em></p>",
+            "name": "Erum S. - Verified Buyer",
+            "rating": 5
+          }
+        },
+        "testimonial_McKn7r": {
+          "type": "testimonial",
+          "name": "Katie J",
+          "settings": {
+            "testimonial": "<p><em>Love how this cream melts into my skin. Its deeply moisturizing but absorbs well. My dry patches disappeared within days!</em></p>",
+            "name": "Katie J. - Verified Buyer",
+            "rating": 5
+          }
+        },
+        "testimonial_9p4n46": {
+          "type": "testimonial",
+          "name": "Paul S",
+          "settings": {
+            "testimonial": "<p><em>My go-to night cream. I wake up with baby-soft skin every morning. It is the perfect blend of hydration and nourishment.</em></p>",
+            "name": "Paul S. - Verified Buyer",
+            "rating": 5
+          }
+        },
+        "testimonial_zER6B7": {
+          "type": "testimonial",
+          "name": "Reynaldo S.",
+          "settings": {
+            "testimonial": "<p><em>Skin barrier repair in a jar! My skin used to feel so damaged, but this cream brought it back to life.</em></p>",
+            "name": "Reynaldo S. - Verified Buyer",
             "rating": 5
           }
         }
       },
       "block_order": [
-        "testimonial_JMjdrq",
         "testimonial_9GCCac",
         "testimonial_gDiLiT",
-        "testimonial_YTPjGm"
+        "testimonial_YTPjGm",
+        "testimonial_McKn7r",
+        "testimonial_9p4n46",
+        "testimonial_zER6B7"
       ],
       "name": "Testimonial Grid",
       "settings": {

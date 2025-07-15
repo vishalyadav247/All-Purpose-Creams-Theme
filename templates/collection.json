@@ -12,7 +12,7 @@
     "hero": {
       "type": "hero-banner-coll",
       "settings": {
-        "hero_height_desktop": 360,
+        "hero_height_desktop": 240,
         "hero_height_mobile": 240,
         "bg_style": "image",
         "boundary_effect": "",

@@ -161,7 +161,7 @@
           "name": "Tatiana T",
           "settings": {
             "testimonial": "<p><em>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</em></p>",
-            "name": "Tatiana T. - Verified Buyer",
+            "name": "Tatiana T.",
             "rating": 5
           }
         },
@@ -169,8 +169,8 @@
           "type": "testimonial",
           "name": "Erica B",
           "settings": {
-            "testimonial": "<p>I have already noticed my dark spots fading after 3 weeks of consistent use. I have no regrets!</p>",
-            "name": "Erica B. - Verified Buyer",
+            "testimonial": "<p><em>I have already noticed my dark spots fading after 3 weeks of consistent use. I have no regrets!</em></p>",
+            "name": "Erica B.",
             "rating": 5
           }
         },
@@ -179,7 +179,7 @@
           "name": "Erum S",
           "settings": {
             "testimonial": "<p><em>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</em></p>",
-            "name": "Erum S. - Verified Buyer",
+            "name": "Erum S.",
             "rating": 5
           }
         },
@@ -188,7 +188,7 @@
           "name": "Katie J",
           "settings": {
             "testimonial": "<p><em>Love how this cream melts into my skin. Its deeply moisturizing but absorbs well. My dry patches disappeared within days!</em></p>",
-            "name": "Katie J. - Verified Buyer",
+            "name": "Katie J.",
             "rating": 5
           }
         },
@@ -197,7 +197,7 @@
           "name": "Paul S",
           "settings": {
             "testimonial": "<p><em>My go-to night cream. I wake up with baby-soft skin every morning. It is the perfect blend of hydration and nourishment.</em></p>",
-            "name": "Paul S. - Verified Buyer",
+            "name": "Paul S.",
             "rating": 5
           }
         },
@@ -206,7 +206,7 @@
           "name": "Reynaldo S.",
           "settings": {
             "testimonial": "<p><em>Skin barrier repair in a jar! My skin used to feel so damaged, but this cream brought it back to life.</em></p>",
-            "name": "Reynaldo S. - Verified Buyer",
+            "name": "Reynaldo S.",
             "rating": 5
           }
         }

@@ -90,7 +90,7 @@
           "settings": {
             "grid-image": "shopify://shop_images/AdobeStock_633271218.png",
             "title": "Aging Skin",
-            "grid-url": "#"
+            "grid-url": "shopify://collections/aging-skin"
           }
         },
         "grid_item_jbdqWJ": {
@@ -98,7 +98,7 @@
           "settings": {
             "grid-image": "shopify://shop_images/AdobeStock_561012767.png",
             "title": "dark spots",
-            "grid-url": "#"
+            "grid-url": "shopify://collections/dark-spots"
           }
         },
         "grid_item_XwAEQb": {
@@ -106,7 +106,7 @@
           "settings": {
             "grid-image": "shopify://shop_images/AdobeStock_1272206299.png",
             "title": "uneven texture",
-            "grid-url": "#"
+            "grid-url": "shopify://collections/uneven-texture"
           }
         },
         "grid_item_CfqwXw": {
@@ -114,7 +114,7 @@
           "settings": {
             "grid-image": "shopify://shop_images/AdobeStock_600725664.png",
             "title": "Acne & redness",
-            "grid-url": "#"
+            "grid-url": "shopify://collections/acne-redness"
           }
         }
       },
@@ -134,8 +134,8 @@
       "settings": {
         "media_type": "image",
         "image": "shopify://shop_images/DSC05610Large.jpg",
-        "image2": "shopify://shop_images/DSC05610Large.jpg",
-        "image3": "shopify://shop_images/teal-brick-texture.jpg",
+        "image2": "shopify://shop_images/APC-VC1.jpg",
+        "image3": "shopify://shop_images/2Two1.6woodpalletoneinbacklayingdown_c30ace8d-7110-43fa-95d8-27c7494d2dfe.jpg",
         "video_external": "",
         "video_description": "",
         "video_autoplay": false,

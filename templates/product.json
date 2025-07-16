@@ -97,7 +97,7 @@
           "settings": {
             "heading": "How to Use",
             "icon": "none",
-            "text": "<p>{{ product.metafields.custom.how_to_use | metafield_tag }}</p>",
+            "text": "{{ product.metafields.custom.how_to_use | metafield_tag }}",
             "page": "",
             "custom_liquid": "",
             "open": false
@@ -108,7 +108,7 @@
           "settings": {
             "heading": "Ingredients",
             "icon": "none",
-            "text": "<p>Purified Water, Propylene Glycol, Mineral Oil, Hydroquinone, Stearic Acid, Cetyl Alcohol, EDTA, Glyceryl Stearate, Aloe Vera Gel, Triethanolamine, White Protopet, Dimethhicone, Propyl Paraben, Methylparaben, Allantoin, Carbomer, Propylene Glycol, Diazolidinyl Urea, Iodopropynyl Butylcarbamate.</p>",
+            "text": "<p>{{ product.metafields.custom.ingredients | metafield_tag }}</p>",
             "page": "",
             "custom_liquid": "",
             "open": false

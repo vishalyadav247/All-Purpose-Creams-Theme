@@ -61,34 +61,56 @@
       "blocks": {
         "testimonial_QEyg9c": {
           "type": "testimonial",
+          "name": "Erum S.",
           "settings": {
-            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
+            "testimonial": "<p><em>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</em></p>",
             "name": "Erum S.",
             "rating": 4
           }
         },
         "testimonial_TUQrgw": {
           "type": "testimonial",
+          "name": "Tatiana T",
           "settings": {
-            "testimonial": "<p>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</p>",
+            "testimonial": "<p><em>The product is absolutely amazing. Absorbs in a twinkle and the skin is glowing.</em></p>",
             "name": "Tatiana T.",
             "rating": 5
           }
         },
         "testimonial_RdBezX": {
           "type": "testimonial",
+          "name": "Erica B",
           "settings": {
-            "testimonial": "<p>I have already noticed my dark spots fading after 3 weeks of consistent use.</p>",
+            "testimonial": "<p><em>I have already noticed my dark spots fading after 3 weeks of consistent use.</em></p>",
             "name": "Erica B.",
             "rating": 5
           }
         },
         "testimonial_Jc6fCP": {
           "type": "testimonial",
+          "name": "Katie J",
           "settings": {
-            "testimonial": "<p>My skin drinks this up immediately, and I love how soft and plump it feels afterward.</p>",
-            "name": "Erum S.",
-            "rating": 4
+            "testimonial": "<p><em>Love how this cream melts into my skin. Its deeply moisturizing but absorbs well. My dry patches disappeared within days!</em></p>",
+            "name": "Katie J.",
+            "rating": 5
+          }
+        },
+        "testimonial_3VUwei": {
+          "type": "testimonial",
+          "name": "Paul S",
+          "settings": {
+            "testimonial": "<p><em>My go-to night cream. I wake up with baby-soft skin every morning. It is the perfect blend of hydration and nourishment.</em></p>",
+            "name": "Paul S.",
+            "rating": 5
+          }
+        },
+        "testimonial_cCVkHd": {
+          "type": "testimonial",
+          "name": "Reynaldo S",
+          "settings": {
+            "testimonial": "<p><em>Skin barrier repair in a jar! My skin used to feel so damaged, but this cream brought it back to life.</em></p>",
+            "name": "Reynaldo S.",
+            "rating": 5
           }
         }
       },
@@ -96,7 +118,9 @@
         "testimonial_QEyg9c",
         "testimonial_TUQrgw",
         "testimonial_RdBezX",
-        "testimonial_Jc6fCP"
+        "testimonial_Jc6fCP",
+        "testimonial_3VUwei",
+        "testimonial_cCVkHd"
       ],
       "name": "Testimonial Grid",
       "settings": {

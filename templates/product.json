@@ -167,7 +167,7 @@
             "color_text": "#212121",
             "color_link": "#8a8a8a",
             "review_ids": "",
-            "product_ids": "8315067105538",
+            "product_ids": "",
             "category": "",
             "product_brand": "",
             "tags": "",
@@ -193,7 +193,7 @@
         "enable_border": true,
         "layout": "grid",
         "card_size": "medium",
-        "products_to_show": 4
+        "products_to_show": 3
       }
     }
   },

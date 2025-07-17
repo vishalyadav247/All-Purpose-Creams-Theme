@@ -27,6 +27,17 @@
           "type": "Excerpt",
           "settings": {}
         },
+        "richtext_txqCkE": {
+          "type": "richtext",
+          "settings": {
+            "text": "{{ product.metafields.custom.product_short_description | metafield_tag }}",
+            "icon": "none",
+            "icon_size": "small",
+            "enable_box": false,
+            "box_color": "#e0f4d5",
+            "reduce_margin": false
+          }
+        },
         "uses_9pzKtm": {
           "type": "uses",
           "settings": {}
@@ -119,6 +130,7 @@
         "title",
         "price",
         "excerpt_tJQbLY",
+        "richtext_txqCkE",
         "uses_9pzKtm",
         "variant-picker",
         "bold_subscriptions_bsub_widget_block_4qcXax",

@@ -25,6 +25,7 @@
         },
         "excerpt_tJQbLY": {
           "type": "Excerpt",
+          "disabled": true,
           "settings": {}
         },
         "richtext_txqCkE": {

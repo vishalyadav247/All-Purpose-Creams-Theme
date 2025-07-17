@@ -192,7 +192,7 @@
         "heading": "You may also like",
         "enable_border": true,
         "layout": "grid",
-        "card_size": "medium",
+        "card_size": "large",
         "products_to_show": 3
       }
     }

@@ -139,7 +139,39 @@
     "cart_empty_shop_link": "shopify://collections/best-sellers",
     "free_shipping_bg_color": "#83858c",
     "free_shipping_color": "#d2ff28",
-    "content_for_index": []
+    "content_for_index": [],
+    "blocks": {
+      "3322588378562147075": {
+        "type": "shopify://apps/marsello-loyalty-email-sms/blocks/widget/2f8afca8-ebe2-41cc-a30f-c0ab7d4ac8be",
+        "disabled": false,
+        "settings": {}
+      },
+      "9094328589753815681": {
+        "type": "shopify://apps/hextom-shipping-bar/blocks/fsb-embeded-block/7ef5d9af-75a2-45c7-9b1b-f9240ee488e9",
+        "disabled": false,
+        "settings": {}
+      },
+      "15573056287721514228": {
+        "type": "shopify://apps/json-ld-for-seo/blocks/app-embed/3fcb4f45-bdde-43fd-84ae-8006cdcd1028",
+        "disabled": false,
+        "settings": {}
+      },
+      "8605505498557855500": {
+        "type": "shopify://apps/bogos-io-free-gift/blocks/app-embed/0432bba6-720a-4e95-be5a-b868386f7aa6",
+        "disabled": false,
+        "settings": {}
+      },
+      "17428600031447253342": {
+        "type": "shopify://apps/attentive/blocks/attn-tag/8df62c72-8fe4-407e-a5b3-72132be30a0d",
+        "disabled": false,
+        "settings": {}
+      },
+      "5557296251606798448": {
+        "type": "shopify://apps/bold-subscriptions/blocks/bsub-embed/9ceb49f0-5fe5-4b5e-943d-f8af8985167d",
+        "disabled": false,
+        "settings": {}
+      }
+    }
   },
   "presets": {
     "Sharp": {

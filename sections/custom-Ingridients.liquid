@@ -44,24 +44,26 @@
     var $prevBtn = $('.prev-btn');
     var $nextBtn = $('.next-btn');
 
-   owl.owlCarousel({
-  items: 1,
-  margin: 10,
-  dots: false,
-  nav: false,
-  responsive: {
-    768: {
-      items: 3,
-      margin: 15
-    },
-    1280: {
-      items: 4,
-      margin: 15
-    }
-  },
-  onInitialized: updateNavButtons 
-});
-
+    owl.owlCarousel({
+      items: 1,
+      margin: 10,
+      dots: false,
+      nav: false,
+      responsive: {
+        768: {
+          items: 3,
+          margin: 15
+        },
+        1280: {
+          items: 4,
+          margin: 15
+        }
+      },
+      onInitialized: function(event) {
+        updateNavButtons(event);
+        matchIngredientHeights();
+      }
+    });
 
     $nextBtn.click(function() {
       owl.trigger('next.owl.carousel');
@@ -77,35 +79,28 @@
       var itemsShown = event.page.size;
 
       // Disable prev button if first slide
-      if (currentIndex === 0) {
-        $prevBtn.prop('disabled', true).css('opacity', 0.5);
-      } else {
-        $prevBtn.prop('disabled', false).css('opacity', 1);
-      }
+      $prevBtn.prop('disabled', currentIndex === 0).css('opacity', currentIndex === 0 ? 0.5 : 1);
 
       // Disable next button if at end
-      if (currentIndex + itemsShown >= totalItems) {
-        $nextBtn.prop('disabled', true).css('opacity', 0.5);
-      } else {
-        $nextBtn.prop('disabled', false).css('opacity', 1);
-      }
+      $nextBtn.prop('disabled', currentIndex + itemsShown >= totalItems).css('opacity', currentIndex + itemsShown >= totalItems ? 0.5 : 1);
     }
-function matchIngredientHeights() {
-  var maxHeight = 0;
 
-  $('.ingredient-box').css('min-height', 'auto'); // reset
+    function matchIngredientHeights() {
+      var maxHeight = 0;
 
-  $('.ingredient-box').each(function(){
-    var thisHeight = $(this).outerHeight();
-    if (thisHeight > maxHeight) {
-      maxHeight = thisHeight;
+      $('.ingredient-box').css('min-height', 'auto'); // reset
+
+      $('.ingredient-box').each(function(){
+        var thisHeight = $(this).outerHeight();
+        if (thisHeight > maxHeight) {
+          maxHeight = thisHeight;
+        }
+      });
+
+      $('.ingredient-box').css('min-height', maxHeight + 'px');
     }
-  });
 
-  $('.ingredient-box').css('min-height', maxHeight + 'px');
-}
-
-    // Also bind update on change & resize
+    // Update on carousel change or resize
     owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
@@ -113,6 +108,7 @@ function matchIngredientHeights() {
     });
   });
 </script>
+
 
 
 {% schema %}

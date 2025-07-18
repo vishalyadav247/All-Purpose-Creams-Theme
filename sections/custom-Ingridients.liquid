@@ -90,11 +90,26 @@
         $nextBtn.prop('disabled', false).css('opacity', 1);
       }
     }
+function matchIngredientHeights() {
+  var maxHeight = 0;
+
+  $('.ingredient-box').css('min-height', 'auto'); // reset
+
+  $('.ingredient-box').each(function(){
+    var thisHeight = $(this).outerHeight();
+    if (thisHeight > maxHeight) {
+      maxHeight = thisHeight;
+    }
+  });
+
+  $('.ingredient-box').css('min-height', maxHeight + 'px');
+}
 
     // Also bind update on change & resize
     owl.on('changed.owl.carousel resized.owl.carousel', function(event) {
       if (!event.namespace) return;
       updateNavButtons(event);
+      matchIngredientHeights();
     });
   });
 </script>

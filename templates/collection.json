@@ -22,7 +22,7 @@
         "hero_text_color": "#333333",
         "image_align": "object-center",
         "hero_tint_color": "#ffffff",
-        "hero_tint_opacity": 10,
+        "hero_tint_opacity": 0,
         "hero_tint_text_color": "#212121",
         "show_description": false,
         "show_breadcrumbs": true

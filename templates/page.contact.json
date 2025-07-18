@@ -9,9 +9,61 @@
  */
 {
   "sections": {
+    "image_banner_LQGyXj": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_d7H9gf": {
+          "type": "heading",
+          "settings": {
+            "heading": "Contact Us",
+            "heading_size": "h2",
+            "heading_h1": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_d7H9gf"
+      ],
+      "name": "Image banner",
+      "settings": {
+        "image_desktop": "shopify://shop_images/APNLSB.jpg",
+        "height_mode": "fixed",
+        "fixed_height_desktop": 400,
+        "fixed_height_mobile": 250,
+        "full_width": true,
+        "overlay_position": "justify-start items-end",
+        "overlay_text_align": "left",
+        "mobile_center_text": false,
+        "mobile_stacked": false,
+        "text_border_width": 0,
+        "text_border_color": "#ffffff",
+        "text_border_radius": 0,
+        "text_bg_opacity": 20,
+        "color_scheme": "none",
+        "text_color_without_scheme": "#ffffff",
+        "tint_color": "#000000",
+        "tint_opacity": 0,
+        "boundary_effect": ""
+      }
+    },
     "hero": {
       "type": "hero-banner",
-      "settings": {}
+      "disabled": true,
+      "settings": {
+        "hero_height_desktop": 280,
+        "hero_height_mobile": 240,
+        "enable_bg": true,
+        "boundary_effect": "",
+        "show_contrast_logo": false,
+        "hero_bg_color": "#eeeeee",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#333333",
+        "image": "shopify://shop_images/APNLSB.jpg",
+        "hero_tint_color": "#000000",
+        "hero_tint_opacity": 0,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": true
+      }
     },
     "main": {
       "type": "main-page",
@@ -22,13 +74,71 @@
       "type": "contact-form",
       "settings": {
         "heading": "",
-        "color_scheme": "none"
+        "text": "<p>Have a question about our products or a query about your order? <br/>Fill out our contact form and we will get back to you as soon as possible.</p>",
+        "text_alignment": "center",
+        "name_half_width": true,
+        "email_half_width": true,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
+    },
+    "multi_column_kRM8rY": {
+      "type": "multi-column",
+      "blocks": {
+        "column_cKj8JH": {
+          "type": "column",
+          "settings": {
+            "show_image": false,
+            "heading": "Contact Info",
+            "heading_size": "h4",
+            "text": "<h6>Mailing Address</h6><p>All Purpose Creams<br/>21175 State Hwy 249 Unit 484<br/>Houston, TX 77070</p><p><strong>Email</strong><br/><a href=\"mailto:contact@allpurposecreams.com\">contact@allpurposecreams.com<br/></a><strong>Phone</strong><br/>(310) 596-7245</p>",
+            "is-newsletter": false,
+            "button_label": "",
+            "button_link": "",
+            "button_style": "feature-link",
+            "column-bg": ""
+          }
+        },
+        "column_GRnaez": {
+          "type": "column",
+          "settings": {
+            "show_image": false,
+            "heading": "Hours: (Central Standard Time)",
+            "heading_size": "h4",
+            "text": "<p>Monday - Friday: <strong>8am to 6pm</strong><br/>Saturday: <strong>9am to 1pm</strong><br/>Sunday: <strong>Closed</strong></p>",
+            "is-newsletter": false,
+            "button_label": "",
+            "button_link": "",
+            "button_style": "feature-link",
+            "column-bg": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_cKj8JH",
+        "column_GRnaez"
+      ],
+      "name": "Multi-column",
+      "settings": {
+        "heading": "",
+        "button_label": "",
+        "button_link": "",
+        "layout": "grid",
+        "column_align": "left",
+        "image_ratio": "shortest",
+        "full_width": true,
+        "bg_style": "column",
+        "color_scheme": "none",
+        "boundary_effect": ""
       }
     }
   },
   "order": [
+    "image_banner_LQGyXj",
     "hero",
     "main",
-    "form"
+    "form",
+    "multi_column_kRM8rY"
   ]
 }

@@ -769,6 +769,11 @@ font-family: 'Montserrat';
   .stamped-carousel-subtitle {
     float: left !important;
   }
+  .product-add{
+    .btn {
+      padding: calc(10px - var(--btn-border-width)) 20px;
+    }
+  }
 }
 #stamped-reviews-widget{
   max-width: 100% !important;

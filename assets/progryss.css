@@ -720,7 +720,7 @@ font-family: 'Montserrat';
       max-width: 95%;
       margin: initial;
       h3 {
-        padding-top: 50px;
+        /* padding-top: 50px; */
       }
       .collection-description {
         p {

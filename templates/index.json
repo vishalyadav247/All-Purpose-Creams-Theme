@@ -88,7 +88,7 @@
         "grid_item_dLtfzY": {
           "type": "grid-item",
           "settings": {
-            "grid-image": "shopify://shop_images/AdobeStock_633271218.png",
+            "grid-image": "shopify://shop_images/aging-skin.png",
             "title": "Aging Skin",
             "grid-url": "shopify://collections/aging-skin"
           }
@@ -96,24 +96,24 @@
         "grid_item_jbdqWJ": {
           "type": "grid-item",
           "settings": {
-            "grid-image": "shopify://shop_images/AdobeStock_561012767.png",
-            "title": "dark spots",
+            "grid-image": "shopify://shop_images/dark-spots-melasma.png",
+            "title": "Dark Spots",
             "grid-url": "shopify://collections/dark-spots"
           }
         },
         "grid_item_XwAEQb": {
           "type": "grid-item",
           "settings": {
-            "grid-image": "shopify://shop_images/AdobeStock_1272206299.png",
-            "title": "uneven texture",
+            "grid-image": "shopify://shop_images/uneven-texture.png",
+            "title": "Uneven Texture",
             "grid-url": "shopify://collections/uneven-texture"
           }
         },
         "grid_item_CfqwXw": {
           "type": "grid-item",
           "settings": {
-            "grid-image": "shopify://shop_images/AdobeStock_600725664.png",
-            "title": "Acne & redness",
+            "grid-image": "shopify://shop_images/acne-redness.png",
+            "title": "Acne & Redness",
             "grid-url": "shopify://collections/acne-redness"
           }
         }

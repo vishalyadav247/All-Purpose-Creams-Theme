@@ -25,7 +25,7 @@
         "enable_sticky": true,
         "logo": "{{ shop.brand.logo }}",
         "logo_width": 105,
-        "logo_h1": true,
+        "logo_h1": false,
         "logo_align_left": true,
         "enable_logo_shrink": true,
         "enable_transparency": true,

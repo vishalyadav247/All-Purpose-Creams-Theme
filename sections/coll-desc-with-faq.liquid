@@ -27,7 +27,7 @@
     
     {% if collection.description != blank %}
       <div class="description-block text-white bg-blue-200 px-6 container">
-        {% if section.settings.heading != blank %}
+        {% if collection.metafields.custom.seo_heading != blank %}
           <h3 class="text-2xl font-bold mb-4 text-current pt-8">{{ collection.metafields.custom.seo_heading }}</h3>
         {% endif %}
         <div class="collection-description max-w-3xl mx-auto">
@@ -113,18 +113,6 @@ faqContainer.querySelectorAll('.faq-answer').forEach((el) => {
 {
   "name": "Collection desc and FAQ",
   "settings": [
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Main Heading",
-      "default": "Best Selling Treatments And Serums"
-    },
-    {
-      "type": "text",
-      "id": "faq_heading",
-      "label": "FAQ Heading",
-      "default": "Frequently Asked Questions"
-    },
      {
       "type": "select",
       "id": "color_scheme",

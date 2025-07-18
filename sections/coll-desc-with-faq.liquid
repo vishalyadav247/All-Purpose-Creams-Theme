@@ -30,7 +30,7 @@
         <div class="collection-description max-w-3xl mx-auto">
           {{ collection.description }}
         </div>
-      </div>
+      </div>{%- endif -%}
       {%- assign faq_list = collection.metafields.custom.faqs.value -%}
 
     {% if faq_list %}
@@ -41,7 +41,7 @@
         <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
       </div>
     {% endif %}
-    {%- endif -%}
+    
 
   </div>
 </section>

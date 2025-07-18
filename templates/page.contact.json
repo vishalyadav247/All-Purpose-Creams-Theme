@@ -40,7 +40,7 @@
         "text_border_radius": 0,
         "text_bg_opacity": 20,
         "color_scheme": "none",
-        "text_color_without_scheme": "#ffffff",
+        "text_color_without_scheme": "#212121",
         "tint_color": "#000000",
         "tint_opacity": 0,
         "boundary_effect": ""

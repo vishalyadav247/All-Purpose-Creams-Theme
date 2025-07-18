@@ -34,8 +34,12 @@
 
 {% if has_description %}
   <div class="description-block text-white bg-blue-200 px-6 container {% unless has_faq %}section--padded{% endunless %}">
-    <h3 class="text-2xl font-bold mb-4 text-current">{{ collection.metafields.custom.seo_heading }}</h3>
-    <div class="collection-description max-w-3xl mx-auto">{{ collection.description }}</div>
+    <h3 class="text-2xl font-bold mb-4 text-current {% if has_faq %}pt-8{% endif %}">
+      {{ collection.metafields.custom.seo_heading }}
+    </h3>
+    <div class="collection-description max-w-3xl mx-auto">
+      {{ collection.description }}
+    </div>
   </div>
 {% endif %}
 
@@ -47,6 +51,7 @@
     <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
   </div>
 {% endif %}
+
 
 
   </div>

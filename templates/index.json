@@ -42,8 +42,8 @@
         "button_NVdt8R"
       ],
       "settings": {
-        "image_desktop": "shopify://shop_images/apc-banner-all-products.jpg",
-        "image_mobile": "shopify://shop_images/apc-banner-mobile.jpg",
+        "image_desktop": "shopify://shop_images/apc-banner-all-products-min.jpg",
+        "image_mobile": "shopify://shop_images/apc-banner-all-products-mobile-min.jpg",
         "height_mode": "auto",
         "fixed_height_desktop": 600,
         "fixed_height_mobile": 440,

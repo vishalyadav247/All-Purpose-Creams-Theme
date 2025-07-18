@@ -11,15 +11,79 @@
   "sections": {
     "hero": {
       "type": "hero-banner",
-      "settings": {}
+      "disabled": true,
+      "settings": {
+        "hero_height_desktop": 360,
+        "hero_height_mobile": 240,
+        "enable_bg": false,
+        "boundary_effect": "bottom",
+        "show_contrast_logo": false,
+        "hero_bg_color": "#eeeeee",
+        "hero_bg_gradient": "",
+        "hero_text_color": "#333333",
+        "hero_tint_color": "#000000",
+        "hero_tint_opacity": 20,
+        "hero_tint_text_color": "#ffffff",
+        "show_breadcrumbs": false
+      }
+    },
+    "image_banner_3Tnhzx": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_TfPxUP": {
+          "type": "heading",
+          "settings": {
+            "heading": "All Purpose Creams Verified Reviews",
+            "heading_size": "h2",
+            "heading_h1": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_TfPxUP"
+      ],
+      "name": "Image banner",
+      "settings": {
+        "image_desktop": "shopify://shop_images/APNLSB.jpg",
+        "height_mode": "fixed",
+        "fixed_height_desktop": 400,
+        "fixed_height_mobile": 250,
+        "full_width": true,
+        "overlay_position": "justify-start items-end",
+        "overlay_text_align": "left",
+        "mobile_center_text": false,
+        "mobile_stacked": false,
+        "text_border_width": 0,
+        "text_border_color": "#ffffff",
+        "text_border_radius": 0,
+        "text_bg_opacity": 20,
+        "color_scheme": "none",
+        "text_color_without_scheme": "#ffffff",
+        "tint_color": "#000000",
+        "tint_opacity": 0,
+        "boundary_effect": ""
+      }
     },
     "main": {
       "type": "main-page",
+      "disabled": true,
       "settings": {}
+    },
+    "custom_liquid_GF6k3D": {
+      "type": "custom-liquid",
+      "name": "Custom HTML/Liquid",
+      "settings": {
+        "custom_liquid": "<div id=\"stamped-main-widget\" style=\"margin: 0 auto; width:100%;\">\n\n</div>",
+        "full_width": false,
+        "show_space": true,
+        "boundary_effect": ""
+      }
     }
   },
   "order": [
     "hero",
-    "main"
+    "image_banner_3Tnhzx",
+    "main",
+    "custom_liquid_GF6k3D"
   ]
 }

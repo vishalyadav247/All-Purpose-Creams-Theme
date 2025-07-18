@@ -21,10 +21,9 @@
         "hero_bg_gradient": "",
         "hero_text_color": "#333333",
         "image_align": "object-center",
-        "image": "shopify://shop_images/APNLSA_720x_297f9e89-5425-4cd9-9eda-3faaee651aad.jpg",
-        "hero_tint_color": "#000000",
-        "hero_tint_opacity": 0,
-        "hero_tint_text_color": "#ffffff",
+        "hero_tint_color": "#ffffff",
+        "hero_tint_opacity": 10,
+        "hero_tint_text_color": "#212121",
         "show_description": false,
         "show_breadcrumbs": true
       }

@@ -25,21 +25,29 @@
 <section class="faq-description-section section container">
   <div class="{% if section.settings.full_width or bg_color %} {% endif %}{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
     
+{% assign has_description = false %}
+{% assign has_faq = faq_list %}
+
 {% if collection.description != blank and collection.metafields.custom.seo_heading != blank %}
-  <div class="description-block text-white bg-blue-200 px-6 container">
-    <h3 class="text-2xl font-bold mb-4 text-current pt-8">{{ collection.metafields.custom.seo_heading }}</h3>
+  {% assign has_description = true %}
+{% endif %}
+
+{% if has_description %}
+  <div class="description-block text-white bg-blue-200 px-6 container {% unless has_faq %}section--padded{% endunless %}">
+    <h3 class="text-2xl font-bold mb-4 text-current">{{ collection.metafields.custom.seo_heading }}</h3>
     <div class="collection-description max-w-3xl mx-auto">{{ collection.description }}</div>
   </div>
 {% endif %}
-    
-    {% if faq_list %}
-      <div class="faq-block section--padded bg-white container">
-        <h3 class="text-2xl font-bold mb-6 text-current">
-          {{ collection.metafields.custom.faq_heading | default: 'Frequently Asked Questions' }}
-        </h3>
-        <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
-      </div>
-    {% endif %}
+
+{% if has_faq %}
+  <div class="faq-block bg-white container {% unless has_description %}section--padded{% endunless %}">
+    <h3 class="text-2xl font-bold mb-6 text-current">
+      {{ collection.metafields.custom.faq_heading | default: 'Frequently Asked Questions' }}
+    </h3>
+    <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
+  </div>
+{% endif %}
+
 
   </div>
 </section>

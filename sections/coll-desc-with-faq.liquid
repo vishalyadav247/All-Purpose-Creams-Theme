@@ -20,9 +20,12 @@
   endif
 -%}
 
+{% assign faq_list = collection.metafields.custom.faqs.value %}
+{% if collection.description != blank or faq_list %} 
 <section class="faq-description-section section container">
-  <div class="{% if section.settings.full_width or bg_color %} {% endif %}  {% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
-    {%- if collection.description != blank -%}
+  <div class="{% if section.settings.full_width or bg_color %} {% endif %}{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
+    
+    {% if collection.description != blank %}
       <div class="description-block text-white bg-blue-200 px-6 container">
         {% if section.settings.heading != blank %}
           <h3 class="text-2xl font-bold mb-4 text-current pt-8">{{ section.settings.heading }}</h3>
@@ -30,9 +33,9 @@
         <div class="collection-description max-w-3xl mx-auto">
           {{ collection.description }}
         </div>
-      </div>{%- endif -%}
-      {%- assign faq_list = collection.metafields.custom.faqs.value -%}
-
+      </div>
+    {% endif %}
+    
     {% if faq_list %}
       <div class="faq-block section--padded bg-white container">
         <h3 class="text-2xl font-bold mb-6 text-current">
@@ -41,10 +44,11 @@
         <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
       </div>
     {% endif %}
-    
 
   </div>
 </section>
+{% endif %}
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {

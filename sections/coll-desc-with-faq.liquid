@@ -21,16 +21,17 @@
 -%}
 
 {% assign faq_list = collection.metafields.custom.faqs.value %}
-{% if collection.description != blank or faq_list %} 
+{% if collection.metafields.custom.seo_text != blank or faq_list %}
 <section class="faq-description-section section container">
   <div class="{% if section.settings.full_width or bg_color %} {% endif %}{% unless color_scheme == 'none' %} color-scheme color-scheme--{{ color_scheme }}{% endunless %}">
     
 {% assign has_description = false %}
 {% assign has_faq = faq_list %}
 
-{% if collection.description != blank and collection.metafields.custom.seo_heading != blank %}
+{% if collection.metafields.custom.seo_text != blank and collection.metafields.custom.seo_heading != blank %}
   {% assign has_description = true %}
 {% endif %}
+
 
 {% if has_description %}
   <div class="description-block text-white bg-blue-200 px-6 container {% unless has_faq %}section--padded{% endunless %}">
@@ -38,7 +39,7 @@
       {{ collection.metafields.custom.seo_heading }}
     </h3>
     <div class="collection-description max-w-3xl mx-auto">
-      {{ collection.description }}
+      {{ collection.metafields.custom.seo_text }}
     </div>
   </div>
 {% endif %}
@@ -51,13 +52,9 @@
     <div id="faq-list" class="grid space-y-4" style="gap:3px;"></div>
   </div>
 {% endif %}
-
-
-
   </div>
 </section>
 {% endif %}
-
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {

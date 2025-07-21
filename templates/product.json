@@ -20,7 +20,7 @@
           "type": "price",
           "settings": {
             "show_tax_and_shipping": false,
-            "show_rating": false
+            "show_rating": true
           }
         },
         "excerpt_tJQbLY": {

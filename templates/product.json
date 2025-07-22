@@ -212,12 +212,28 @@
     },
     "related-products": {
       "type": "related-products",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "enable_border": true,
         "layout": "grid",
         "card_size": "large",
         "products_to_show": 3
+      }
+    },
+    "featured_collection_6jCMTU": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "You may also like",
+        "collection": "best-sellers",
+        "layout": "carousel",
+        "card_size": "large",
+        "products_to_show": 12,
+        "show_view_all": false,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
       }
     }
   },
@@ -227,6 +243,7 @@
     "custom_user_results_inGARf",
     "custom_liquid_jwQkTx",
     "17501617857e568869",
-    "related-products"
+    "related-products",
+    "featured_collection_6jCMTU"
   ]
 }

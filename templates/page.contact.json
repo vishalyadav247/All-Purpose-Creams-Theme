@@ -92,7 +92,7 @@
             "show_image": false,
             "heading": "Contact Info",
             "heading_size": "h4",
-            "text": "<h6>Mailing Address</h6><p>All Purpose Creams<br/>21175 State Hwy 249 Unit 484<br/>Houston, TX 77070</p><p><strong>Email</strong><br/><a href=\"mailto:contact@allpurposecreams.com\">contact@allpurposecreams.com<br/></a><strong>Phone</strong><br/>(310) 596-7245</p>",
+            "text": "<h6>Mailing Address</h6><p>All Purpose Creams<br/>21175 State Hwy 249 Unit 484<br/>Houston, TX 77070</p><p><strong>Email</strong><br/><a href=\"mailto:contact@allpurposecreams.com\">contact@allpurposecreams.com</a></p>",
             "is-newsletter": false,
             "button_label": "",
             "button_link": "",

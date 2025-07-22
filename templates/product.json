@@ -166,6 +166,16 @@
       "name": "User Real Result",
       "settings": {}
     },
+    "custom_liquid_jwQkTx": {
+      "type": "custom-liquid",
+      "name": "Custom HTML/Liquid",
+      "settings": {
+        "custom_liquid": "<!--Start Stamped.io Auto Installation--><div id=\"stamped-main-widget\" class=\"stamped-main-widget\" data-widget-style=\"standard\" data-product-id=\"{{ product.id }}\" data-name=\"{{ product.title | escape }}\" data-url=\"{{ shop.url }}{{ product.url }}\" data-image-url=\"{{ product.featured_image | product_img_url: \"large\" |replace: '?', '%3F' | replace: '&','%26'}}\" data-description=\"{{ product.description | escape }}\" data-product-sku=\"{{product.handle}}\" data-product-type=\"{{product.type}}\" data-widget-language=\"{{shop.locale}}\"></div><!--End Stamped.io Auto Installation-->",
+        "full_width": false,
+        "show_space": true,
+        "boundary_effect": ""
+      }
+    },
     "17501617857e568869": {
       "type": "apps",
       "blocks": {
@@ -195,6 +205,7 @@
       "block_order": [
         "stamped_reviews_carousel_hXtkDc"
       ],
+      "disabled": true,
       "settings": {
         "full_width": false
       }
@@ -214,6 +225,7 @@
     "main",
     "custom_ingridients_UJjXYQ",
     "custom_user_results_inGARf",
+    "custom_liquid_jwQkTx",
     "17501617857e568869",
     "related-products"
   ]

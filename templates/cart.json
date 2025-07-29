@@ -43,17 +43,34 @@
     },
     "recommendations": {
       "type": "cart-recommendations",
+      "disabled": true,
       "settings": {
         "heading": "You may also like",
         "layout": "carousel",
         "card_size": "medium",
         "products_to_show": 4
       }
+    },
+    "featured_collection_MLjW8e": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "heading": "You May Also Like",
+        "collection": "best-sellers",
+        "layout": "carousel",
+        "card_size": "medium",
+        "products_to_show": 8,
+        "show_view_all": false,
+        "full_width": true,
+        "color_scheme": "none",
+        "boundary_effect": ""
+      }
     }
   },
   "order": [
     "hero",
     "main",
-    "recommendations"
+    "recommendations",
+    "featured_collection_MLjW8e"
   ]
 }

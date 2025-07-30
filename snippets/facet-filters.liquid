@@ -125,7 +125,7 @@
       {%- endif -%}
 
       {%- if section.settings.enable_filtering -%}
-        <button type="button" class="results-header__filter btn btn--primary js-show-filters no-js-hidden">
+        <button type="button" class="results-header__filter btn btn--primary js-show-filters no-js-hidden" style="display:none;">
           {% render 'icon-filter' %} {{ 'products.filtering.filter' | t }}
         </button>
       {%- endif -%}

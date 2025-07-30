@@ -34,7 +34,7 @@
         "products_per_page": 24,
         "card_size": "large",
         "show_prod_totals": true,
-        "enable_filtering": true,
+        "enable_filtering": false,
         "show_filter_counts": true,
         "filters_open": "some",
         "max_filter_options": 7,

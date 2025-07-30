@@ -82,7 +82,7 @@
           assign sort_by = results.sort_by | default: results.default_sort_by
         -%}
 
-        <div class="results-header__sortby no-js-hidden{% if section.settings.enable_filtering %} mobile-visually-hidden{% endif %}">
+        <div class="results-header__sortby no-js-hidden{% if section.settings.enable_sorting %} mobile-visually-hidden{% endif %}"> 
           <label class="label label--inline visually-hidden" for="sort-by">
             {{- 'products.sorting.sort_by_label' | t -}}
           </label>

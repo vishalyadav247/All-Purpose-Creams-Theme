@@ -148,7 +148,7 @@
         "media_ratio": "1",
         "enable_border": true,
         "enable_zoom": true,
-        "enable_video_looping": false,
+        "enable_video_looping": true,
         "description_location": "details",
         "enable_media_grouping": false,
         "media_grouping_option": "Color,Colour,Couleur,Farbe"

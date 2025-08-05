@@ -783,5 +783,5 @@ font-family: 'Montserrat';
 }
 
 .media-gallery deferred-media {
-  background-color: #fff;
+  background-color: #fff !important;
 }

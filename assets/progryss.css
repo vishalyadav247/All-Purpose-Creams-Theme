@@ -781,3 +781,7 @@ font-family: 'Montserrat';
     display: none !important;
   }
 }
+
+.media-gallery deferred-media {
+  background-color: #fff;
+}
